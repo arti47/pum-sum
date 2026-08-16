@@ -170,9 +170,11 @@ body.has-actionbar .screen {
   box-shadow: 0 -2px 12px rgba(0,0,0,.06);
 }
 .action-bar .ab-ctx {
-  font-size: .75rem; color: var(--ink-3); flex: 1; min-width: 0;
+  font-size: .75rem; color: var(--ink-3); flex: 1 1 0; min-width: 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+.action-bar .btn { flex: none; }
 
 .tab-bar {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;

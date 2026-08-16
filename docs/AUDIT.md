@@ -160,6 +160,10 @@ caught it on the first re-run: the wizard completed, threw, and never reached th
 **F-14 · Track boxes measured 36px at 320px width.** Only visible at the narrowest supported
 width, where eleven boxes flexed below the 40px target. `min-width` raised from 30px to 40px.
 
+**F-15 · The action bar's context line wrapped.** Cosmetic, found by looking at a real render
+rather than a number: "scene open · 1 check" broke to two lines on a 390px screen and grew the
+bar. Truncated with an ellipsis, buttons no longer flexing.
+
 ### Cycle 2 result
 
 After F-11 to F-14: unit harness 945 green, dead-data scan clean, browser smoke 304 green,
