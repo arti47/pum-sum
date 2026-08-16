@@ -1,0 +1,52 @@
+// Feature toggles. Every flag has a setter, a reader and a clearer (§10.14).
+// The clearer for all of these is derived.normalize(), which restores the
+// documented default for any flag missing or out of range in stored data.
+
+import { getState, setSetting, setTheme, setTextScale } from "./store.js";
+
+export const Settings = {
+  // Disruption die (PUM p.9) — an explicitly optional rule, so it defaults OFF.
+  // Defaults follow the fiction (§10.15): the book presents it as a variant you opt into.
+  disruptionDie: () => !!getState().settings.disruptionDie,
+  setDisruptionDie: (v) => setSetting("disruptionDie", !!v),
+
+  // Widen the modified-proposal face range from 2 to 2-5 in a volatile situation.
+  disruptionVolatile: () => !!getState().settings.disruptionVolatile,
+  setDisruptionVolatile: (v) => setSetting("disruptionVolatile", !!v),
+
+  // Enrichment is the book's default for descriptive and story oracles
+  // ("roll 1d10 + 1d100"), so this defaults ON.
+  autoEnrich: () => getState().settings.autoEnrich !== false,
+  setAutoEnrich: (v) => setSetting("autoEnrich", !!v),
+
+  seenTutorial: () => !!getState().settings.seenTutorial,
+  setSeenTutorial: (v) => setSetting("seenTutorial", !!v),
+
+  theme: () => getState().theme,
+  setTheme: (t) => setTheme(t),
+
+  textScale: () => getState().textScale,
+  setTextScale: (n) => setTextScale(n),
+};
+
+export function applyTheme() {
+  const t = Settings.theme();
+  const root = document.documentElement;
+  if (t === "system") root.removeAttribute("data-theme");
+  else root.setAttribute("data-theme", t);
+  root.style.setProperty("--scale", String(Settings.textScale()));
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) {
+    const dark = t === "dark"
+      || (t === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    meta.setAttribute("content", dark ? "#14161d" : "#f7f1e3");
+  }
+}
+
+export function cycleTheme() {
+  const order = ["system", "light", "dark"];
+  const next = order[(order.indexOf(Settings.theme()) + 1) % order.length];
+  Settings.setTheme(next);
+  applyTheme();
+  return next;
+}
