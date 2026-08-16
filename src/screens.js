@@ -20,8 +20,18 @@ let ruleSearch = "";
 let pendingRuleId = null;
 
 export function renderMore(host, section) {
-  if (inWizard()) return renderWizard(host);
+  // The wizard lives on Home. It must not hijack the other More routes, or the
+  // section nav reads as broken while a game is being prepared (§6.3.9).
+  if (inWizard() && section === "home") return renderWizard(host);
   add(host, sectionNav("more", section));
+  if (inWizard()) {
+    add(host, el("div", { class: "card" },
+      el("h3", { text: "A game is half-prepared" }),
+      el("p", { class: "muted", text: "Your draft is still here — nothing is lost." }),
+      el("button", { class: "btn primary wide", onclick: () => go("more", "home") },
+        "Back to preparing it")
+    ));
+  }
   if (section === "library") return renderLibrary(host);
   if (section === "tutorial") return renderTutorial(host);
   if (section === "settings") return renderSettings(host);

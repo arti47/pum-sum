@@ -7,6 +7,7 @@ import * as store from "./store.js";
 import { plotSheet, trackTotal } from "./rules.js";
 import { go, render } from "./router.js";
 import { PLOT_SHEETS, NODE_CATEGORIES } from "../data-pum-plot.js";
+import { registerClearer } from "./viewstate.js";
 
 let step = 0;
 let draft = null;
@@ -38,6 +39,9 @@ export function inWizard() { return draft !== null; }
 
 function cancelWizard() { draft = null; step = 0; render(); }
 
+// Switching game mid-prep discards the draft rather than carrying it across.
+registerClearer(() => { draft = null; step = 0; onDone = null; });
+
 export function renderWizard(host) {
   const s = STEPS[step];
   add(host, el("h1", { text: "Prepare a game" }));
@@ -49,9 +53,12 @@ export function renderWizard(host) {
 
   const nav = el("div", { class: "section-nav" });
   STEPS.forEach((st, i) => {
+    const reachable = i <= step || legalUpTo(i);
     add(nav, el("button", {
       "aria-current": i === step ? "true" : "false",
-      onclick: () => { if (i <= step || legalUpTo(i)) { step = i; render(); } },
+      disabled: reachable ? null : true,
+      title: reachable ? null : "Finish the earlier steps first",
+      onclick: () => { if (reachable) { step = i; render(); } },
     }, `${st.n} ${st.name}`));
   });
   add(host, nav);
@@ -251,19 +258,23 @@ function stepNodes(host) {
 }
 
 function finish() {
-  const game = store.createGame(draft);
+  // Take a local copy first: creating the game changes the active context, which
+  // fires the clearer registered below and nulls `draft` mid-flight.
+  const d = draft;
+  draft = null;
+  step = 0;
+
+  const game = store.createGame(d);
   const scope = game.scopes[0];
   store.addJournal({
     kind: "prep",
     title: "Game prepared",
-    detail: [draft.universe, draft.tone, plotSheet(draft.sheetId).name].filter(Boolean).join(" · "),
+    detail: [d.universe, d.tone, plotSheet(d.sheetId).name].filter(Boolean).join(" · "),
     scopeId: scope.id,
   });
-  if (draft.startingPoint) {
-    store.addJournal({ kind: "prep", title: "Starting point", detail: draft.startingPoint, scopeId: scope.id });
+  if (d.startingPoint) {
+    store.addJournal({ kind: "prep", title: "Starting point", detail: d.startingPoint, scopeId: scope.id });
   }
-  draft = null;
-  step = 0;
   toast("Ready. Open a scene when you are.");
   if (onDone) { const f = onDone; onDone = null; f(); }
   else go("play", "track");

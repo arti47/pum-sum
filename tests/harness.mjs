@@ -40,6 +40,25 @@ function eq(name, a, b) {
   }
 }
 
+// --- 0a. the service-worker app shell lists every shipped file --------------
+// A module added without its app-shell entry 404s offline and the app never boots.
+{
+  const sw = readFileSync(join(root, "service-worker.js"), "utf8");
+  const listed = new Set(
+    [...sw.matchAll(/"\.\/([^"]+)"/g)].map((m) => m[1])
+      .filter((f) => /\.(js|css|html|svg|json)$/.test(f))
+  );
+  const shipped = [
+    ...readdirSync(join(root, "src")).map((f) => "src/" + f),
+    ...readdirSync(root).filter((f) =>
+      /^(data-.*\.js|styles\.css|index\.html|icon\.svg|manifest\.json)$/.test(f)),
+  ];
+  const missing = shipped.filter((f) => !listed.has(f));
+  ok("every shipped file is in the service-worker app shell", missing.length === 0, missing.join(", "));
+  const stale = [...listed].filter((f) => f && !shipped.includes(f));
+  ok("the app shell lists no file that does not exist", stale.length === 0, stale.join(", "));
+}
+
 // --- imports ---------------------------------------------------------------
 const oracles = await import("../data-pum-oracles.js");
 const plot = await import("../data-pum-plot.js");

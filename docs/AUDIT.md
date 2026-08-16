@@ -101,6 +101,19 @@ actually returns to — sits above Appearance; its first primary action is now a
 reference build and fell out of one measured table. Same here: reading the screens found
 nothing; the table found both.
 
+### Pass 5b — Shipped-file sweep
+
+**F-10 · A module was added without its service-worker app-shell entry.**
+*Rule:* template §6.1 — adding a `src/` file updates the app-shell list and bumps
+`CACHE_VERSION` in the same change.
+*Target:* `src/viewstate.js` (added by the F-5 fix) was missing from `APP_SHELL`.
+*Fix:* listed it, bumped the cache to `um-v2`, and added a harness check asserting the shell
+lists every shipped file and no file that does not exist.
+*Why it mattered:* the app would have booted fine online and failed completely offline — the
+module 404s, the import chain breaks, nothing renders. A play aid that dies in a basement is
+the specific failure the caching strategy exists to prevent, and only a mechanical check
+finds it, because nothing looks wrong while you have a network.
+
 ### Pass 6 — Stress state
 
 Re-probed against the `stress` fixture (3 plot sheets, 14 cast entries with rolled traits,
@@ -116,10 +129,49 @@ journal links to the plot sheet, a nodeless sheet says so rather than showing an
 
 ---
 
+## Cycle 2 — run after every cycle-1 fix
+
+Two findings, both introduced by cycle-1 fixes. This is the reason for the stopping rule:
+a clean pass proves nothing until the *whole cycle* is re-run against the fixed code.
+
+**F-11 · The wizard hijacked every route on the More tab.**
+*Target:* `renderMore` returned `renderWizard(host)` whenever a draft existed, ignoring the
+requested section, so tapping Rules or Settings mid-preparation re-rendered the wizard and the
+section nav read as broken.
+*Fix:* the wizard renders on Home only; the other More sections render normally and carry a
+"A game is half-prepared" card back to it. Found by the interaction audit, as four wizard
+step-buttons that "changed nothing" on the *Rules* route.
+
+**F-12 · The wizard's own step nav offered steps it would not go to.**
+*Target:* `wizard.js` step buttons for not-yet-legal steps were rendered enabled and silently
+did nothing when tapped.
+*Fix:* they are `disabled` with a title naming the reason. §6.4 — a refusal explains the rule;
+it does not fail silently.
+
+**F-13 · Creating the game nulled the wizard's draft mid-`finish()`.**
+*Rule:* not a book rule — the same seam again. `store.createGame` emits, `main.js` sees the
+active game change and fires the clearers, the wizard's clearer nulls `draft`, and the next
+line read `draft.universe` and threw.
+*Fix:* `finish()` takes a local copy of the draft before creating anything.
+*Why it mattered:* a **regression introduced by the F-5 fix**, and the reason the whole cycle
+gets re-run rather than only the pass that found the original defect. The browser smoke walk
+caught it on the first re-run: the wizard completed, threw, and never reached the plot sheet.
+
+**F-14 · Track boxes measured 36px at 320px width.** Only visible at the narrowest supported
+width, where eleven boxes flexed below the 40px target. `min-width` raised from 30px to 40px.
+
+### Cycle 2 result
+
+After F-11 to F-14: unit harness 945 green, dead-data scan clean, browser smoke 304 green,
+interaction audit 338 controls with no error, no unclickable control and no no-op, layout probe
+clean at 320/360/390 under the stress fixture. **A full cycle with no new finding.**
+
+---
+
 ## Verified clean — do not re-litigate
 
 - **Data values.** Every table's row count, range coverage and uniqueness is asserted in the
-  unit harness (930 assertions). The granular columns tile 1–100 in all 21 register/band
+  unit harness (945 assertions). The granular columns tile 1–100 in all 21 register/band
   combinations; all 24 SUM tables tile their die exactly; both d100 enrichment tables cover
   1–100 with 50 unique paired rows. Track box counts are measured from 300 dpi renders, not
   estimated, and pinned by `EXPECTED_TRACK`.

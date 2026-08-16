@@ -46,16 +46,22 @@ let clicked = 0;
 
 await page.goto(url, { waitUntil: "networkidle" });
 
+// Reset in-page rather than reloading: re-seed localStorage, make the store
+// re-read it, clear every module's transient view state, and re-render. Same
+// isolation as a reload and far faster, so the audit actually finishes.
 async function resetTo(tab, section) {
-  await page.evaluate((state) => {
+  await page.evaluate(async ([state, t, s]) => {
     localStorage.setItem("umState", JSON.stringify(state));
-  }, MID);
-  await page.reload({ waitUntil: "networkidle" });
-  await page.evaluate(async ([t, s]) => {
+    const store = await import("./src/store.js");
+    store.load();
+    const vs = await import("./src/viewstate.js");
+    vs.clearTransient();
+    const back = document.querySelector(".modal-back");
+    if (back) back.remove();
     const r = await import("./src/router.js");
     r.go(t, s);
-  }, [tab, section]);
-  await page.waitForTimeout(60);
+  }, [MID, tab, section]);
+  await page.waitForTimeout(40);
 }
 
 async function snapshot() {
@@ -77,14 +83,16 @@ for (const [tab, section] of ROUTES) {
 
   const count = await page.evaluate(() => {
     const sel = "#screen button, #screen .btn, #action-bar button, #screen summary";
-    return [...document.querySelectorAll(sel)].filter((n) => n.offsetParent !== null).length;
+    return [...document.querySelectorAll(sel)].filter((n) =>
+      n.offsetParent !== null && !n.closest("details:not([open]) > *:not(summary)")).length;
   });
 
   for (let i = 0; i < count; i++) {
     await resetTo(tab, section);
     const info = await page.evaluate((idx) => {
       const sel = "#screen button, #screen .btn, #action-bar button, #screen summary";
-      const nodes = [...document.querySelectorAll(sel)].filter((n) => n.offsetParent !== null);
+      const nodes = [...document.querySelectorAll(sel)].filter((n) =>
+        n.offsetParent !== null && !n.closest("details:not([open]) > *:not(summary)"));
       const n = nodes[idx];
       if (!n) return null;
       n.setAttribute("data-audit-target", "1");
