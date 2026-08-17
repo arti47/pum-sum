@@ -1131,16 +1131,22 @@ export const GUM_PLOT_SEED = [
 export const GUM_GRAND = ["grand-action", "grand-adjective", "grand-subject"];
 
 // --- Which tables a blank field reaches for --------------------------------
-// Every text input in the app can roll three words for inspiration. The tables
-// are chosen by what the field is *for*, so a character field pulls archetypes
-// and flaws while a location field pulls features and purpose. Nothing here is
-// new content: these are the same 43 tables, pointed at a blank.
+// Every text field that GUM can actually serve offers three rolled words. The
+// tables are chosen by what the field is *for*, so a character field pulls
+// archetypes and flaws while a location field pulls features and purpose.
+// Nothing here is new content: the same 43 tables, pointed at a blank.
+//
+// The rule that decides whether a field appears here at all is SHAPE. Every GUM
+// row is a descriptive phrase about fiction — "Humid: wilderness, jungle,
+// raining", "Naturally draws others in". That is the right shape for a field
+// that wants a piece of fiction, and the wrong shape for a field that wants a
+// proper name ("Vera", "The Neverwinter road") or a real-world answer ("D&D
+// 5e"). Pointing a table at a field of the wrong shape produces an answer that
+// reads as noise, which is worse than no offer at all — see INSPIRE_ABSENT.
 //
 // A field with more tables than it needs rotates through them on a re-roll; a
 // field with fewer rolls several times within the ones it has, which GUM p.3
-// names as its own method ("roll multiple times within one table"). Anything
-// not listed falls back to the grand oracle — GUM's own answer to "nothing
-// specific fits".
+// names as its own method ("roll multiple times within one table").
 export const GUM_FOR_FIELDS = {
   // The eight plot-node lists (PUM p.28 and the p.27 extension).
   world: ["location-archetype", "background-problem", "faction-focus", "faction-society", "faction-politics"],
@@ -1154,10 +1160,12 @@ export const GUM_FOR_FIELDS = {
   custom1: ["grand-action", "grand-adjective", "grand-subject"],
   custom2: ["grand-action", "grand-adjective", "grand-subject"],
 
-  // Game identity (PUM p.3 step 1)
-  "game-title": ["plot-hook", "location-archetype", "background-problem"],
-  "game-universe": ["location-archetype", "background-problem", "faction-focus"],
-  "game-tone": ["grand-adjective", "background-problem", "location-archetype"],
+  // Game identity (PUM p.3 step 1). A title is a name, so only the two
+  // word-shaped grand tables apply — an adjective and a subject can be read as
+  // a title ("Abundant" + "Frontier"); a plot hook cannot.
+  "game-title": ["grand-adjective", "grand-subject"],
+  // Tone is an adjective before it is anything else, plus the world's state.
+  "game-tone": ["grand-adjective", "background-problem"],
   "game-inspiration": ["grand-action", "grand-adjective", "grand-subject"],
 
   // The plot scope and its mission (PUM p.3 step 2)
@@ -1166,28 +1174,33 @@ export const GUM_FOR_FIELDS = {
   "scope-start": ["plot-hook", "initial-lead", "location-archetype"],
   "scope-notes": ["grand-action", "grand-adjective", "grand-subject"],
 
-  // People and places
-  "protagonist": ["archetypes-1", "archetypes-2", "character-edge", "character-flaw", "character-past"],
-  "protagonist-notes": ["character-past", "character-edge", "character-flaw", "character-possessions"],
+  // People and places. GUM builds a character as a *concept*, not a name, so
+  // these feed the notes beside the name rather than the name itself.
+  "protagonist-notes": ["archetypes-1", "archetypes-2", "character-edge", "character-flaw", "character-past"],
   "cast-character": ["archetypes-1", "archetypes-2", "character-edge", "character-flaw", "good-purposes"],
   "cast-location": ["location-archetype", "location-feature", "location-purpose", "location-worth"],
   "cast-notes": ["character-impression", "character-intentions", "character-activity", "character-past"],
-  "cast-rename": ["archetypes-1", "archetypes-2", "grand-subject"],
 
-  // The track and the sheet's own furniture
+  // A coming event, marked on a future box (PUM p.9)
   "timed-beat": ["nemesis-intentions", "opposition", "evil-deeds"],
-  "track-section": ["grand-action", "grand-adjective", "grand-subject"],
-  "list-name": ["grand-subject", "faction-focus", "object-function"],
 
   // The scene
   "scene-open": ["location-feature", "character-activity", "grand-action"],
+};
 
-  // The record. Rolling words to describe what already happened is a stretch,
-  // but the grand oracle is exactly the table for "nothing specific fits", and
-  // a field the player can reach is a field that gets the same offer.
-  "journal-entry": ["grand-action", "grand-adjective", "grand-subject"],
-  "journal-note": ["grand-action", "grand-adjective", "grand-subject"],
-  "session-break": ["grand-action", "grand-adjective", "grand-subject"],
+// Fields the app deliberately does NOT offer a roll on, and why. Recorded the
+// way ruling A8 records the absent safety tools: the honest answer is that the
+// book has nothing for this, said plainly, rather than a table pointed at the
+// wrong question so that every field has *something*.
+export const INSPIRE_ABSENT = {
+  "game-universe": "Which RPG or fiction you are playing in is a real-world answer — D&D 5e, Blade Runner, your own. GUM generates worlds, not the names of published ones.",
+  "protagonist-name": "GUM has no name generator. It builds a character as a concept; the concept goes in the notes beside the name.",
+  "cast-rename": "Renaming something that already exists is a correction, not an invention.",
+  "list-name": "A plot-node list's name is a category you choose — factions, rumours, debts. GUM has no table of categories.",
+  "track-section": "A track section is a structural label for your own pacing, not a piece of fiction.",
+  "journal-entry": "The journal records what already happened. Rolling for it would be inventing over your own play.",
+  "journal-note": "Same: a note interprets a roll you have already made.",
+  "session-break": "A bookmark for where you stopped.",
 };
 
 // How many words a roll produces. Three, per the grand oracle's own shape.

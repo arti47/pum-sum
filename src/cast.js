@@ -44,8 +44,14 @@ export function renderCast(host) {
   add(pcs, el("button", {
     class: "btn wide",
     onclick: () => promptModal({
-      title: "Add a protagonist", label: "Name", inspire: "protagonist",
-      onSubmit: (v) => { if (v) { store.addProtagonist(v); render(); } },
+      // no-inspire: GUM has no name generator; the concept belongs in the notes.
+      title: "Add a protagonist", label: "Name",
+      notes: {
+        label: "A line about them (optional)",
+        placeholder: "What marks them out?",
+        inspire: "protagonist-notes",
+      },
+      onSubmit: (v, notes) => { if (v) { store.addProtagonist(v, notes); render(); } },
     }),
   }, "Add a protagonist"));
   add(host, pcs);
@@ -70,10 +76,15 @@ export function renderCast(host) {
       el("button", {
         class: "btn",
         onclick: () => promptModal({
+          // no-inspire: a name is the player's; the rolled concept sits beside it.
           title: kind === "character" ? "Add a character" : "Add a location",
           label: "Name",
-          inspire: kind === "character" ? "cast-character" : "cast-location",
-          onSubmit: (v) => { if (v) { store.addCast(kind, v); render(); } },
+          notes: {
+            label: kind === "character" ? "What GUM says about them" : "What GUM says about it",
+            placeholder: kind === "character" ? "Archetype, edge, flaw…" : "Feature, purpose, worth…",
+            inspire: kind === "character" ? "cast-character" : "cast-location",
+          },
+          onSubmit: (v, notes) => { if (v) { store.addCast(kind, v, notes); render(); } },
         }),
       }, kind === "character" ? "Add a character" : "Add a location")
     ));
@@ -207,8 +218,8 @@ function openCast(c) {
         onClick: () => {
           closeModal();
           promptModal({
+            // no-inspire: renaming something that exists is a correction.
             title: "Rename", label: "Name", value: c.name,
-            inspire: c.kind === "location" ? "cast-location" : "cast-rename",
             onSubmit: (v) => { if (v) { store.updateCast(c.id, { name: v }); render(); } },
           });
           return true;

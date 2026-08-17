@@ -4,7 +4,7 @@
 import { el, add, announce, fmtRange } from "./core.js";
 import {
   explain, actionBar, modal, closeModal, toast, confirmModal, promptModal,
-  resultCard, emptyState, inspireBlock,
+  resultCard, emptyState,
 } from "./ui.js";
 import * as store from "./store.js";
 import {
@@ -443,7 +443,6 @@ function addSectionDialog() {
     title: "Add a track section",
     body: el("div", null,
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Section name" }), name),
-      inspireBlock("track-section", name),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Boxes" }), boxes),
       el("p", { class: "muted", text: "More boxes means more beats — and more of the universe pushing back before this thread resolves." })
     ),
@@ -605,10 +604,10 @@ function beatCard(scope) {
   actions.push({
     label: "Add a note",
     onClick: () => promptModal({
+      // no-inspire: a note records the beat you just played.
       title: "Note this beat",
       label: "What happened?",
       multiline: true,
-      inspire: "journal-note",
       onSubmit: (v) => { if (v) store.updateJournal(b.journalId, { note: v }); toast("Noted."); },
     }),
   });
@@ -639,8 +638,8 @@ function nodeBlock(scope, beat) {
       add(wrap, el("button", {
         class: "btn small primary",
         onclick: () => promptModal({
+          // no-inspire: a list's name is a category you choose, not fiction.
           title: "Name your list", label: "What is this list of?",
-          inspire: "list-name",
           hint: "Factions, rumours, omens, debts owed — whatever this game keeps reaching for.",
           onSubmit: (v) => {
             if (!v) return;
@@ -733,11 +732,15 @@ function unprintedListBlock(scope, wrap, n, cat, beat) {
   add(row, el("button", {
     class: "btn small primary",
     onclick: () => promptModal({
+      // no-inspire: the name is yours; the rolled concept lands in the notes.
       title: kind === "location" ? "An interesting location" : "A notable character",
       label: "Name",
-      inspire: n.categoryId,
       hint: "Whoever the moment asks for. They are kept in the cast so you can reach for them again.",
-      onSubmit: (v) => { if (v) keep(v); },
+      notes: {
+        label: "What GUM says about them",
+        inspire: n.categoryId,
+      },
+      onSubmit: (v, notes) => { if (v) keep(v, notes); },
     }),
   }, "Bring one in"));
 
@@ -840,9 +843,9 @@ function renderNodes(host, scope) {
       add(card, el("button", {
         class: "btn wide",
         onclick: () => promptModal({
+          // no-inspire: as above.
           title: "Name your list",
           label: "What is this list of?",
-          inspire: "list-name",
           hint: "Factions, rumours, omens, debts owed, ship systems — whatever your game keeps reaching for.",
           onSubmit: (v) => {
             if (!v) return;
@@ -886,8 +889,8 @@ function nodeCard(scope, cat, slots) {
       el("button", {
         class: "btn small ghost",
         onclick: () => promptModal({
+          // no-inspire: as above.
           title: "Rename this list", label: "Name", value: customListName(scope, cat.id),
-          inspire: "list-name",
           onSubmit: (v) => { if (v) { store.setCustomListName(cat.id, v); render(); } },
         }),
       }, "Rename"),

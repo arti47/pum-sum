@@ -278,8 +278,8 @@ function keepDialog(parts, label) {
     onclick: () => {
       closeModal();
       promptModal({
+        // no-inspire: you have just rolled; this only names the result.
         title: "Name them", label: "Name",
-        inspire: "cast-character",
         hint: text,
         onSubmit: (v) => {
           if (!v) return;
@@ -295,8 +295,8 @@ function keepDialog(parts, label) {
     onclick: () => {
       closeModal();
       promptModal({
+        // no-inspire: as above.
         title: "Name the place", label: "Name",
-        inspire: "cast-location",
         hint: text,
         onSubmit: (v) => {
           if (!v) return;

@@ -52,12 +52,23 @@ bias to them.
 **G1 (p.21):** "Evil intentions or deeds" prints *Vandalism and destruction* twice, at 17 and
 at 22. Kept as printed so the app's odds match the book's; surfaced in the rules library.
 
-## Three words beside any blank
-Every text field in the app can ask GUM for three words. The tables are chosen by what the
+## Three words beside a blank GUM can serve
+Most text fields can ask GUM for three words. The tables are chosen by what the
 field is *for* — `GUM_FOR_FIELDS`, 29 fields, falling back to the grand oracle for anything
 unmapped, because that is what the grand oracle is for. A field with more than three tables
 rotates through them on a re-roll; a field with fewer rolls repeatedly within the ones it has,
 which the book names as its own method. "All N tables" rolls the whole mapped set at once.
+
+**Shape decides whether a field is offered at all.** Every GUM row is a descriptive phrase
+about fiction — "Humid: wilderness, jungle, raining", "Naturally draws others in". That is the
+right shape for a piece of story and the wrong shape for a proper name ("Vera") or a
+real-world answer ("D&D 5e"). Eight fields therefore offer nothing and say why in
+`INSPIRE_ABSENT`, surfaced as *Rules → Where the app does not roll*. A table pointed at the
+wrong question reads as noise, which is worse than an honest empty hand — the same call ruling
+A8 makes about the absent safety tools.
+
+Where a name and a description sit in one dialog, the roll feeds the **description**: GUM
+builds a character as a concept, and a concept does not belong in a Name box.
 
 Words **append**; they never replace what you already wrote. Nothing rolls until the block is
 opened, and only a word you keep reaches the journal — so the Dice view counts the dice you

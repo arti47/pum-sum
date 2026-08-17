@@ -129,7 +129,8 @@ function stepUniverse(host) {
   const card = el("div", { class: "card" });
   add(card, el("p", { class: "muted", text: "Narrow things down. Which RPG or universe do you want to roleplay in? If it brings no setting, define the world, tone and theme yourself. Mystery or horror? Social or action?" }));
   add(card, field("Name this game", "title", { placeholder: "The Neverwinter road", inspire: "game-title" }));
-  add(card, field("Universe or RPG", "universe", { placeholder: "D&D 5e · Blade Runner · my own", inspire: "game-universe" }));
+  // no-inspire: which RPG you are playing is a real-world answer, not one GUM has.
+  add(card, field("Universe or RPG", "universe", { placeholder: "D&D 5e · Blade Runner · my own" }));
   add(card, field("World, tone and theme", "tone", { placeholder: "Grim frontier fantasy, low magic", inspire: "game-tone" }));
   add(card, field("Inspiration", "inspiration", {
     multiline: true,
@@ -198,7 +199,6 @@ function stepProtagonists(host) {
   name.addEventListener("input", () => { addBtn.disabled = !name.value.trim(); });
   name.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addOne(); } });
   add(card, el("label", { class: "field" }, el("span", { class: "lbl", text: "Name" }), name));
-  add(card, inspireBlock("protagonist", name));
   add(card, el("label", { class: "field" }, el("span", { class: "lbl", text: "Notes" }), notes));
   add(card, addBtn);
   add(host, card);

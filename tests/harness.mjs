@@ -400,9 +400,21 @@ ok("every GUM_FOR_FIELDS id is a real table",
   // Every plot-node category is a field, so an empty slot always has an offer.
   ok("every plot-node category is a field",
     derived.NODE_IDS.every((id) => gum.GUM_FOR_FIELDS[id]));
-  // An unmapped field must still offer something rather than nothing.
+  // A field the app never asks about still resolves to something, so a typo in a
+  // call site degrades to the grand oracle rather than throwing.
   eq("an unknown field falls back to the grand oracle",
     forge.inspireTables("no-such-field").join(","), gum.GUM_GRAND.join(","));
+  // Every field the app deliberately does NOT roll on carries its reason, and no
+  // field is in both lists.
+  ok("every absent field states a reason",
+    Object.values(gum.INSPIRE_ABSENT).every((r) => typeof r === "string" && r.length > 20));
+  ok("no field is both offered and absent",
+    !Object.keys(gum.INSPIRE_ABSENT).some((k) => gum.GUM_FOR_FIELDS[k]),
+    Object.keys(gum.INSPIRE_ABSENT).filter((k) => gum.GUM_FOR_FIELDS[k]).join(", "));
+  // Shape rule: a field that asks for a proper name is not offered a phrase.
+  for (const nameField of ["game-universe", "list-name", "track-section", "cast-rename"]) {
+    ok(`${nameField} is recorded as out of GUM's reach`, !!gum.INSPIRE_ABSENT[nameField]);
+  }
   eq("a mapped field uses its own tables",
     forge.inspireTables("cast-location")[0], "location-archetype");
   eq("three words is the roll", gum.INSPIRE_WORDS, 3);
@@ -419,13 +431,21 @@ ok("every GUM_FOR_FIELDS id is a real table",
     if (f === "ui.js") continue;   // the definition itself
     const src = readFileSync(join(root, "src", f), "utf8");
     for (const m of src.matchAll(/promptModal\(\{([\s\S]*?)\n\s*\}\)/g)) {
-      sites.push({ file: f, hasInspire: /\binspire:/.test(m[1]) });
+      sites.push({
+        file: f,
+        hasInspire: /\binspire:/.test(m[1]),
+        excused: /\/\/ no-inspire:/.test(m[1]),
+      });
     }
   }
   ok("the app has text dialogs to audit", sites.length >= 20, `${sites.length} found`);
-  const bare = sites.filter((x) => !x.hasInspire).map((x) => x.file);
-  ok("every text dialog offers an inspiration roll", bare.length === 0,
-    `${bare.length} without: ${[...new Set(bare)].join(", ")}`);
+  // Not every field can be served: GUM emits phrases about fiction, which is the
+  // wrong shape for a proper name or a real-world answer. A dialog must either
+  // name a field or say in one line why it has none — silence is the bug.
+  const bare = sites.filter((x) => !x.hasInspire && !x.excused).map((x) => x.file);
+  ok("every text dialog either rolls or says why it does not", bare.length === 0,
+    `${bare.length} silent: ${[...new Set(bare)].join(", ")}`);
+  ok("some dialogs are excused, and say so", sites.some((x) => x.excused));
 }
 
 // --- 21-24. Guidance and library --------------------------------------------

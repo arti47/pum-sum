@@ -290,10 +290,10 @@ function rerollActions(result) {
     {
       label: "Note it",
       onClick: () => promptModal({
+        // no-inspire: a note interprets the answer you already have.
         title: "Note this answer",
         label: "How did you read it?",
         multiline: true,
-        inspire: "journal-note",
         onSubmit: (v) => { if (v) store.updateJournal(last.entryId, { note: v }); toast("Noted."); },
       }),
     },

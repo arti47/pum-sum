@@ -172,7 +172,7 @@ export const RULES_LIBRARY = [
       },
       {
         id: "gum-inspire", title: "Three words beside any blank", page: "GUM p.3",
-        body: "Every text field in the app can roll three GUM words for inspiration. Which tables it rolls depends on what the field is for — a character field reaches for archetypes and flaws, a location field for features and purpose, the mission field for GUM's own six-table plot seed. Words are appended to what you have written, never substituted for it, and nothing is rolled until you open the block: the books ask you not to roll when you already know. Only words you keep are journalled.",
+        body: "Most text fields can roll three GUM words for inspiration. Which tables they roll depends on what the field is for — a character field reaches for archetypes and flaws, a location field for features and purpose, the mission field for GUM's own six-table plot seed. Some fields offer nothing, and that is deliberate: every GUM row is a phrase about fiction, which is the wrong shape for a proper name or a real-world answer like which RPG you are playing. See \"Where the app does not roll\". Words are appended to what you have written, never substituted for it, and nothing is rolled until you open the block: the books ask you not to roll when you already know. Only words you keep are journalled.",
       },
       {
         id: "gum-nodes", title: "GUM fills a plot sheet", page: "GUM p.3",

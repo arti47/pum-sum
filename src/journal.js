@@ -88,9 +88,9 @@ function renderEntries(host, game) {
       // bundle at one. It only lets you mark where you stopped.
       label: "Session break",
       onClick: () => promptModal({
+        // no-inspire: a bookmark for where you stopped.
         title: "Mark a session break",
         label: "A line about where you stopped (optional)",
-        inspire: "session-break",
         hint: "Neither book defines a session procedure, so nothing is reset or rolled. This is a bookmark for you.",
         multiline: true,
         onSubmit: (v) => {
@@ -101,10 +101,10 @@ function renderEntries(host, game) {
       }),
     },
     onClick: () => promptModal({
+      // no-inspire: the journal records play; rolling here invents over it.
       title: "Write in the journal",
       label: "What happened?",
       multiline: true,
-      inspire: "journal-entry",
       onSubmit: (v) => { if (v) { store.addJournal({ kind: "note", title: "", detail: v }); render(); } },
     }),
   });
@@ -128,7 +128,8 @@ function entryEl(e) {
   add(tools, el("button", {
     class: "btn small ghost",
     onclick: () => promptModal({
-      title: "Note", label: "Your note", value: e.note, multiline: true, inspire: "journal-note",
+      // no-inspire: a note interprets a roll already made.
+      title: "Note", label: "Your note", value: e.note, multiline: true,
       onSubmit: (v) => { store.updateJournal(e.id, { note: v }); render(); },
     }),
   }, e.note ? "Edit note" : "Add note"));

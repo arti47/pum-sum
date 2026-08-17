@@ -486,3 +486,32 @@ have shipped unaudited. It now expands each dialog's folds first: 300 in-dialog 
 492. The deep audit expands `details.inspire` on the Play routes for the same reason. A
 source-scanning unit test asserts every `promptModal` in the app names a field, so a dialog
 added later without one fails the harness; it was watched failing before it was trusted.
+
+### Phase 8a — the map was wrong on shape
+
+Reported from play, not caught by any pass: rolling on *Name this game* and *Universe or RPG*
+returned answers with nothing to do with the field.
+
+**The bad premise.** Phase 8 assumed every text field could be served by *some* table, with the
+grand oracle as a catch-all. It cannot. Every GUM row is a descriptive phrase about fiction;
+that is the right shape for a piece of story and the wrong shape for a **proper name** or a
+**real-world answer**. *Universe or RPG* wants "D&D 5e" — GUM generates worlds, not the names
+of published ones. Pointing a table at it produced "Captive: prison, police station", which
+reads as noise.
+
+**Why no harness caught it.** Every guard asked *is a table wired here and does it exist* —
+questions about plumbing. None asked *does what this table emits fit what this field wants*,
+because that is a judgement about meaning. The guard now enforces the weaker but checkable
+form: a dialog must either name a field or carry a `// no-inspire:` line saying why it does
+not, so an unconsidered field fails rather than silently defaulting.
+
+**Fixes.** Eight fields lost the block and gained a recorded reason (`INSPIRE_ABSENT`).
+Name fields no longer take the concept into the name box — `promptModal` gained an optional
+second field so "Add a character" asks for the name and the rolled archetype lands in the
+notes beside it, restoring what the retired `gumSuggest` flow did and undoing a regression
+Phase 8 had introduced. `game-title` now rolls only the two word-shaped grand tables, and
+`game-tone` an adjective plus the world's state.
+
+**The absence is shown, not merely recorded.** Data with no shipped surface is the §0 defect,
+and a player who sees one blank offer three words and the next offer none deserves the reason:
+Rules gains a *Where the app does not roll* card, listing all eight with their explanations.

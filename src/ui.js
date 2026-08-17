@@ -111,7 +111,10 @@ export function inspireBlock(fieldId, input) {
   return inspireFactory(fieldId, (text) => appendToField(input, text));
 }
 
-export function promptModal({ title, label, value = "", multiline = false, placeholder = "", hint = "", inspire = null, onSubmit }) {
+// `notes` adds a second field below the first. It exists because GUM builds a
+// character as a concept and the concept does not belong in a Name box: the
+// dialog asks for the name, and the rolled words land beside it.
+export function promptModal({ title, label, value = "", multiline = false, placeholder = "", hint = "", inspire = null, notes = null, onSubmit }) {
   const input = multiline
     ? el("textarea", { placeholder })
     : el("input", { type: "text", placeholder });
@@ -124,21 +127,28 @@ export function promptModal({ title, label, value = "", multiline = false, place
     )
   );
   add(body, inspireBlock(inspire, input));
-  if (!multiline) {
+
+  let notesInput = null;
+  if (notes) {
+    notesInput = el("textarea", { placeholder: notes.placeholder || "" });
+    notesInput.value = notes.value || "";
+    add(body, el("label", { class: "field" },
+      el("span", { class: "lbl", text: notes.label }),
+      notesInput
+    ));
+    add(body, inspireBlock(notes.inspire, notesInput));
+  }
+  const submit = () => onSubmit(input.value.trim(), notesInput ? notesInput.value.trim() : "");
+  if (!multiline && !notes) {
     input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        const v = input.value.trim();
-        closeModal();
-        onSubmit(v);
-      }
+      if (e.key === "Enter") { e.preventDefault(); closeModal(); submit(); }
     });
   }
   return modal({
     title,
     body,
     actions: [
-      { label: "Save", primary: true, onClick: () => onSubmit(input.value.trim()) },
+      { label: "Save", primary: true, onClick: submit },
       { label: "Cancel" },
     ],
   });

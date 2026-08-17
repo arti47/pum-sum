@@ -15,7 +15,7 @@ import { renderTutorial } from "./tutorial.js";
 import { RULES_LIBRARY } from "../data-rules-library.js";
 import { PLAY_STATES, FLOWCHART, ADVICE, ADVANCED, MACHINES } from "../data-guidance.js";
 import { PUM_ERRATA, NODE_CATEGORIES } from "../data-pum-plot.js";
-import { GUM_ERRATA } from "../data-gum.js";
+import { GUM_ERRATA, INSPIRE_ABSENT } from "../data-gum.js";
 
 let ruleSearch = "";
 let pendingRuleId = null;
@@ -185,7 +185,6 @@ function editGame(game) {
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Title" }), title),
       inspireBlock("game-title", title),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Universe or RPG" }), universe),
-      inspireBlock("game-universe", universe),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "World, tone and theme" }), tone),
       inspireBlock("game-tone", tone),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Inspiration" }), inspiration),
@@ -342,6 +341,7 @@ function renderLibrary(host) {
 
   add(host, guidanceCard());
   add(host, errataCard());
+  if (Settings.gum()) add(host, noRollCard());
 
   if (pendingRuleId) {
     const target = pendingRuleId;
@@ -397,6 +397,24 @@ function guidanceCard() {
   add(mech, mBody);
   add(card, mech);
 
+  return card;
+}
+
+// The fields the app deliberately does not roll on, and why. Recorded the way
+// ruling A8 records the absent safety tools: a player who notices that one blank
+// offers three words and the next does not deserves the reason, not a shrug.
+function noRollCard() {
+  const card = el("div", { class: "card" });
+  add(card, el("div", { class: "card-head" },
+    el("h3", { text: "Where the app does not roll" }),
+    el("span", { class: "cite", text: "GUM p.3" })
+  ));
+  add(card, el("p", { class: "muted", text: "Most text fields offer three GUM words. These do not, because every GUM row is a phrase about fiction — the right shape for a piece of story, the wrong shape for a proper name or a real-world answer. A table pointed at the wrong question reads as noise, so the app says nothing instead." }));
+  for (const [field, why] of Object.entries(INSPIRE_ABSENT)) {
+    const d = el("details", { class: "acc" }, el("summary", null, field.replace(/-/g, " ")));
+    add(d, el("div", { class: "acc-body" }, el("p", { text: why })));
+    add(card, d);
+  }
   return card;
 }
 
