@@ -441,6 +441,12 @@ branch in this repo. Reconfirmed by the owner on 2026-08-17 after audit cycle 5,
 session-level rule had held the work on its branch pending permission — that permission is
 standing, and does not need asking again.
 
+*Known environment limit:* the sandboxed git proxy used by Claude Code sessions accepts pushes
+but **silently drops a delete refspec** — `git push origin --delete <branch>` reports
+"Everything up-to-date" and the ref survives, and the GitHub MCP tool set has no
+delete-branch call. So from a session, the local branch goes and the remote one has to be
+deleted from GitHub's own UI. Say so rather than reporting a deletion that did not happen.
+
 **`CLAUDE.md` is updated in the same change, every time.** This is the template's §10.1 rule
 and it is not optional: a code change with a stale spec is an incomplete change. In practice
 that means, for any change worth committing:
