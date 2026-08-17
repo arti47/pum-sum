@@ -222,8 +222,12 @@ function stepSheet(host) {
     add(card, el("p", { class: "cite", text: sheet.nodeSlots
       ? `${sheet.nodeSlots} node slots per list${sheet.expandedNodes ? " · characters and locations too" : ""}`
       : "no plot nodes" }));
+    // The picker behaves like a radio group, so say so: without aria-pressed a
+    // screen reader hears ten identical buttons and no indication of which one
+    // is live, and the chosen one is a control that correctly does nothing.
     add(card, el("button", {
       class: `btn wide ${chosen ? "primary" : ""}`.trim(),
+      "aria-pressed": chosen ? "true" : "false",
       onclick: () => { draft.sheetId = sheet.id; render(); },
     }, chosen ? "Chosen" : "Choose this sheet"));
     add(host, card);
@@ -299,6 +303,7 @@ function stepNodes(host) {
       add(card, el("h3", { text: "A list of your own" }));
       add(card, el("p", { class: "muted", text: `${sheet.name} pairs with the plot-node extension sheet, which carries two blank lists for whatever this game needs that the printed categories do not cover. ${unused.length} still unused.` }));
       const name = el("input", { type: "text", placeholder: "Factions · rumours · omens · debts owed" });
+      const addBtn = el("button", { class: "btn wide", disabled: true }, "Add a plot node list");
       const addList = () => {
         const v = name.value.trim();
         if (!v) return;
@@ -306,9 +311,12 @@ function stepNodes(host) {
         name.value = "";
         render();
       };
+      addBtn.addEventListener("click", addList);
+      // Disabled until there is a name, rather than silently doing nothing.
+      name.addEventListener("input", () => { addBtn.disabled = !name.value.trim(); });
       name.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addList(); } });
       add(card, el("label", { class: "field" }, el("span", { class: "lbl", text: "What is this list of?" }), name));
-      add(card, el("button", { class: "btn wide", onclick: addList }, "Add a plot node list"));
+      add(card, addBtn);
       add(card, el("p", { class: "cite", text: "PUM p.27 — point a face of the Random Prompt column at it on a Customized sheet." }));
       add(host, card);
     }

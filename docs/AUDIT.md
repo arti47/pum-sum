@@ -371,7 +371,15 @@ ten slots in each of two lists called "My list"; everything typed there vanished
 *Fix:* an unnamed list gets no slots in prep either, and naming one is now part of prep —
 `draft.customNames` carried through `store.createGame` into the new scope.
 
-**F-23 · "Add protagonist" did nothing with an empty name.** Disabled until there is one.
+**F-23 · Controls that silently did nothing with an empty field.** The wizard's
+"Add protagonist", and the new "Add a plot node list" beside it, both read the name input and
+returned when it was blank. Disabled until there is a name — a control that says why it cannot
+act yet beats one that appears to work and doesn't (§6.4).
+
+**F-24 · The plot-sheet picker had no selected-state semantics.** Ten visually distinct cards
+and, to a screen reader, ten identical buttons with no indication of which was live. They
+carry `aria-pressed` now; that also tells the audit that the chosen one is *meant* to do
+nothing when tapped.
 
 ### Pass 4 — the permission sweep, re-run
 
@@ -426,3 +434,11 @@ the correct behaviour.
 - 1,480 controls and 1,857 in-dialog buttons clicked in isolation across the sheet matrix:
   no JS errors, no unclickable controls, no no-ops.
 - The book's loop still walks without the tab bar; layout still clean at 320/360/390.
+
+### The stopping rule
+
+The first deep run produced thirty findings, twenty-seven of which were the detector's own
+blind spot (F-22). The second produced three, all real (F-23, F-24). The third — with every
+pass re-run after those fixes — produced none: 1,427 controls, 1,857 in-dialog buttons and
+3,286 write-back checks across ten plot sheets and the wizard, plus unit, dead-data, smoke,
+interaction, modal, flow and layout, all clean. **Cycle closed.**
