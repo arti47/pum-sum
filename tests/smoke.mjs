@@ -291,7 +291,7 @@ for (const width of WIDTHS) {
   await page.waitForTimeout(120);
   ok("closing a scene summarises what changed",
     (await page.locator(".modal h2").first().textContent()) === "Scene closed");
-  await page.getByRole("button", { name: "Done" }).click();
+  await page.getByRole("button", { name: "Open the next scene" }).click();
   await page.waitForTimeout(80);
 
   // Read it back

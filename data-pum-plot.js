@@ -136,6 +136,8 @@ export const PROMPT_NOTES = {
   questions: "Play a scene that answers the question, wholly or in part.",
   characters: "New or familiar — met, mentioned, or referenced. It need not mean they are physically present.",
   locations: "Discovered or learned about, within the reach of the story. A mention counts.",
+  custom1: "Your own list. Read the entry the way the four printed categories are read — as something the story now reaches for.",
+  custom2: "Your own list. Read the entry the way the four printed categories are read — as something the story now reaches for.",
 };
 
 // --- Plot node categories (p.28) ------------------------------------------
@@ -164,6 +166,16 @@ export const NODE_CATEGORIES = [
     id: "characters", name: "Notable characters", expanded: true,
     definition: "Characters involved in the current plot scope who can get mentioned, show up, or be recalled.",
     examples: "Gard the tavern keeper · Lisa the Mad Daughter · the Captain",
+  },
+  {
+    id: "custom1", name: "My list", expanded: true, custom: true,
+    definition: "A plot node list of your own naming. The extension sheet prints two blank ones — whatever this game needs that the four base categories do not cover.",
+    examples: "factions · rumours · omens · debts owed · ship systems",
+  },
+  {
+    id: "custom2", name: "My list", expanded: true, custom: true,
+    definition: "The second blank list from the extension sheet.",
+    examples: "clues · contacts · weather turns · dwindling supplies",
   },
   {
     id: "locations", name: "Interesting locations", expanded: true,

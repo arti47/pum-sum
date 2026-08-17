@@ -609,15 +609,21 @@ function showTextDump(title, text, filename) {
       {
         label: "Download",
         onClick: () => {
+          // Some embedded viewers block a page-initiated download silently: the
+          // click neither downloads nor throws. Always report, so the button is
+          // never a control that appears to do nothing.
           try {
             const blob = new Blob([text], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = el("a", { href: url, download: filename });
+            const href = URL.createObjectURL(blob);
+            const a = el("a", { href, download: filename });
             document.body.append(a);
             a.click();
             a.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-          } catch (err) { toast("Download blocked — copy the text instead."); }
+            setTimeout(() => URL.revokeObjectURL(href), 1000);
+            toast(`Saving ${filename} — if nothing arrives, copy the text instead.`);
+          } catch (err) {
+            toast("Download blocked here — copy the text instead.");
+          }
           return true;
         },
       },

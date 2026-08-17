@@ -117,6 +117,19 @@ function renderArc(host, scope) {
   add(host, c3);
 
   if (open) {
+    const loop = el("div", { class: "card" });
+    add(loop, el("div", { class: "card-head" },
+      el("h3", { text: "While the scene runs" }),
+      el("span", { class: "cite", text: "PUM p.5" })
+    ));
+    add(loop, el("p", { class: "muted", text: "Roleplay it. Ask when you genuinely do not know. Call a beat when a moment might matter to the bigger picture." }));
+    add(loop, el("div", { class: "btn-row" },
+      el("button", { class: "btn", onclick: () => go("play", "track") }, "Call a plot beat"),
+      el("button", { class: "btn", onclick: () => go("oracles", "yesno") }, "Ask an oracle"),
+      el("button", { class: "btn", onclick: () => go("play", "cast") }, "Who is here?")
+    ));
+    add(host, loop);
+
     actionBar({
       label: "Intervention check",
       context: `scene open · ${open.interventions.length} check${open.interventions.length === 1 ? "" : "s"}`,
@@ -162,7 +175,8 @@ function closeSceneFlow(open) {
       )
     ),
     actions: [
-      { label: "Done", primary: true, onClick: () => render() },
+      { label: "Open the next scene", primary: true, onClick: () => render() },
+      { label: "Back to the plot sheet", onClick: () => go("play", "track") },
       {
         label: "Undo",
         onClick: () => {

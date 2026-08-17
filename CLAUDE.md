@@ -34,7 +34,7 @@ the subsystems this game actually has:
 | The character sheet / tracker (§9.2 Phase 2) | **The plot sheet**: plot track + plot nodes + beat controls |
 | Derived stats / vitals (§3.5) | *(none)* — the header carries plot-track position instead |
 | The Threshold that is the point of the game (§3.0) | **Plot-track completion** — how close this scope is to resolving |
-| Generic progress tracker (§3.13) | **The plot track** — one component, eleven sheet shapes |
+| Generic progress tracker (§3.13) | **The plot track** — one component, ten sheet shapes |
 | Meta-currency (§3.3) | *(none)* — PUM has no spendable economy |
 | Scene/session lifecycle (§3.12) | **SUM's scene arc**: opener → intervention → closure |
 | Bestiary / NPC compendium (§3.18) | **The cast**: notable-character plot nodes carried with their SUM-rolled traits |
@@ -118,7 +118,7 @@ The honest statement of what this app must be good at.
 | Shape | Count | Where they are |
 |---|---|---|
 | **Lookup** | **86** | Every oracle, prompt and generator table. 19 PUM, 24 SUM, 43 GUM |
-| **Permission** | **11** | Re-roll a result you dislike · ignore or reinterpret any answer · choose *not* to advance the track · advance it voluntarily without a beat · invoke a plot node deliberately instead of rolling · "add new, choose, or reroll" on any node slot · invent a plot node mid-play · re-roll a repeated beat · customise the Random Prompt column · pre-draw or grow a custom track · end a scope when you say it ends |
+| **Permission** | **12** | Re-roll a result you dislike · ignore or reinterpret any answer · choose *not* to advance the track · advance it voluntarily without a beat · invoke a plot node deliberately instead of rolling · "add new, choose, or reroll" on any node slot · invent a plot node mid-play · re-roll a repeated beat · customise the Random Prompt column · pre-draw or grow a custom track · end a scope when you say it ends · name two plot-node lists of your own (p.27) |
 | **Modifier** | 2 | SUM Rule of Bias (keep low/high) · PUM bias (roll twice, pick) — different mechanics, ruling A4 |
 | **Escalation** | 1 | The plot track: each confirmed beat advances one box toward resolution |
 | **Threshold** | 1 | Track full ⇒ the scope resolves. This is the game's stakes and it lives in the persistent header |
@@ -127,7 +127,7 @@ The honest statement of what this app must be good at.
 | **Compulsion** | 1 | Empty node slot + "still stuck" ⇒ re-roll until an entry comes up (PUM p.6) |
 | **Conversion** | 1 | An invented node written into an empty slot becomes a permanent entry in that list |
 
-**Consequence for the build:** eleven Permission rules is the largest count after Lookup.
+**Consequence for the build:** twelve Permission rules is the largest count after Lookup.
 Every one of them is a control in this app, never a sentence — that is the single biggest
 correctness risk here (template D-22), and the ability sweep (§11.2.3) is re-aimed at
 permissions rather than at abilities, which this game does not have.
@@ -179,6 +179,7 @@ optionally *in medias res*. The home screen names it as the next step until it i
 | Pending questions | Open threads, unresolved leads, mysteries |
 | Notable characters *(expanded)* | People in scope who can appear, be mentioned or recalled |
 | Interesting locations *(expanded)* | Places in scope that can be discovered or referenced |
+| *My list* ×2 *(expanded, p.27)* | Two blank lists the player names — whatever this game keeps reaching for |
 
 ### 3.12 Scene lifecycle → **SUM's scene arc**
 
@@ -194,7 +195,7 @@ There is **no session or adventure boundary** in either book (ruling A6).
 
 ### 3.13 Progress tasks → **the plot track**
 
-One component, eleven configurations. A track is an ordered list of **sections**, each
+One component, ten configurations. A track is an ordered list of **sections**, each
 holding a measured number of **boxes**. A confirmed plot beat crosses the next empty box.
 
 | Sheet | Track | Boxes | Notes |
@@ -250,7 +251,7 @@ text-size control paying back the zoom lock.
 | `data-rules-library.js` | One entry per automated rule, in the app's own words, page-cited |
 | `src/*.js` | Modules, §4.2 |
 | `manifest.json`, `service-worker.js`, `icon.svg` | PWA |
-| `tests/` | Harnesses, probes, seed fixtures, and `tests/tools/` — the retained extraction scripts |
+| `tests/` | Harnesses (`harness`, `smoke`, `interaction`, `audit-modals`, `deadcode`), probes (`probe-layout`, `probe-flow`), seed fixtures, and `tests/tools/` — the retained extraction scripts |
 | `docs/AUDIT.md` | Numbered findings per pass + the verified-clean list |
 | `docs/rules/*.md` | Distilled per-subsystem reference the audit reads against the engine |
 
@@ -287,9 +288,11 @@ umState
   games[ {
     id, title, universe, tone, createdAt, archivedAt|null,
     scopes[ {                              // one per plot sheet in play
-      id, name, mission, sheetId, startingPoint,
+      id, name, mission, sheetId, startingPoint, notes,
+      customNames: { custom1, custom2 },   // the extension sheet's two blank lists
       track: { crossed:int, marks:{ index -> label } },   // timed beats (PUM p.9)
-      nodes: { world[], problems[], findings[], questions[], characters[], locations[] },
+      nodes: { world[], problems[], findings[], questions[], characters[], locations[],
+               custom1[], custom2[] },
       openScene: { id, openedAt, opener, interventions[] } | null
     } ],
     protagonists[ { id, name, notes } ],
@@ -364,6 +367,8 @@ All ticked boxes are extracted, cited and unit-checked for row count and range c
 | Scene opener / intervention / closure | Lookup | `SUM_CONTROLLER` | `scene.open/intervene/close` | Scene tab, in play order | `closing a scene requires an open one` |
 | Custom Random Prompt column | Permission | `scope.customPrompts` | `store.setCustomPrompts` | Track → Customize → Edit the prompt column | `custom column persists and rolls` |
 | Custom track grown in play | Permission | `track.custom` | `store.addTrackSection/addTrackBox/removeTrackSection` | Track → Customize | `boxes persist and cross in order; removing a section clamps` |
+| Two plot-node lists the player names | Permission | `NODE_CATEGORIES[].custom` | `store.setCustomListName` | Nodes → Add a plot node list | `an unnamed list has no slots; naming brings it into being` |
+| A Yes/No answer can trigger a beat | Lookup | `BEAT_TRIGGERS` | `oracles.fireBeatFromOracle` | Result card → "It said yes / no" | `the trigger is offered, never fired` |
 | Every roll is journalled with its dice | Lookup | — | `store.addJournal` | Journal tab | `a roll writes exactly one entry` |
 | GUM table = a plain 1..N roll, no bias | Lookup | `GUM_TABLES` | `roller.rollGum` | Forge → result card | `every GUM roll returns a row; 1,580 rows` |
 | GUM's method is combining several tables | Lookup | `GUM_PLOT_SEED`, `GUM_GRAND` | `roller.rollGumSet` | Forge → "Roll a whole plot seed" | `the plot seed is six tables; the grand oracle three` |
@@ -430,5 +435,6 @@ that means, for any change worth committing:
 | 2026-08-16 | Instantiated from template v3. Stage A extraction complete (bbox reconstruction + 300 dpi vector measurement); Stage B decisions recorded; full build of Phases 0–4 and 6. | `npm test` 930 assertions green; parse gate clean | v1 |
 | 2026-08-16 | Audit cycle 1: nine findings, all fixed. F-1 proposal notes extracted and never shown (the §0 defect) → `PROPOSAL_KINDS` + `rules.proposalNote`, surfaced on the beat card. F-2 three custom-sheet Permissions with an engine and no control → the Customize dialog. F-3 `updateGame` unreachable → Edit on the Home game card. F-4 SUM section names hardcoded in `src/` → read `SUM_SECTIONS`. F-5 transient view state leaked across scopes → new `src/viewstate.js` clearer registry. F-6 dead exports and unused imports removed. F-7 the dead-data scan's own `\b$\b` bug, which I acted on before verifying. F-8 tap targets raised to 40px. F-9 two primary actions below the fold → Home pinned, Settings reordered by frequency. F-10 `viewstate.js` missing from the service-worker app shell (offline boot failure) → listed, cache bumped to v2, and a harness check added. | `npm test` · `npm run deadcode` · `npm run smoke` (304 checks) · `npm run audit` · layout probe at 320/360/390 under the stress fixture; three data guards and one layout guard each watched failing before restore | v2 |
 | 2026-08-16 | Audit cycle 2, run against the cycle-1 fixes: four findings, three of them regressions the fixes introduced. F-11 the wizard hijacked every More route → it renders on Home only. F-12 illegal wizard steps were enabled and inert → disabled with a reason. F-13 `store.createGame` fired the clearers and nulled the draft mid-`finish()` → local copy taken first. F-14 track boxes 36px at 320px → min-width raised. Re-ran the full cycle afterwards with no new finding. | unit 945 · dead-data clean · smoke 304 · interaction audit 338 controls · layout probe clean at 320/360/390 under stress | v3 |
+| 2026-08-17 | Audit cycle 4, aimed at sequence of play and completeness. Eight findings. Two features the books have and the app did not: the extension sheet's two player-named plot-node lists (PUM p.27) and its Game notes area. Flow: the Forge (prep) sat between the plot sheet and the oracles in the tab bar; the Play tab crossed a box above the control that calls the beat; the loop of PUM p.5 crossed tabs with no onward route at any step, so the player drove it from the tab bar. Fidelity: a Yes/No answer now offers the beat p.28 says it triggers. Plus journal filters that missed five of the kinds the app writes, a session-break marker the spec claimed and did not have, and a Download button that was silent when the browser blocked it. New `tests/audit-modals.mjs` (284 in-dialog buttons, never previously audited) and `tests/probe-flow.mjs`. | unit 1323 · dead-data clean · smoke 362 · interaction 453 controls · modal audit 284 in-dialog buttons · flow probe: every loop step offered in place · layout clean at 320/360/390 | v6 |
 | 2026-08-17 | **GUM v2.2 added** as the committed third book: all 43 tables (1,580 rows) parsed by coordinate reconstruction rather than hand-transcribed, every table validated contiguous before transcription; new `data-gum.js`, `src/forge.js` and a sixth tab; GUM wired into every blank-filling point (empty node slots, the cast, the wizard's scope step) through one shared `gumSuggest()` dialog; erratum G1 recorded rather than corrected; rulings A9 and A10 added. Audit cycle 3: three findings — two Forge screens with a mis-classed primary action, and Settings' primary pushed off a small screen by the new toggle. | unit 1312 · dead-data clean · smoke 362 · interaction audit 440 controls · layout probe clean at 320/360/390 under stress | v5 |
 | 2026-08-16 | Cosmetic: the pinned action bar's context line wrapped to two lines on a narrow screen, growing the bar. Truncated with an ellipsis; the buttons no longer flex. Verified in light and dark on a real render. | smoke 304 green; layout probe clean at 320 | v4 |

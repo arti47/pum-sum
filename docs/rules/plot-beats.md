@@ -26,6 +26,18 @@ add something new, choose an entry that fits, or reroll. If still stuck, reroll 
 entry comes up ("leave it to destiny").
 → `roller.invokeNode`; three buttons plus the forced reroll on the beat card.
 
+## Two lists of your own (p.27)
+The plot-node **extension** sheet prints, below Notable characters and Interesting locations,
+two blank lists with a rule for a name. They behave exactly like the printed categories —
+ten slots, the same die rule, the same add/choose/reroll — and hold whatever this game keeps
+reaching for that the four base categories do not cover.
+→ `NODE_CATEGORIES[].custom`; a list exists only once named (`derived.nodeSlots` returns 0
+before that), and `store.setCustomListName` names, renames or removes it. Point a face of the
+Random Prompt column at it on a Customized sheet.
+
+Sheets 26 and 27 also carry a **Game notes** area → `scope.notes`, on the plot sheet under
+"This scope".
+
 ## Which die a node list uses
 Roll 1d10 in lists with less than half the entries filled; otherwise 1d20. A five-slot list
 can never pass half of ten, so it always rolls 1d10.
@@ -45,6 +57,13 @@ persistent header.
 Mark a future box with an event you know is coming. On arrival it fires, once, and counts as
 a random prompt.
 → `track.marks` / `track.fired`; the mark badge on a box; fired exactly once (harness).
+
+## Answers that trigger beats (p.28)
+Two of the cheat sheet's triggers are answers, not situations: *you ask if something happens
+and PUM says YES* → a random prompt; *you ask if things occur as expected and PUM says NO* →
+a modified proposal. The app cannot know which question was asked, so after any Yes/No answer
+it **offers** both and fires neither until you choose.
+→ `oracles.fireBeatFromOracle`; the beat is journalled with the trigger that produced it.
 
 ## Re-roll a repeated beat
 You may re-roll whenever a beat repeats the last one. Flagged, never forced.

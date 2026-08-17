@@ -10,6 +10,7 @@ import { render, go } from "./router.js";
 import { currentBias } from "./scene.js";
 import { CHARACTER_TABLE_IDS } from "../data-sum.js";
 import { NODE_CATEGORIES } from "../data-pum-plot.js";
+import { categoryName } from "./derived.js";
 import { gumSuggest, gumTablesForNode } from "./forge.js";
 import { Settings } from "./settings.js";
 
@@ -256,7 +257,7 @@ function addToNodes(c) {
   modal({
     title: "Add to plot nodes",
     body: el("div", null,
-      el("p", null, `Write `, el("strong", { text: c.name }), ` into `, el("strong", { text: cat.name }), `.`),
+      el("p", null, `Write `, el("strong", { text: c.name }), ` into `, el("strong", { text: scope ? categoryName(scope, catId) : cat.name }), `.`),
       el("p", { class: "muted", text: "Until a name sits in a plot node list, a random prompt can never reach them." })
     ),
     actions: [

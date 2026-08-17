@@ -219,8 +219,53 @@ function renderLast() {
     dice: result.dice,
     actions: rerollActions(result),
   }));
+  add(wrap, beatTriggerCard(result));
   add(wrap, disruptionBlock(result));
   return wrap;
+}
+
+// The two beat triggers a Yes/No answer can satisfy (PUM p.28). Offered, never
+// fired: the app cannot know which question was asked, so the player decides
+// whether the trigger applies.
+function beatTriggerCard(result) {
+  if (result.kind !== "yesno") return null;
+  const answered = result.chosen ? result.chosen.answer : result.options[0].answer;
+  if (result.needsChoice) return null;
+  const scope = store.currentScope();
+  if (!scope) return null;
+
+  const card = el("div", { class: "card" });
+  add(card, el("div", { class: "card-head" },
+    el("h3", { text: "Does this call for a beat?" }),
+    el("span", { class: "cite", text: "PUM p.28" })
+  ));
+  add(card, el("p", { class: "muted", text: `You were answered "${answered}". The cheat sheet turns two kinds of answer straight into a plot beat — if that is the question you asked.` }));
+  const row = el("div", { class: "btn-row" });
+  add(row, el("button", {
+    class: "btn",
+    onclick: () => fireBeatFromOracle("prompt", "asked if something happens, and PUM said yes"),
+  }, "It said yes — random prompt"));
+  add(row, el("button", {
+    class: "btn",
+    onclick: () => fireBeatFromOracle("proposal", "asked if things go as expected, and PUM said no"),
+  }, "It said no — modified proposal"));
+  add(card, row);
+  return card;
+}
+
+function fireBeatFromOracle(kind, why) {
+  const scope = store.currentScope();
+  if (!scope) { toast("Prepare a game first."); return; }
+  const beat = kind === "prompt" ? rollPrompt(scope) : rollProposal();
+  const entry = journalRoll(beat, {
+    kind: "beat",
+    title: `${kind === "prompt" ? "Random prompt" : "Modified proposal"} — ${beat.text}`,
+    detail: `Triggered because you ${why}. ${diceText(beat.dice)}`,
+    linkedTo: last ? last.entryId : null,
+  });
+  setOpenBeat({ ...beat, journalId: entry.id });
+  store.setLastBeat({ key: beat.key, text: beat.text, open: true });
+  go("play", "track");
 }
 
 function rerollActions(result) {

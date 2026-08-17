@@ -9,25 +9,25 @@
     "gum": true,
     "seenTutorial": false
   },
-  "activeGameId": "game-womc1pyk3el",
+  "activeGameId": "game-1rvy21u1045su6",
   "games": [
     {
-      "id": "game-womc1pyk3el",
+      "id": "game-1rvy21u1045su6",
       "title": "The long winter",
       "universe": "Homebrew — a drowned city",
       "tone": "Cold, political, slowly flooding. Everyone is negotiating with someone.",
       "inspiration": "",
-      "createdAt": 1786934081306,
+      "createdAt": 1786938538032,
       "archivedAt": null,
-      "activeScopeId": "scope-cziqcr1egwkiy",
+      "activeScopeId": "scope-4ftzkuk81341",
       "scopes": [
         {
-          "id": "scope-cziqcr1egwkiy",
+          "id": "scope-4ftzkuk81341",
           "name": "Keep the eastern district above water until the thaw",
           "mission": "Three factions, one failing pump station, and a council that will not meet.",
           "sheetId": "journey",
           "startingPoint": "The pump stalls at dawn and nobody who can fix it will answer the door.",
-          "createdAt": 1786934081306,
+          "createdAt": 1786938538032,
           "track": {
             "crossed": 9,
             "marks": {
@@ -38,6 +38,11 @@
             "custom": null
           },
           "customPrompts": null,
+          "customNames": {
+            "custom1": "",
+            "custom2": ""
+          },
+          "notes": "",
           "nodes": {
             "world": [
               "The tide table nobody trusts",
@@ -99,6 +104,8 @@
               "",
               ""
             ],
+            "custom1": [],
+            "custom2": [],
             "locations": [
               "Pump station 4",
               "The eastern span",
@@ -113,24 +120,24 @@
             ]
           },
           "openScene": {
-            "id": "scene-a3nrdn1meagz8",
-            "openedAt": 1786934081307,
+            "id": "scene-uid3q818cz46w",
+            "openedAt": 1786938538033,
             "opener": "Explain what is going on, the activity in the area",
             "interventions": [
               {
-                "ts": 1786934081308,
+                "ts": 1786938538034,
                 "text": "Something bad happens, misfortune, of concern"
               },
               {
-                "ts": 1786934081308,
+                "ts": 1786938538034,
                 "text": "Something bad happens, misfortune, of concern"
               },
               {
-                "ts": 1786934081308,
+                "ts": 1786938538034,
                 "text": "Something bad happens, misfortune, of concern"
               },
               {
-                "ts": 1786934081308,
+                "ts": 1786938538034,
                 "text": "Something bad happens, misfortune, of concern"
               }
             ]
@@ -138,12 +145,12 @@
           "lastBeat": null
         },
         {
-          "id": "scope-1xekwj018nfwfq",
+          "id": "scope-1jxz27l16yrq7n",
           "name": "Get Marek to talk",
           "mission": "He will not open the door.",
           "sheetId": "scenes",
           "startingPoint": "",
-          "createdAt": 1786934081306,
+          "createdAt": 1786938538032,
           "track": {
             "crossed": 10,
             "marks": {},
@@ -151,24 +158,31 @@
             "custom": null
           },
           "customPrompts": null,
+          "customNames": {
+            "custom1": "",
+            "custom2": ""
+          },
+          "notes": "",
           "nodes": {
             "world": [],
             "problems": [],
             "findings": [],
             "questions": [],
             "characters": [],
+            "custom1": [],
+            "custom2": [],
             "locations": []
           },
           "openScene": null,
           "lastBeat": null
         },
         {
-          "id": "scope-aop02vin0hd9",
+          "id": "scope-1xi3y5q1wlrxep",
           "name": "The aqueduct run",
           "mission": "Under the market, in the dark.",
           "sheetId": "dungeon",
           "startingPoint": "",
-          "createdAt": 1786934081307,
+          "createdAt": 1786938538033,
           "track": {
             "crossed": 3,
             "marks": {},
@@ -176,12 +190,19 @@
             "custom": null
           },
           "customPrompts": null,
+          "customNames": {
+            "custom1": "",
+            "custom2": ""
+          },
+          "notes": "",
           "nodes": {
             "world": [],
             "problems": [],
             "findings": [],
             "questions": [],
             "characters": [],
+            "custom1": [],
+            "custom2": [],
             "locations": []
           },
           "openScene": null,
@@ -212,7 +233,7 @@
       ],
       "cast": [
         {
-          "id": "cast-1gntcrt12i8xyk",
+          "id": "cast-17v58kah55nww",
           "kind": "character",
           "name": "Councillor Wen",
           "notes": "Met on the eastern span.",
@@ -220,25 +241,25 @@
             {
               "table": "meet-reaction",
               "label": "Meet reaction",
-              "text": "Ignore you intentionally, avoiding any interaction",
-              "roll": 17
+              "text": "Despite disliking you, remain respectful and calm",
+              "roll": 14
             },
             {
               "table": "personality-type",
               "label": "Personality type",
-              "text": "Tactful, polite, skilled at handling people carefully",
-              "roll": 12
+              "text": "Expressive and communicative, creative and playful",
+              "roll": 5
             },
             {
               "table": "plot-contribution",
               "label": "Plot contribution",
-              "text": "Shares common cause with you, gives faction support",
-              "roll": 13
+              "text": "Provides answers that advance the plot and progress",
+              "roll": 9
             }
           ]
         },
         {
-          "id": "cast-15vdps918ebjv3",
+          "id": "cast-1w020ll1picfag",
           "kind": "character",
           "name": "Old Marek",
           "notes": "Met on the eastern span.",
@@ -252,19 +273,19 @@
             {
               "table": "personality-type",
               "label": "Personality type",
-              "text": "Curious, always seeking creative solutions and ideas",
-              "roll": 7
+              "text": "Very neutral, striving for harmony or avoiding conflict",
+              "roll": 13
             },
             {
               "table": "plot-contribution",
               "label": "Plot contribution",
-              "text": "Asks to abandon the protagonists' goal, for a reason",
-              "roll": 66
+              "text": "Provides answers that advance the plot and progress",
+              "roll": 1
             }
           ]
         },
         {
-          "id": "cast-432ugjtdu1ja",
+          "id": "cast-1sy38es1b30fso",
           "kind": "character",
           "name": "Halle the auditor",
           "notes": "Met on the eastern span.",
@@ -272,25 +293,25 @@
             {
               "table": "meet-reaction",
               "label": "Meet reaction",
-              "text": "Remain neutral, cold, or emotionally detached",
-              "roll": 8
+              "text": "Feel threatened, showing concern or fear toward you",
+              "roll": 13
             },
             {
               "table": "personality-type",
               "label": "Personality type",
-              "text": "Taking charge, leading, perhaps even inspiring others",
-              "roll": 11
+              "text": "Practical, down-to-earth, but can be pessimistic",
+              "roll": 16
             },
             {
               "table": "plot-contribution",
               "label": "Plot contribution",
-              "text": "Asks for a favor or a task before giving information",
-              "roll": 61
+              "text": "Takes the enemy's side, boasting about their stance",
+              "roll": 81
             }
           ]
         },
         {
-          "id": "cast-1dgazna1pff23v",
+          "id": "cast-1iu99htbfn6en",
           "kind": "character",
           "name": "Bryn",
           "notes": "Met on the eastern span.",
@@ -298,25 +319,25 @@
             {
               "table": "meet-reaction",
               "label": "Meet reaction",
-              "text": "Give an uncomfortable, cold, or unwelcoming look",
-              "roll": 16
+              "text": "Act defensively, ready for a fight if necessary",
+              "roll": 20
             },
             {
               "table": "personality-type",
               "label": "Personality type",
-              "text": "Serious type, doesn't seem to enjoy a sense of humor",
-              "roll": 17
+              "text": "Unpredictable, independent, dislikes rules",
+              "roll": 18
             },
             {
               "table": "plot-contribution",
               "label": "Plot contribution",
-              "text": "Has the power to stop or significantly hinder the plan",
-              "roll": 91
+              "text": "Mentions a useful, dangerous, or wonderful place",
+              "roll": 30
             }
           ]
         },
         {
-          "id": "cast-f1f1n1u2uc8b",
+          "id": "cast-1a1w778v6hdfx",
           "kind": "character",
           "name": "Captain Oro",
           "notes": "Met on the eastern span.",
@@ -324,14 +345,40 @@
             {
               "table": "meet-reaction",
               "label": "Meet reaction",
-              "text": "Remain neutral, cold, or emotionally detached",
-              "roll": 8
+              "text": "Feel threatened, showing concern or fear toward you",
+              "roll": 13
             },
             {
               "table": "personality-type",
               "label": "Personality type",
-              "text": "Very neutral, striving for harmony or avoiding conflict",
-              "roll": 13
+              "text": "Resistant, hot-headed, always looking for trouble",
+              "roll": 20
+            },
+            {
+              "table": "plot-contribution",
+              "label": "Plot contribution",
+              "text": "Mentions a useful, dangerous, or wonderful place",
+              "roll": 29
+            }
+          ]
+        },
+        {
+          "id": "cast-mj4uyj1atah4z",
+          "kind": "character",
+          "name": "The ferryman",
+          "notes": "Met on the eastern span.",
+          "traits": [
+            {
+              "table": "meet-reaction",
+              "label": "Meet reaction",
+              "text": "Act nervously, as if watched, or highly cautious",
+              "roll": 12
+            },
+            {
+              "table": "personality-type",
+              "label": "Personality type",
+              "text": "Funny, sarcastic, joking, rarely taking things seriously",
+              "roll": 6
             },
             {
               "table": "plot-contribution",
@@ -342,35 +389,35 @@
           ]
         },
         {
-          "id": "cast-16j3z1b1qj7fo0",
+          "id": "cast-17yh982sky4bj",
           "kind": "character",
-          "name": "The ferryman",
+          "name": "Sable's sister",
           "notes": "Met on the eastern span.",
           "traits": [
             {
               "table": "meet-reaction",
               "label": "Meet reaction",
-              "text": "Behave neutrally, very cold, kind of lacking emotions",
-              "roll": 9
+              "text": "Give a flashy, extrovert, or humorous reaction to you",
+              "roll": 2
             },
             {
               "table": "personality-type",
               "label": "Personality type",
-              "text": "Tactful, polite, skilled at handling people carefully",
-              "roll": 12
+              "text": "Unpredictable, independent, dislikes rules",
+              "roll": 18
             },
             {
               "table": "plot-contribution",
               "label": "Plot contribution",
-              "text": "Has done something that the protagonists won't like",
-              "roll": 71
+              "text": "Asks for a favor or a task before giving information",
+              "roll": 59
             }
           ]
         },
         {
-          "id": "cast-1hm4h1wdtnn4y",
+          "id": "cast-59v4lvn671ha",
           "kind": "character",
-          "name": "Sable's sister",
+          "name": "The dockside surgeon",
           "notes": "Met on the eastern span.",
           "traits": [
             {
@@ -382,80 +429,54 @@
             {
               "table": "personality-type",
               "label": "Personality type",
-              "text": "Meticulous, preferring to plan and keep things in order",
-              "roll": 14
+              "text": "Open-minded, focused on the future and big picture",
+              "roll": 8
             },
             {
               "table": "plot-contribution",
               "label": "Plot contribution",
-              "text": "Asks to abandon the protagonists' goal, for a reason",
-              "roll": 66
+              "text": "Provides answers that advance the plot and progress",
+              "roll": 7
             }
           ]
         },
         {
-          "id": "cast-14mlzqf150tc00",
-          "kind": "character",
-          "name": "The dockside surgeon",
-          "notes": "Met on the eastern span.",
-          "traits": [
-            {
-              "table": "meet-reaction",
-              "label": "Meet reaction",
-              "text": "Hide away, avoid direct eye contact, or shy away",
-              "roll": 11
-            },
-            {
-              "table": "personality-type",
-              "label": "Personality type",
-              "text": "Unpredictable, independent, dislikes rules",
-              "roll": 18
-            },
-            {
-              "table": "plot-contribution",
-              "label": "Plot contribution",
-              "text": "Doesn't contribute much but still tries to help",
-              "roll": 46
-            }
-          ]
-        },
-        {
-          "id": "cast-1kz69im1iunleo",
+          "id": "cast-rqw9zx1aqj98j",
           "kind": "location",
           "name": "Pump station 4",
           "notes": "",
           "traits": []
         },
         {
-          "id": "cast-zulh8pdrv3vk",
+          "id": "cast-if8ado1pb77cr",
           "kind": "location",
           "name": "The drowned market",
           "notes": "",
           "traits": []
         },
         {
-          "id": "cast-125trt01f43ax7",
+          "id": "cast-1g7r9m7moizcu",
           "kind": "location",
           "name": "The council hall",
           "notes": "",
           "traits": []
         },
         {
-          "id": "cast-rp7weffhcloc",
+          "id": "cast-4eltxr1izkm8s",
           "kind": "location",
           "name": "The eastern span",
           "notes": "",
           "traits": []
         },
         {
-          "id": "cast-12n2vvpags4hd",
+          "id": "cast-vab9r611wkegz",
           "kind": "location",
           "name": "The aqueduct grate",
           "notes": "",
           "traits": []
         },
         {
-          "id": "cast-h2fsaz1opn613",
+          "id": "cast-owdpgb1yobc8n",
           "kind": "location",
           "name": "Rowan Street",
           "notes": "",
@@ -464,887 +485,289 @@
       ],
       "journal": [
         {
-          "id": "j-1op510a1eaz6q0",
-          "ts": 1786934081381,
+          "id": "j-1t4p5am1572sdj",
+          "ts": 1786938538105,
           "kind": "sum",
           "title": "Intervention check",
           "detail": "",
           "dice": [
             {
               "label": "d100 #1",
-              "value": 12,
+              "value": 40,
               "kept": false
             },
             {
               "label": "d100 #2",
-              "value": 77,
+              "value": 85,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1h27lcylon7a5",
-          "ts": 1786934081380,
+          "id": "j-1y3tj4z1c54yxg",
+          "ts": 1786938538104,
           "kind": "oracle",
           "title": "Reason (why)",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 9,
+              "value": 7,
               "kept": true
             },
             {
               "label": "d100",
+              "value": 10,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-15qbcfd3yocy7",
+          "ts": 1786938538103,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1kc5avo190pq2x",
+          "ts": 1786938538103,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-djo9071g400i1",
+          "ts": 1786938538103,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 79,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 46,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1pu59a31w34lyl",
+          "ts": 1786938538102,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 32,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-s7733pvtk2rz",
+          "ts": 1786938538102,
+          "kind": "note",
+          "title": "",
+          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
+          "dice": [],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": null,
+          "linkedTo": null
+        },
+        {
+          "id": "j-pxvek61tw6kep",
+          "ts": 1786938538101,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1uqaptsgm8k27",
+          "ts": 1786938538100,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-q7q3bubtp926",
+          "ts": 1786938538099,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 47,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 67,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-y3yqs4s3d852",
+          "ts": 1786938538099,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 92,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1v0trxc7ls8a8",
+          "ts": 1786938538098,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-qs89v81r88vyz",
+          "ts": 1786938538097,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 6,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-ez1e9iifqkmc",
+          "ts": 1786938538097,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 54,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
               "value": 25,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-cf0d7jz88elj",
-          "ts": 1786934081379,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-xbox4h1iozpjr",
-          "ts": 1786934081379,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 3,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-s2en8o1q5fhg4",
-          "ts": 1786934081378,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 72,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 13,
               "kept": false
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-danlhe1ev6mep",
-          "ts": 1786934081378,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 8,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 23,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-co7d54mjljvb",
-          "ts": 1786934081377,
-          "kind": "note",
-          "title": "",
-          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
-          "dice": [],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": null,
-          "linkedTo": null
-        },
-        {
-          "id": "j-2ni18shx2k9t",
-          "ts": 1786934081377,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 3,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-2gh30a190ar30",
-          "ts": 1786934081375,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-i3fia313xbn52",
-          "ts": 1786934081375,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 74,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 57,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-y1474zponjaq",
-          "ts": 1786934081374,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 6,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 66,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-zwup3b1isjwss",
-          "ts": 1786934081373,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-ualywe1sjcnsc",
-          "ts": 1786934081373,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 8,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-16psdca5mykwh",
-          "ts": 1786934081372,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 42,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 49,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-3747icjt4m64",
-          "ts": 1786934081371,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 2,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 93,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-10qt4z41tczphw",
-          "ts": 1786934081371,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 5,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-j4p6da5kdep3",
-          "ts": 1786934081370,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1ihvqnlgqv9hz",
-          "ts": 1786934081369,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 76,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 22,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-16s5aeo1n2h8m1",
-          "ts": 1786934081369,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 8,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 73,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-dvb68z140vjdt",
-          "ts": 1786934081368,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1kvylkd1essy5b",
-          "ts": 1786934081367,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1wjbog81tb78zh",
-          "ts": 1786934081367,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 81,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 98,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1pjwe5e130sm77",
-          "ts": 1786934081366,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 5,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 32,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-xnshif77l72",
-          "ts": 1786934081366,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-db6ofx1uksv7d",
-          "ts": 1786934081365,
-          "kind": "note",
-          "title": "",
-          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
-          "dice": [],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": null,
-          "linkedTo": null
-        },
-        {
-          "id": "j-1iop2g2x0zr6",
-          "ts": 1786934081365,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 6,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1k20x9j1sqotql",
-          "ts": 1786934081364,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 71,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 15,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-zlxiquoq8qv",
-          "ts": 1786934081364,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 3,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 18,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-vj9rnx1hac0m0",
-          "ts": 1786934081363,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 5,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-zjbg4v14its22",
-          "ts": 1786934081363,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-xa1yvc1v918ke",
-          "ts": 1786934081363,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 61,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 10,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-jcbj4u1oz4bl3",
-          "ts": 1786934081362,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 95,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-ks98q51iuttx9",
-          "ts": 1786934081361,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 3,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-ql5rb3mcop03",
-          "ts": 1786934081361,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1hlvgm13hqxz9",
-          "ts": 1786934081361,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 97,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 41,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-dl2xob138j2fu",
-          "ts": 1786934081359,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 3,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 69,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-v2mwtctmny2m",
-          "ts": 1786934081358,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-snw7usa1bta2",
-          "ts": 1786934081358,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1ydyv6xwm022x",
-          "ts": 1786934081357,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 8,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 48,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-dx6gij1mkhl0d",
-          "ts": 1786934081357,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 6,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 80,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-17cbs0e1j93od7",
-          "ts": 1786934081357,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-13jojrp189ta8c",
-          "ts": 1786934081356,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-hdxbsywrem4f",
-          "ts": 1786934081356,
-          "kind": "note",
-          "title": "",
-          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
-          "dice": [],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": null,
-          "linkedTo": null
-        },
-        {
-          "id": "j-gsxjolnhfhqf",
-          "ts": 1786934081355,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 63,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 1,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1ig7rga133npy8",
-          "ts": 1786934081355,
+          "id": "j-wgxezyr2ueoi",
+          "ts": 1786938538096,
           "kind": "oracle",
           "title": "Reason (why)",
           "detail": "",
@@ -1352,510 +775,6 @@
             {
               "label": "d10",
               "value": 7,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 23,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-fkuo2p1u4kva5",
-          "ts": 1786934081355,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1v8wmv0sq063o",
-          "ts": 1786934081352,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-cfh6hp15sa5vs",
-          "ts": 1786934081352,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 45,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 5,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1jf1qhg1eij0am",
-          "ts": 1786934081351,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 6,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 15,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-wruhhf14ex1q9",
-          "ts": 1786934081351,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-p8eyuf1u0c1jl",
-          "ts": 1786934081351,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 8,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-n0cyzw11wjn01",
-          "ts": 1786934081350,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 78,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 32,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-o4fid81wt1g9d",
-          "ts": 1786934081350,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 70,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-12gfwqz165ee63",
-          "ts": 1786934081349,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1a8smepkaglqj",
-          "ts": 1786934081349,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 2,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-11lxn3n1vmi8n1",
-          "ts": 1786934081348,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 24,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 51,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1mbj5e4l1fkaw",
-          "ts": 1786934081348,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 100,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-rj6xnz1v1gper",
-          "ts": 1786934081347,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 2,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-n0hqnt10ae0zd",
-          "ts": 1786934081347,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1nfkr2fpl8snw",
-          "ts": 1786934081346,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 24,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 53,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-e0rw9mwh12r",
-          "ts": 1786934081345,
-          "kind": "note",
-          "title": "",
-          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
-          "dice": [],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": null,
-          "linkedTo": null
-        },
-        {
-          "id": "j-1da4wqfjvtej1",
-          "ts": 1786934081345,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 73,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-q74egg1o46mrq",
-          "ts": 1786934081343,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1d336owshaflk",
-          "ts": 1786934081342,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-z9y1u41bz8a13",
-          "ts": 1786934081342,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 81,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 41,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-18x5yc91d9ie9r",
-          "ts": 1786934081341,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 41,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-f0xq8e16kb8m5",
-          "ts": 1786934081341,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 2,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-7of5oxeh1iwz",
-          "ts": 1786934081340,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-sts7ec1yp73eg",
-          "ts": 1786934081340,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 64,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 26,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-h1fz9d1tcboq0",
-          "ts": 1786934081340,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 3,
               "kept": true
             },
             {
@@ -1865,207 +784,31 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-sxddv01xebkc5",
-          "ts": 1786934081339,
+          "id": "j-1xaur8o3sxqfq",
+          "ts": 1786938538095,
           "kind": "yesno",
           "title": "Yes/No",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 2,
+              "value": 3,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1sq4o145vy8ac",
-          "ts": 1786934081339,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 5,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1q0k4bl14djus5",
-          "ts": 1786934081338,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 28,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 41,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-mqr6d5nkw6pk",
-          "ts": 1786934081338,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 5,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 52,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-x1b04m1l5dxhi",
-          "ts": 1786934081338,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 8,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1sqv8zl1pwg86t",
-          "ts": 1786934081337,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-rdtii519wemaw",
-          "ts": 1786934081337,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 85,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 61,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-v5yvbvpi34ch",
-          "ts": 1786934081337,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 6,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 55,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-5xuhlkrpxw3j",
-          "ts": 1786934081336,
-          "kind": "note",
-          "title": "",
-          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
-          "dice": [],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": null,
-          "linkedTo": null
-        },
-        {
-          "id": "j-56lbmpysj8cb",
-          "ts": 1786934081335,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 6,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1gqvj92ib6hf2",
-          "ts": 1786934081335,
+          "id": "j-1t1vnzn14nxlme",
+          "ts": 1786938538095,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
@@ -2077,622 +820,36 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-ks5kz41yxg13r",
-          "ts": 1786934081335,
+          "id": "j-1s7f6z4e56mnr",
+          "ts": 1786938538094,
           "kind": "sum",
           "title": "Intervention check",
           "detail": "",
           "dice": [
             {
               "label": "d100 #1",
-              "value": 1,
+              "value": 31,
               "kept": false
             },
             {
               "label": "d100 #2",
-              "value": 23,
+              "value": 83,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-sl9gs216x7rax",
-          "ts": 1786934081334,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 2,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 74,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-fosxn4dpgfbh",
-          "ts": 1786934081334,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1cqnu63bt7kwp",
-          "ts": 1786934081334,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 8,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1fcmyc51d0j0q4",
-          "ts": 1786934081333,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 43,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 55,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1bs2qef1dpjxoj",
-          "ts": 1786934081333,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 32,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-zrbvyb1uodftd",
-          "ts": 1786934081333,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1mhq9781h70vxk",
-          "ts": 1786934081332,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1jdojyfrwy1p8",
-          "ts": 1786934081332,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 49,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 4,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1i7zikcor8iew",
-          "ts": 1786934081331,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 88,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1ik1qe71owzoh5",
-          "ts": 1786934081331,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-hzgfve1tzovli",
-          "ts": 1786934081331,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-12ev9g03cht0y",
-          "ts": 1786934081331,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 50,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 70,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-7et17eq3et05",
-          "ts": 1786934081330,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 56,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-v711uz15843go",
-          "ts": 1786934081330,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-17n1b14r7bk4",
-          "ts": 1786934081330,
-          "kind": "note",
-          "title": "",
-          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
-          "dice": [],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": null,
-          "linkedTo": null
-        },
-        {
-          "id": "j-b8omwj1a9q5ox",
-          "ts": 1786934081330,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-7pwj8m1b17498",
-          "ts": 1786934081329,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 56,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 15,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1lxi612ov20rb",
-          "ts": 1786934081329,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 56,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-kl5288r1fgal",
-          "ts": 1786934081329,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-f2o6sv14g2610",
-          "ts": 1786934081329,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 2,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-yzocu3ty3r9e",
-          "ts": 1786934081327,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 2,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 85,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1fl2bvl1wiwzjm",
-          "ts": 1786934081327,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 89,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-xi2w5t6l18tg",
-          "ts": 1786934081327,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 2,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1l23y283a9nnm",
-          "ts": 1786934081326,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 5,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-16slzu01btv387",
-          "ts": 1786934081326,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 56,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 36,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1h4jj7s1k8o16u",
-          "ts": 1786934081326,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 5,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 4,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-5yq56a28rvj",
-          "ts": 1786934081326,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1bunpmz1pzfmd7",
-          "ts": 1786934081325,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1om43x81hl66xs",
-          "ts": 1786934081325,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 35,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 90,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-13ssnkqkd76dc",
-          "ts": 1786934081325,
+          "id": "j-j15yjg19terl9",
+          "ts": 1786938538094,
           "kind": "oracle",
           "title": "Reason (why)",
           "detail": "",
@@ -2704,194 +861,18 @@
             },
             {
               "label": "d100",
-              "value": 12,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-dfhhvtt8hzl7",
-          "ts": 1786934081325,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-15eavkh1v9aye6",
-          "ts": 1786934081324,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1ck6vei1dctqms",
-          "ts": 1786934081324,
-          "kind": "note",
-          "title": "",
-          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
-          "dice": [],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": null,
-          "linkedTo": null
-        },
-        {
-          "id": "j-1c554qs2g44a6",
-          "ts": 1786934081323,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 43,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 17,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-uqq4rp1hhpx6",
-          "ts": 1786934081323,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 5,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-tmt2r51ey3ve1",
-          "ts": 1786934081323,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-spay9j1vub8v8",
-          "ts": 1786934081323,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-mmcbewgmus5g",
-          "ts": 1786934081323,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 49,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
               "value": 54,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-zmcjja1x1vqt6",
-          "ts": 1786934081322,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 15,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-6fbylk1fd55jw",
-          "ts": 1786934081322,
+          "id": "j-tqmi64duk0x2",
+          "ts": 1786938538093,
           "kind": "yesno",
           "title": "Yes/No",
           "detail": "",
@@ -2903,177 +884,13 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1npltny12oyh7c",
-          "ts": 1786934081322,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-civ7hpe9oddl",
-          "ts": 1786934081322,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 80,
-              "kept": false
-            },
-            {
-              "label": "d100 #2",
-              "value": 83,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1u83l76dgbmmz",
-          "ts": 1786934081322,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 2,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 82,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-4j1mq757w3hd",
-          "ts": 1786934081321,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 8,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1wpoebv11eorra",
-          "ts": 1786934081321,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 6,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-13nt3hndni3dy",
-          "ts": 1786934081320,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 88,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 44,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1f5l08av8rbh7",
-          "ts": 1786934081320,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 36,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1u0m9exh564ad",
-          "ts": 1786934081320,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-8ofymn1ff0y4k",
-          "ts": 1786934081320,
+          "id": "j-102ldy3zggl1d",
+          "ts": 1786938538092,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
@@ -3085,271 +902,13 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-j5ntnc1mg7aqx",
-          "ts": 1786934081319,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 98,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 39,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-knis6c9usuip",
-          "ts": 1786934081319,
-          "kind": "note",
-          "title": "",
-          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
-          "dice": [],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": null,
-          "linkedTo": null
-        },
-        {
-          "id": "j-x45zoo8idfhg",
-          "ts": 1786934081319,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 17,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1abkuh6tlg4p8",
-          "ts": 1786934081319,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1qn49i179u8ym",
-          "ts": 1786934081318,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-11jwv4h1mfuhef",
-          "ts": 1786934081318,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 93,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 65,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-ji1vsmi56kva",
-          "ts": 1786934081318,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 80,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-qiu6te17e7ovu",
-          "ts": 1786934081317,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 2,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-10ay2pzatpbqq",
-          "ts": 1786934081317,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-qbn7gb1h7ggwd",
-          "ts": 1786934081317,
-          "kind": "sum",
-          "title": "Intervention check",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d100 #1",
-              "value": 44,
-              "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 42,
-              "kept": false
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1sj9c1217xkmyb",
-          "ts": 1786934081316,
-          "kind": "oracle",
-          "title": "Reason (why)",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            },
-            {
-              "label": "d100",
-              "value": 6,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1rjjkc93wjgj",
-          "ts": 1786934081316,
-          "kind": "yesno",
-          "title": "Yes/No",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-iu8mohunninq",
-          "ts": 1786934081316,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 6,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
-          "linkedTo": null
-        },
-        {
-          "id": "j-jgwbsqel1x8c",
-          "ts": 1786934081316,
+          "id": "j-e5mhpshnwpee",
+          "ts": 1786938538092,
           "kind": "sum",
           "title": "Intervention check",
           "detail": "",
@@ -3366,36 +925,130 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1oe8seulhmhsm",
-          "ts": 1786934081316,
+          "id": "j-10etafa19rhpt9",
+          "ts": 1786938538091,
           "kind": "oracle",
           "title": "Reason (why)",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 6,
+              "value": 10,
               "kept": true
             },
             {
               "label": "d100",
-              "value": 73,
+              "value": 52,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1k9uswk1rpeqx6",
-          "ts": 1786934081316,
+          "id": "j-1kv35n989ol86",
+          "ts": 1786938538091,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 6,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1tp8rt81xgel1d",
+          "ts": 1786938538090,
+          "kind": "note",
+          "title": "",
+          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
+          "dice": [],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": null,
+          "linkedTo": null
+        },
+        {
+          "id": "j-13v6ni91hggkl4",
+          "ts": 1786938538089,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-g3fjjm17gsagv",
+          "ts": 1786938538089,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 24,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 65,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1pyc9n7gzdxnx",
+          "ts": 1786938538089,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 38,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-etyoua4vm9cq",
+          "ts": 1786938538088,
           "kind": "yesno",
           "title": "Yes/No",
           "detail": "",
@@ -3407,13 +1060,95 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1tdp752d2wuag",
-          "ts": 1786934081315,
+          "id": "j-1htrf9a1lc0xa5",
+          "ts": 1786938538088,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-sapb2e1xrukwg",
+          "ts": 1786938538087,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 46,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 53,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-ee0kt51bnz7w",
+          "ts": 1786938538087,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 31,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-v4ieaq1pnwjf",
+          "ts": 1786938538086,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1tsb6jlo3visf",
+          "ts": 1786938538086,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
@@ -3425,71 +1160,235 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1359oa2vleoe5",
-          "ts": 1786934081315,
+          "id": "j-qi050295pxs9",
+          "ts": 1786938538086,
           "kind": "sum",
           "title": "Intervention check",
           "detail": "",
           "dice": [
             {
               "label": "d100 #1",
-              "value": 2,
-              "kept": false
+              "value": 95,
+              "kept": true
             },
             {
               "label": "d100 #2",
-              "value": 15,
-              "kept": true
+              "value": 54,
+              "kept": false
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1mtgqdc1h9c0jw",
-          "ts": 1786934081315,
+          "id": "j-qzty78w1lii8",
+          "ts": 1786938538085,
           "kind": "oracle",
           "title": "Reason (why)",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 9,
+              "value": 6,
               "kept": true
             },
             {
               "label": "d100",
-              "value": 84,
+              "value": 87,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1scmuky1pyrn1w",
-          "ts": 1786934081314,
+          "id": "j-kef7mzqxm0aa",
+          "ts": 1786938538083,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 4,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-pnwsf9dhoroj",
+          "ts": 1786938538082,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1v2x9tp1pnbeky",
+          "ts": 1786938538081,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 99,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 28,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1020jk11rjnfcj",
+          "ts": 1786938538080,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 40,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-16v57mtw1rx1d",
+          "ts": 1786938538080,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1rvks7iz72h6n",
+          "ts": 1786938538079,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-b6srr21mia69z",
+          "ts": 1786938538079,
           "kind": "note",
           "title": "",
           "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
           "dice": [],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
+          "scopeId": "scope-4ftzkuk81341",
           "sceneId": null,
           "linkedTo": null
         },
         {
-          "id": "j-frlyug8jwd2i",
-          "ts": 1786934081314,
+          "id": "j-1btyfh9qparle",
+          "ts": 1786938538078,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 54,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 69,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-xmkuts1eq3bo",
+          "ts": 1786938538078,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 2,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 6,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-13jjpk31fc0sd8",
+          "ts": 1786938538078,
           "kind": "yesno",
           "title": "Yes/No",
           "detail": "",
@@ -3501,54 +1400,54 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-v5gtz7qofac0",
-          "ts": 1786934081314,
+          "id": "j-15c1ulr1e8urnf",
+          "ts": 1786938538077,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 2,
+              "value": 4,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1of0dr2alkac8",
-          "ts": 1786934081314,
+          "id": "j-1j70pv3zgwo7",
+          "ts": 1786938538077,
           "kind": "sum",
           "title": "Intervention check",
           "detail": "",
           "dice": [
             {
               "label": "d100 #1",
-              "value": 83,
-              "kept": true
+              "value": 34,
+              "kept": false
             },
             {
               "label": "d100 #2",
-              "value": 25,
-              "kept": false
+              "value": 40,
+              "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1cupt0nfffkqe",
-          "ts": 1786934081314,
+          "id": "j-ncfk2e1ilznz4",
+          "ts": 1786938538075,
           "kind": "oracle",
           "title": "Reason (why)",
           "detail": "",
@@ -3560,100 +1459,276 @@
             },
             {
               "label": "d100",
-              "value": 97,
+              "value": 16,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-13gefer12hlcr1",
-          "ts": 1786934081314,
+          "id": "j-vvutl02bm3a2",
+          "ts": 1786938538075,
           "kind": "yesno",
           "title": "Yes/No",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 9,
+              "value": 7,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-8xrcity57l67",
-          "ts": 1786934081313,
+          "id": "j-sq6qb41ibvl6q",
+          "ts": 1786938538075,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 5,
+              "value": 3,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-123of4dg2g3jn",
-          "ts": 1786934081313,
+          "id": "j-146w94e1ysxwex",
+          "ts": 1786938538074,
           "kind": "sum",
           "title": "Intervention check",
           "detail": "",
           "dice": [
             {
               "label": "d100 #1",
+              "value": 87,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 36,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-f6mdds1l9g7oj",
+          "ts": 1786938538074,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 66,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1jpxenhwiem01",
+          "ts": 1786938538073,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-8zcw5vxxhsnr",
+          "ts": 1786938538073,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1svso379g4zvr",
+          "ts": 1786938538073,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 38,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
               "value": 98,
               "kept": true
-            },
-            {
-              "label": "d100 #2",
-              "value": 79,
-              "kept": false
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-101hsttdoftko",
-          "ts": 1786934081313,
+          "id": "j-16v052c14tfqq8",
+          "ts": 1786938538072,
           "kind": "oracle",
           "title": "Reason (why)",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 2,
+              "value": 5,
               "kept": true
             },
             {
               "label": "d100",
-              "value": 42,
+              "value": 53,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1ereohxdfys2o",
-          "ts": 1786934081313,
+          "id": "j-v33v241yovgmp",
+          "ts": 1786938538072,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1sq3s5v13e3tbu",
+          "ts": 1786938538072,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1pfutayw1lwcy",
+          "ts": 1786938538071,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 6,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 17,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-19oepy3yyoznf",
+          "ts": 1786938538071,
+          "kind": "note",
+          "title": "",
+          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
+          "dice": [],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": null,
+          "linkedTo": null
+        },
+        {
+          "id": "j-1y51vib1givx4z",
+          "ts": 1786938538071,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 58,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1bbeoae1ej0d8o",
+          "ts": 1786938538070,
           "kind": "yesno",
           "title": "Yes/No",
           "detail": "",
@@ -3665,77 +1740,77 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1t9ox1ia4q0m8",
-          "ts": 1786934081313,
+          "id": "j-yyfvme1nu7v9c",
+          "ts": 1786938538069,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 3,
+              "value": 4,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-33wdzfnp3vk8",
-          "ts": 1786934081313,
+          "id": "j-13obnaz44c0x1",
+          "ts": 1786938538069,
           "kind": "sum",
           "title": "Intervention check",
           "detail": "",
           "dice": [
             {
               "label": "d100 #1",
-              "value": 80,
-              "kept": true
+              "value": 30,
+              "kept": false
             },
             {
               "label": "d100 #2",
-              "value": 3,
-              "kept": false
+              "value": 91,
+              "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1qmnpco1decsrq",
-          "ts": 1786934081313,
+          "id": "j-16iwbpp1fax7i2",
+          "ts": 1786938538068,
           "kind": "oracle",
           "title": "Reason (why)",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 9,
+              "value": 7,
               "kept": true
             },
             {
               "label": "d100",
-              "value": 47,
+              "value": 75,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-uppy221ffn76w",
-          "ts": 1786934081312,
+          "id": "j-pv1w2ct0cr4",
+          "ts": 1786938538068,
           "kind": "yesno",
           "title": "Yes/No",
           "detail": "",
@@ -3747,31 +1822,113 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-ecsznltsw7n7",
-          "ts": 1786934081312,
+          "id": "j-11vgxxb1xkxwq6",
+          "ts": 1786938538067,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 2,
+              "value": 1,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1i2zzucfg93v8",
-          "ts": 1786934081312,
+          "id": "j-me3mr81jjrkc5",
+          "ts": 1786938538067,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 10,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 100,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-inkv23635eow",
+          "ts": 1786938538067,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 2,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 45,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1dnixu815h69cv",
+          "ts": 1786938538066,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1e2u99yvqzat2",
+          "ts": 1786938538066,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1qbew4m1oag7n6",
+          "ts": 1786938538065,
           "kind": "sum",
           "title": "Intervention check",
           "detail": "",
@@ -3783,18 +1940,194 @@
             },
             {
               "label": "d100 #2",
-              "value": 19,
+              "value": 75,
               "kept": false
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-n5e6ak7ry7n",
-          "ts": 1786934081312,
+          "id": "j-194hfzymnvi4",
+          "ts": 1786938538065,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 69,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1q8bg1v1lqcn3d",
+          "ts": 1786938538065,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-uj38ea1e2hjfn",
+          "ts": 1786938538064,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-o0i71kvou78x",
+          "ts": 1786938538064,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 9,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 78,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-bfi9q8rob51g",
+          "ts": 1786938538064,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 9,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 63,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1j590z71b4blcd",
+          "ts": 1786938538063,
+          "kind": "note",
+          "title": "",
+          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
+          "dice": [],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": null,
+          "linkedTo": null
+        },
+        {
+          "id": "j-1tjdbsveb6wmg",
+          "ts": 1786938538062,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-xfrxhg1iykp19",
+          "ts": 1786938538062,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1iegznn1swrbz1",
+          "ts": 1786938538062,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 5,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 12,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-ml4y3kqkknm8",
+          "ts": 1786938538061,
           "kind": "oracle",
           "title": "Reason (why)",
           "detail": "",
@@ -3806,18 +2139,1378 @@
             },
             {
               "label": "d100",
+              "value": 91,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1epk11qebxmw",
+          "ts": 1786938538061,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 2,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-t3ayzb1vse9mf",
+          "ts": 1786938538060,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1mfvrs21nawsf6",
+          "ts": 1786938538060,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 30,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 79,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-a00s7ceo4ixj",
+          "ts": 1786938538060,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            },
+            {
+              "label": "d100",
               "value": 98,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-1e0wysp1c665sb",
-          "ts": 1786934081312,
+          "id": "j-9urik9wl6a2v",
+          "ts": 1786938538059,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-rle19ypbuwqt",
+          "ts": 1786938538059,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1dtlrdtpn5kf3",
+          "ts": 1786938538059,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 100,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 60,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-p37g5vtm3ycq",
+          "ts": 1786938538058,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 94,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-4vs1pi1dkp1pn",
+          "ts": 1786938538058,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-cr5zn1128yufs",
+          "ts": 1786938538058,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1q6h9nb3dvtxi",
+          "ts": 1786938538057,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 71,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 37,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-bun49z1wt9hs8",
+          "ts": 1786938538057,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 2,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 52,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-18o0rq31bw02x8",
+          "ts": 1786938538057,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-uclgr71coyljk",
+          "ts": 1786938538056,
+          "kind": "note",
+          "title": "",
+          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
+          "dice": [],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": null,
+          "linkedTo": null
+        },
+        {
+          "id": "j-1ufbpz854wdlj",
+          "ts": 1786938538056,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-fd2lab1s5xumi",
+          "ts": 1786938538056,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 66,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 24,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-ntppkk1qmalsu",
+          "ts": 1786938538056,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 33,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-uik6jb1t55axm",
+          "ts": 1786938538056,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1mgswws1jhocdg",
+          "ts": 1786938538055,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-958duohlg1uo",
+          "ts": 1786938538055,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 14,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 55,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-fijns7fajmp3",
+          "ts": 1786938538055,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 93,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1bkrofh19uqd98",
+          "ts": 1786938538053,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1cssn88l9yjlo",
+          "ts": 1786938538053,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1xxj5au5x7wi1",
+          "ts": 1786938538053,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 3,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 18,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1v4r4cb18yfqt",
+          "ts": 1786938538052,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1r47nyu13grgwz",
+          "ts": 1786938538052,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-bt3vi4axy0y7",
+          "ts": 1786938538052,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 9,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-wym2bg1p34n3v",
+          "ts": 1786938538051,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 62,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 44,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-19myocf1i5abmz",
+          "ts": 1786938538051,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 82,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-14jew741hizubw",
+          "ts": 1786938538051,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-e39xy01uurb1",
+          "ts": 1786938538051,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1wza0jvfm5d7o",
+          "ts": 1786938538051,
+          "kind": "note",
+          "title": "",
+          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
+          "dice": [],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": null,
+          "linkedTo": null
+        },
+        {
+          "id": "j-b2mjep1i5nqdn",
+          "ts": 1786938538050,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 99,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 9,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-uidmjroidg9w",
+          "ts": 1786938538049,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 54,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1c1fdx01wog8w3",
+          "ts": 1786938538049,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-15xt8461ja0o7o",
+          "ts": 1786938538049,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-12to90y125b0pk",
+          "ts": 1786938538049,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 79,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 86,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-xtfjkp31srsx",
+          "ts": 1786938538048,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 2,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 92,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1d9kn5wjsu541",
+          "ts": 1786938538048,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1aokxo21fqeff6",
+          "ts": 1786938538048,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-wre93cddr01d",
+          "ts": 1786938538048,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 96,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 10,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-10k4smaeqs20q",
+          "ts": 1786938538048,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 70,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1ox1djy16k88of",
+          "ts": 1786938538047,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 2,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1ff39rkiylpj8",
+          "ts": 1786938538047,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-zdodlu1yde2un",
+          "ts": 1786938538047,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 1,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 61,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1ofr5xxdpldg0",
+          "ts": 1786938538047,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 92,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1r2utf65a8kuk",
+          "ts": 1786938538046,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-x5z4u6c6hirc",
+          "ts": 1786938538046,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 6,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-3yvvqedoqfz5",
+          "ts": 1786938538045,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 25,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 70,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-8lxohb16c15el",
+          "ts": 1786938538045,
+          "kind": "note",
+          "title": "",
+          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
+          "dice": [],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": null,
+          "linkedTo": null
+        },
+        {
+          "id": "j-1d2xtay1v4phl3",
+          "ts": 1786938538045,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 57,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-8xireq1jd7ruy",
+          "ts": 1786938538045,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-c7l2ko125oh6n",
+          "ts": 1786938538044,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1fuxxmb1julmvu",
+          "ts": 1786938538044,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 95,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 13,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1x0vypt1m0ox04",
+          "ts": 1786938538044,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 4,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 66,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-14mwgt111a0yj",
+          "ts": 1786938538043,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-b0dqoe4bzwjp",
+          "ts": 1786938538043,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-v9eemu16nxd3q",
+          "ts": 1786938538043,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 8,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 83,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-xk0bmq234wm4",
+          "ts": 1786938538042,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 59,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-m7gifk1q79quo",
+          "ts": 1786938538042,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1h0lvd71o1iipn",
+          "ts": 1786938538042,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-v5g3gj1lf4fjb",
+          "ts": 1786938538042,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 57,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 77,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-19h37lb1ftc3qk",
+          "ts": 1786938538042,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 2,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 41,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-ero0rnf7hk5a",
+          "ts": 1786938538042,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 2,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-tyy6941nk3w0z",
+          "ts": 1786938538042,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 6,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1lh0hh1614691",
+          "ts": 1786938538041,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 58,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 80,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-12ay1sc1g5uk4u",
+          "ts": 1786938538041,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 9,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 95,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-avsvw51okjwtp",
+          "ts": 1786938538041,
+          "kind": "note",
+          "title": "",
+          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
+          "dice": [],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": null,
+          "linkedTo": null
+        },
+        {
+          "id": "j-xeu2nwnid9zp",
+          "ts": 1786938538040,
           "kind": "yesno",
           "title": "Yes/No",
           "detail": "",
@@ -3829,38 +3522,366 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         },
         {
-          "id": "j-8uc5ankkch2f",
-          "ts": 1786934081311,
-          "kind": "note",
-          "title": "",
-          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
-          "dice": [],
-          "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": null,
-          "linkedTo": null
-        },
-        {
-          "id": "j-1rj099y1l57evc",
-          "ts": 1786934081311,
+          "id": "j-16v1b2p15bayro",
+          "ts": 1786938538040,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 2,
+              "value": 5,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-cziqcr1egwkiy",
-          "sceneId": "scene-a3nrdn1meagz8",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-tv6tiy131lziu",
+          "ts": 1786938538040,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 73,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 75,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-16hhu1z1tuvrp",
+          "ts": 1786938538040,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 8,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 78,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1gk4flpigvo7x",
+          "ts": 1786938538040,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-4ehwa31d4xlsf",
+          "ts": 1786938538040,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 7,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-13sgx961jsx454",
+          "ts": 1786938538039,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 8,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 69,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-19hjxfg1sfeyiu",
+          "ts": 1786938538039,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-ibrxxlmg52ki",
+          "ts": 1786938538039,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1x5c2lq1g2oxxc",
+          "ts": 1786938538039,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1p7nbqbrksjlh",
+          "ts": 1786938538039,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 32,
+              "kept": false
+            },
+            {
+              "label": "d100 #2",
+              "value": 99,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-pow3t4rbenxg",
+          "ts": 1786938538039,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 63,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1eborezi8dmbk",
+          "ts": 1786938538039,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 9,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1526diczc99kv",
+          "ts": 1786938538038,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1v7onjsua81sm",
+          "ts": 1786938538038,
+          "kind": "sum",
+          "title": "Intervention check",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d100 #1",
+              "value": 98,
+              "kept": true
+            },
+            {
+              "label": "d100 #2",
+              "value": 7,
+              "kept": false
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-14gkn1enoblji",
+          "ts": 1786938538038,
+          "kind": "oracle",
+          "title": "Reason (why)",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            },
+            {
+              "label": "d100",
+              "value": 47,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-l24ej7y7hud1",
+          "ts": 1786938538038,
+          "kind": "yesno",
+          "title": "Yes/No",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1eecnku1e4eey4",
+          "ts": 1786938538037,
+          "kind": "note",
+          "title": "",
+          "detail": "A long note of the kind a solo player actually writes at the table, several lines of it, because the journal is where the story really lives and it is not going to be one tidy sentence.",
+          "dice": [],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": null,
+          "linkedTo": null
+        },
+        {
+          "id": "j-e3f02tj32x9j",
+          "ts": 1786938538037,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-4ftzkuk81341",
+          "sceneId": "scene-uid3q818cz46w",
           "linkedTo": null
         }
       ]

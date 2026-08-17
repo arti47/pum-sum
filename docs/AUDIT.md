@@ -206,6 +206,85 @@ finding.**
 
 ---
 
+## Cycle 4 — sequence of play, completeness, and every button
+
+Prompted by a report that the buttons did not follow the sequence of play. Eight findings.
+Two are features the books have and the app did not; three are flow; three are hygiene.
+
+**F-19 · The Forge sat inside the play loop.** Tab order was Play · Forge · Oracles · Scene.
+GUM is prep-time by the book's own division of labour — "use GUM when setting a game up, and
+SUM while playing it" — so the prep tool was sitting between the plot sheet and the oracles.
+*Fix:* Play · Scene · Oracles · Forge · Journal · More. The three loop tabs are now adjacent
+and in the order the loop runs.
+
+**F-20 · The Play tab crossed a box above the control that calls the beat.** The track card
+led, the beat controls followed. The procedure runs the other way: call a beat, play it, then
+cross a box only if it mattered (§6.3.3).
+*Fix:* the beat controls lead as **1 · Call a plot beat**, the track follows as **2 · Cross a
+box**, the trigger reference is **3 ·** and folded — matching the Scene tab's existing 1/2/3.
+The track's live position was never lost, because the persistent header carries it.
+
+**F-21 · The loop of PUM p.5 crossed tabs with no onward route at any step.** The app had
+every piece of the flowchart and no connective tissue: after confirming a beat nothing named
+the scene, after closing a scene nothing named the next beat, and the oracles never led back.
+Measured with the new flow probe: **every step of the loop needed the tab bar.**
+*Fix:* a state-driven **What now** card on the plot sheet (open a scene / back to the scene /
+ask an oracle / write it down, or "start another plot sheet" once resolved); a **While the
+scene runs** card on the Scene screen (call a beat / ask an oracle / who is here); and the
+scene-closed summary now offers the next scene and the plot sheet instead of a bare "Done".
+The probe now reports every step offered in place.
+
+**F-22 · The two player-named plot-node lists were missing.** PUM p.27's extension sheet
+prints "My list: ____" twice, with the same ten slots and die rule as the printed categories.
+*Fix:* two `custom` node categories that exist only once named, with rename and remove,
+reachable by the Customized sheet's prompt column, offered GUM's grand oracle for filling, and
+named by the player everywhere the app refers to them.
+*Why it mattered:* D-22 again — a Permission the book grants and the app silenced. This one is
+the difference between "the four categories PUM ships" and "the categories *this* game needs".
+
+**F-23 · The Game notes area was missing.** Printed on both plot-node sheets.
+*Fix:* `scope.notes`, folded under "This scope" on the plot sheet with the mission and the
+starting point — which also moved that prep context out of the way of the beat controls.
+
+**F-24 · A Yes/No answer did not offer the beat it triggers.** PUM p.28 turns two answers
+straight into beats. The app had the trigger table on the Play tab as reference and never
+applied it at the moment it fires.
+*Fix:* after any Yes/No answer, both triggers are offered with the rule cited; choosing one
+rolls the beat, journals it with the trigger that produced it, and opens it on the plot sheet.
+Offered, never fired — the app cannot know which question was asked.
+*Why it mattered:* §15 — a narrative game's app is judged on its prompts. This is the single
+place the books' own procedure was legible to the app and it was not acting on it.
+
+**F-25 · Journal filters covered eight of the thirteen kinds the app writes.** GUM rolls, prep
+entries, node writes and timed beats could not be found again in a 500-entry log.
+*Fix:* one filter per kind actually written, plus a **session break** marker — which the spec
+claimed under ruling A6 and did not have. Nothing is reset or rolled at one; neither book
+defines a session procedure, and the marker says so.
+
+**F-26 · The Download button was silent when the browser blocked it.** Found by the new modal
+audit: a page-initiated download in an embedded viewer neither downloads nor throws.
+*Fix:* it now always reports, so the control is never one that appears to do nothing.
+
+### Tooling added this cycle
+
+**`tests/audit-modals.mjs`.** The interaction audit clicks top-level controls and discards
+whatever dialog opens — so **284 in-dialog buttons had never been audited at all**. The new
+pass opens each modal and clicks each of its buttons in isolation. Its first run produced 21
+findings, 19 of which were its own false negatives: a dialog that closes itself and opens
+another leaves the modal *count* at 1, so the swap read as "changed nothing". Fingerprinting
+the dialog rather than counting dialogs left the two real ones (F-26).
+
+**`tests/probe-flow.mjs`.** Walks the book's loop and reports, per step, whether the screen the
+player was already on offered the next step — the measurement behind F-21.
+
+### Cycle 4 result
+
+Unit harness 1,323 · dead-data clean · browser smoke 362 · interaction audit 453 controls ·
+modal audit 284 in-dialog buttons · flow probe: every loop step offered in place · layout clean
+at 320/360/390 under stress. **A full cycle with no new finding.**
+
+---
+
 ## Verified clean — do not re-litigate
 
 - **Data values.** Every table's row count, range coverage and uniqueness is asserted in the

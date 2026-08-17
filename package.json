@@ -8,6 +8,8 @@
     "test": "node tests/harness.mjs",
     "smoke": "node tests/smoke.mjs",
     "audit": "node tests/interaction.mjs",
+    "audit:modals": "node tests/audit-modals.mjs",
+    "probe:flow": "node tests/probe-flow.mjs",
     "probe": "node tests/probe-layout.mjs",
     "deadcode": "node tests/deadcode.mjs"
   },

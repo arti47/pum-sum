@@ -278,6 +278,23 @@ export function writeNodeToFirstEmpty(categoryId, text, slots) {
   return index;
 }
 
+export function setCustomListName(categoryId, name) {
+  mutate(name ? "Name a plot node list" : "Clear a list name", () => {
+    const sc = currentScope();
+    if (!sc) return;
+    if (!sc.customNames) sc.customNames = { custom1: "", custom2: "" };
+    sc.customNames[categoryId] = name;
+    if (!name && Array.isArray(sc.nodes[categoryId])) sc.nodes[categoryId] = [];
+  });
+}
+
+export function setScopeNotes(text) {
+  mutate("Write game notes", () => {
+    const sc = currentScope();
+    if (sc) sc.notes = text;
+  });
+}
+
 // --- protagonists & cast ----------------------------------------------------
 export function addProtagonist(name, notes = "") {
   mutate("Add a protagonist", () => {

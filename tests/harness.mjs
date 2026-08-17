@@ -183,8 +183,20 @@ eq("journey is 3/7/4/3/3", rules.plotSheet("journey").track.map((s) => s.boxes).
 eq("exploration triples each area", rules.plotSheet("exploration").track.map((s) => s.boxes).join("/"), "1/3/3/3/1");
 
 // --- 12. Node categories ----------------------------------------------------
-eq("six node categories", plot.NODE_CATEGORIES.length, 6);
+// Four printed base categories, two expanded, and the two blank player-named
+// lists the extension sheet carries (PUM p.27).
+eq("eight node categories", plot.NODE_CATEGORIES.length, 8);
 eq("four base categories", plot.NODE_CATEGORIES.filter((c) => !c.expanded).length, 4);
+eq("two player-named lists", plot.NODE_CATEGORIES.filter((c) => c.custom).length, 2);
+{
+  const scope = derived.normalizeScope({ sheetId: "journey" });
+  eq("an unnamed list has no slots", derived.nodeSlots(scope, "custom1"), 0);
+  eq("and shows its placeholder name", derived.categoryName(scope, "custom1"), "My list");
+  scope.customNames.custom1 = "Rumours";
+  ok("naming it brings the list into being", derived.nodeSlots(scope, "custom1") > 0);
+  eq("and it answers to that name", derived.categoryName(scope, "custom1"), "Rumours");
+  eq("a printed category keeps the book's name", derived.categoryName(scope, "world"), "Game or world elements");
+}
 ok("every category has a definition and examples",
   plot.NODE_CATEGORIES.every((c) => c.definition && c.examples));
 ok("every node-invoking prompt has a play note",

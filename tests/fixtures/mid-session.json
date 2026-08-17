@@ -9,25 +9,25 @@
     "gum": true,
     "seenTutorial": false
   },
-  "activeGameId": "game-1nir3b8ynggcf",
+  "activeGameId": "game-17k3tej1fpmjx2",
   "games": [
     {
-      "id": "game-1nir3b8ynggcf",
+      "id": "game-17k3tej1fpmjx2",
       "title": "The Neverwinter road",
       "universe": "D&D 5e",
       "tone": "Grim frontier fantasy, low magic",
       "inspiration": "",
-      "createdAt": 1786934081302,
+      "createdAt": 1786938538028,
       "archivedAt": null,
-      "activeScopeId": "scope-1pdhc62126czsp",
+      "activeScopeId": "scope-1mstqjdk3ku2c",
       "scopes": [
         {
-          "id": "scope-1pdhc62126czsp",
+          "id": "scope-1mstqjdk3ku2c",
           "name": "Find out who burned the caravan",
           "mission": "The caravan burned on the Triboar Trail. Somebody paid for it.",
           "sheetId": "standard",
           "startingPoint": "In medias res: the wagons are still smoking and the survivors are arguing.",
-          "createdAt": 1786934081301,
+          "createdAt": 1786938538028,
           "track": {
             "crossed": 2,
             "marks": {
@@ -37,6 +37,11 @@
             "custom": null
           },
           "customPrompts": null,
+          "customNames": {
+            "custom1": "",
+            "custom2": ""
+          },
+          "notes": "",
           "nodes": {
             "world": [
               "Bandit remnants of the King's army",
@@ -67,15 +72,17 @@
               ""
             ],
             "characters": [],
+            "custom1": [],
+            "custom2": [],
             "locations": []
           },
           "openScene": {
-            "id": "scene-1eweeky1rn7bnq",
-            "openedAt": 1786934081302,
+            "id": "scene-1dbaf51wbwn0",
+            "openedAt": 1786938538028,
             "opener": "Describe the current location, what characters see",
             "interventions": [
               {
-                "ts": 1786934081302,
+                "ts": 1786938538028,
                 "text": "Something breaks, fails, or is damaged around here"
               }
             ]
@@ -97,7 +104,7 @@
       ],
       "cast": [
         {
-          "id": "cast-yq9wg2pvj7sb",
+          "id": "cast-13xtyoe12xk52x",
           "kind": "character",
           "name": "Gard the tavern keeper",
           "notes": "Knows everyone on the trail",
@@ -111,7 +118,7 @@
           ]
         },
         {
-          "id": "cast-1wqrsf362mb6z",
+          "id": "cast-uvlxxdt68lvu",
           "kind": "location",
           "name": "The Triboar Trail",
           "notes": "Three days of open road, no cover",
@@ -120,110 +127,20 @@
       ],
       "journal": [
         {
-          "id": "j-q86k9j99nftx",
-          "ts": 1786934081305,
+          "id": "j-11vefcn4tmdlt",
+          "ts": 1786938538032,
           "kind": "note",
           "title": "",
           "detail": "Vera wants to backtrack to the ford before dark.",
           "dice": [],
           "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
+          "scopeId": "scope-1mstqjdk3ku2c",
           "sceneId": null,
           "linkedTo": null
         },
         {
-          "id": "j-1425svt1bw8vm4",
-          "ts": 1786934081305,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 7,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1e8k81sh3a7f",
-          "ts": 1786934081305,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 8,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1k9uptjp97fw",
-          "ts": 1786934081304,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
-          "linkedTo": null
-        },
-        {
-          "id": "j-5crbd3lmi9eg",
-          "ts": 1786934081304,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 9,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
-          "linkedTo": null
-        },
-        {
-          "id": "j-14ctugj17gj53g",
-          "ts": 1786934081304,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1dkn8ax1g63gzb",
-          "ts": 1786934081304,
+          "id": "j-nv8j3swu5cjw",
+          "ts": 1786938538032,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
@@ -235,103 +152,31 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
           "linkedTo": null
         },
         {
-          "id": "j-bzdt5c16dk5r7",
-          "ts": 1786934081304,
+          "id": "j-17h2w6o1lf2gsm",
+          "ts": 1786938538031,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 4,
+              "value": 5,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
           "linkedTo": null
         },
         {
-          "id": "j-og0ntm1dpzdks",
-          "ts": 1786934081304,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 4,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1j4cgr61v4b645",
-          "ts": 1786934081304,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 8,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
-          "linkedTo": null
-        },
-        {
-          "id": "j-l92e0x1hro8qx",
-          "ts": 1786934081304,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 10,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
-          "linkedTo": null
-        },
-        {
-          "id": "j-1vjm37g1jb7kdk",
-          "ts": 1786934081304,
-          "kind": "beat",
-          "title": "Modified proposal",
-          "detail": "",
-          "dice": [
-            {
-              "label": "d10",
-              "value": 1,
-              "kept": true
-            }
-          ],
-          "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
-          "linkedTo": null
-        },
-        {
-          "id": "j-90o82s104bc6n",
-          "ts": 1786934081304,
+          "id": "j-hvamwkj092tu",
+          "ts": 1786938538031,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
@@ -343,13 +188,121 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
           "linkedTo": null
         },
         {
-          "id": "j-6vnmijmqa6oe",
-          "ts": 1786934081303,
+          "id": "j-19tuf491lvrp3l",
+          "ts": 1786938538031,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 4,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1l8cbf51btiuuq",
+          "ts": 1786938538030,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 2,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
+          "linkedTo": null
+        },
+        {
+          "id": "j-ajx6cj1xv58cr",
+          "ts": 1786938538030,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
+          "linkedTo": null
+        },
+        {
+          "id": "j-7zkt7j3g291w",
+          "ts": 1786938538030,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 5,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1eiudhgenf3g7",
+          "ts": 1786938538030,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 10,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
+          "linkedTo": null
+        },
+        {
+          "id": "j-tlzmggcgdmee",
+          "ts": 1786938538030,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 9,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1hlnxrq1yy8ux3",
+          "ts": 1786938538030,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
@@ -361,26 +314,80 @@
             }
           ],
           "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
           "linkedTo": null
         },
         {
-          "id": "j-1yqidwv1p44lal",
-          "ts": 1786934081303,
+          "id": "j-rwkgmn17bxdxd",
+          "ts": 1786938538030,
           "kind": "beat",
           "title": "Modified proposal",
           "detail": "",
           "dice": [
             {
               "label": "d10",
-              "value": 8,
+              "value": 9,
               "kept": true
             }
           ],
           "note": "",
-          "scopeId": "scope-1pdhc62126czsp",
-          "sceneId": "scene-1eweeky1rn7bnq",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
+          "linkedTo": null
+        },
+        {
+          "id": "j-11rhy8016m8b09",
+          "ts": 1786938538030,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 1,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
+          "linkedTo": null
+        },
+        {
+          "id": "j-15d9y97dg7ch8",
+          "ts": 1786938538030,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 4,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
+          "linkedTo": null
+        },
+        {
+          "id": "j-1qfoqmnuk3dmf",
+          "ts": 1786938538029,
+          "kind": "beat",
+          "title": "Modified proposal",
+          "detail": "",
+          "dice": [
+            {
+              "label": "d10",
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "note": "",
+          "scopeId": "scope-1mstqjdk3ku2c",
+          "sceneId": "scene-1dbaf51wbwn0",
           "linkedTo": null
         }
       ]

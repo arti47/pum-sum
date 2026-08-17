@@ -9,9 +9,9 @@ import { Settings } from "./settings.js";
 
 export const TABS = [
   { id: "play",    icon: "▤", label: "Play",    sections: ["track", "nodes", "cast"] },
-  { id: "forge",   icon: "✦", label: "Forge",   sections: ["seed", "world", "character", "grand"], gated: "gum" },
-  { id: "oracles", icon: "◇", label: "Oracles", sections: ["yesno", "descriptive", "story", "granular", "quantifiers"] },
   { id: "scene",   icon: "◗", label: "Scene",   sections: ["arc", "explore", "battle", "discovery", "people"] },
+  { id: "oracles", icon: "◇", label: "Oracles", sections: ["yesno", "descriptive", "story", "granular", "quantifiers"] },
+  { id: "forge",   icon: "✦", label: "Forge",   sections: ["seed", "world", "character", "grand"], gated: "gum" },
   { id: "journal", icon: "✎", label: "Journal", sections: ["entries", "dice"] },
   { id: "more",    icon: "≡", label: "More",    sections: ["home", "library", "tutorial", "settings"] },
 ];

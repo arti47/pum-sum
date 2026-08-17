@@ -11,9 +11,13 @@ const PAGE = 40;
 let shown = PAGE;
 let filter = "all";
 
+// One entry per kind the app actually writes — a kind with no filter is a kind
+// you cannot find again in a 500-entry log.
 const FILTERS = [
   ["all", "All"], ["beat", "Beats"], ["oracle", "Oracles"], ["yesno", "Yes/No"],
-  ["sum", "SUM"], ["scene", "Scenes"], ["note", "Notes"], ["track", "Track"],
+  ["sum", "SUM"], ["gum", "GUM"], ["scene", "Scenes"], ["node", "Nodes"],
+  ["track", "Track"], ["timed", "Timed"], ["note", "Notes"], ["prep", "Prep"],
+  ["session", "Sessions"],
 ];
 
 export function renderJournal(host, section) {
@@ -79,6 +83,22 @@ function renderEntries(host, game) {
   actionBar({
     label: "Write an entry",
     context: `${all.length} entr${all.length === 1 ? "y" : "ies"}`,
+    secondary: {
+      // Ruling A6: neither book defines a session boundary, so the app fires no
+      // bundle at one. It only lets you mark where you stopped.
+      label: "Session break",
+      onClick: () => promptModal({
+        title: "Mark a session break",
+        label: "A line about where you stopped (optional)",
+        hint: "Neither book defines a session procedure, so nothing is reset or rolled. This is a bookmark for you.",
+        multiline: true,
+        onSubmit: (v) => {
+          store.addJournal({ kind: "session", title: "— session break —", detail: v });
+          toast("Marked.");
+          render();
+        },
+      }),
+    },
     onClick: () => promptModal({
       title: "Write in the journal",
       label: "What happened?",

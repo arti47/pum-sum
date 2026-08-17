@@ -9,7 +9,7 @@ import {
 import * as store from "./store.js";
 import {
   sectionsOf, crossed, trackLength, hasTrack, isResolved, currentSection,
-  nodeList, nodeDie, nodeFill, nodeSlots, slotRange,
+  nodeList, nodeDie, nodeFill, nodeSlots, slotRange, categoryName, customListName,
 } from "./derived.js";
 import { plotSheet, nodeCategory, sectionOfBox, proposalNote, abcd } from "./rules.js";
 import { rollProposal, rollPrompt, invokeNode, journalRoll, diceText } from "./roller.js";
@@ -64,11 +64,26 @@ function renderTrack(host, scope) {
     "Play the answer out first. Only cross a box once the outcome turned out to be relevant — the app never crosses one for you.",
   ], "confirm", openRule));
 
-  if (scope.mission) {
-    add(host, el("div", { class: "card" },
-      el("div", { class: "card-head" }, el("h3", { text: "Mission" })),
-      el("p", { text: scope.mission })
-    ));
+  // Context the player re-reads occasionally, not every beat — folded (§6.5).
+  if (scope.mission || scope.startingPoint || scope.notes) {
+    const d = el("details", { class: "explain" }, el("summary", null, "This scope"));
+    const body = el("div", { class: "body" });
+    if (scope.mission) add(body, el("p", null, el("strong", { text: "Mission. " }), scope.mission));
+    if (scope.startingPoint) add(body, el("p", null, el("strong", { text: "Starting point. " }), scope.startingPoint));
+    if (scope.notes) add(body, el("p", { style: "white-space:pre-wrap" }, scope.notes));
+    add(body, el("button", {
+      class: "btn small",
+      onclick: () => promptModal({
+        title: "Game notes",
+        label: "Notes for this plot sheet",
+        multiline: true,
+        value: scope.notes || "",
+        hint: "The printed plot-node sheets carry a Game notes area. This is it.",
+        onSubmit: (v) => { store.setScopeNotes(v); render(); },
+      }),
+    }, scope.notes ? "Edit game notes" : "Add game notes"));
+    add(d, body);
+    add(host, d);
   }
 
   // The next step is named until the scope has a starting point (§6.3.7).
@@ -93,8 +108,12 @@ function renderTrack(host, scope) {
     ));
   }
 
-  add(host, trackCard(scope));
+  // Controls in the order the book performs them (§6.3.3): you call a beat, you
+  // play it, and only then do you cross a box. The track's live position is
+  // already in the persistent header, so it does not need to lead here.
   add(host, openBeat ? beatCard(scope) : beatChooser(scope));
+  add(host, trackCard(scope));
+  add(host, whatNowCard(scope));
   add(host, triggersCard());
 
   // The primary action stays above the fold, pinned, carrying its context (§6.3.2).
@@ -110,6 +129,44 @@ function renderTrack(host, scope) {
   }
 }
 
+// PUM p.5's flowchart is a loop, and the loop crosses tabs: a scene opens, you
+// ask, you call a beat, you confirm, you close. Without an onward route at each
+// step the player drives the whole loop from the tab bar (§6.3.6, §6.3.9).
+function whatNowCard(scope) {
+  const card = el("div", { class: "card" });
+  const open = scope.openScene;
+  add(card, el("div", { class: "card-head" },
+    el("h3", { text: "What now" }),
+    el("span", { class: "cite", text: "PUM p.5" })
+  ));
+
+  if (isResolved(scope)) {
+    add(card, el("p", { class: "muted", text: "The track is full. Bring this thread to its end, then open the next plot sheet." }));
+    add(card, el("button", { class: "btn wide", onclick: () => go("more", "home") }, "Start another plot sheet"));
+    return card;
+  }
+
+  if (openBeat) {
+    add(card, el("p", { class: "muted", text: "A beat is on the table. Play it out in the fiction, then confirm it above — or decide it did not matter." }));
+    return card;
+  }
+
+  add(card, el("p", { class: "muted", text: open
+    ? "A scene is running. Roleplay it, ask when you do not know, and call a beat when a moment might matter to the bigger picture."
+    : "No scene is open. SUM's opener exists for exactly the moment you know a scene should happen but not how it starts." }));
+
+  const row = el("div", { class: "btn-row" });
+  if (!open) {
+    add(row, el("button", { class: "btn", onclick: () => go("scene", "arc") }, "Open a scene"));
+  } else {
+    add(row, el("button", { class: "btn", onclick: () => go("scene", "arc") }, "Back to the scene"));
+  }
+  add(row, el("button", { class: "btn", onclick: () => go("oracles", "yesno") }, "Ask an oracle"));
+  add(row, el("button", { class: "btn", onclick: () => go("journal", "entries") }, "Write it down"));
+  add(card, row);
+  return card;
+}
+
 function trackCard(scope) {
   const card = el("div", { class: "card" });
   const sections = sectionsOf(scope);
@@ -118,7 +175,7 @@ function trackCard(scope) {
   const total = trackLength(scope);
 
   add(card, el("div", { class: "card-head" },
-    el("h2", { text: "Plot track" }),
+    el("h2", { text: "2 · Cross a box" }),
     el("span", { class: "cite", text: total ? `${done}/${total}` : "no track" })
   ));
 
@@ -243,7 +300,8 @@ function promptColumnDialog(scope) {
       add(sel, el("option", { value: "event:" + letter }, label));
     }
     for (const cat of NODE_CATEGORIES) {
-      add(sel, el("option", { value: "node:" + cat.id }, cat.name));
+      if (cat.custom && !customListName(scope, cat.id)) continue;
+      add(sel, el("option", { value: "node:" + cat.id }, categoryName(scope, cat.id)));
     }
     const cur = current[i];
     sel.value = cur ? (cur.event ? "event:" + cur.event : "node:" + cur.node) : "event:A";
@@ -267,8 +325,7 @@ function promptColumnDialog(scope) {
               const t = abcdLabel(id);
               return { label: t, event: id };
             }
-            const cat = nodeCategory(id);
-            return { label: cat ? cat.name : id, node: id };
+            return { label: categoryName(scope, id), node: id };
           });
           store.setCustomPrompts(column);
           toast("Column saved — that is what the app will roll.");
@@ -393,7 +450,7 @@ function reportAdvance(out, title) {
 // --- beats -----------------------------------------------------------------
 function beatChooser(scope) {
   const card = el("div", { class: "card" });
-  add(card, el("div", { class: "card-head" }, el("h2", { text: "Call a plot beat" })));
+  add(card, el("div", { class: "card-head" }, el("h2", { text: "1 · Call a plot beat" })));
   add(card, el("p", { class: "muted", text: "A proposal twists an idea you already have. A prompt tells you what happens when you don't." }));
   add(card, el("div", { class: "btn-row" },
     el("button", { class: "btn primary", onclick: () => doProposal(scope) }, "Modified proposal"),
@@ -514,7 +571,7 @@ function nodeBlock(scope, beat) {
   const n = beat.node;
   const cat = nodeCategory(n.categoryId);
   const wrap = el("div", { class: "strip" });
-  add(wrap, el("div", { class: "strip-k", text: `${cat ? cat.name : n.categoryId}${n.die ? ` — 1d${n.die}` : ""}` }));
+  add(wrap, el("div", { class: "strip-k", text: `${categoryName(scope, n.categoryId)}${n.die ? ` — 1d${n.die}` : ""}` }));
 
   if (n.unavailable) {
     add(wrap, el("div", { text: "This sheet carries no plot nodes. Read the prompt as a free invitation, or switch to a sheet that does." }));
@@ -613,7 +670,7 @@ function chooseNodeDialog(scope, n, beat) {
 
 function triggersCard() {
   const card = el("div", { class: "card" });
-  add(card, el("h3", { text: "When to call which" }));
+  add(card, el("h3", { text: "3 · When to call which" }));
   for (const key of ["proposal", "prompt"]) {
     const t = BEAT_TRIGGERS[key];
     const d = el("details", { class: "acc" }, el("summary", null, t.name));
@@ -652,6 +709,32 @@ function renderNodes(host, scope) {
     if (cat.expanded && !sheet.expandedNodes) continue;
     add(host, nodeCard(scope, cat, slots));
   }
+
+  // The extension sheet prints two blank, player-named lists (PUM p.27).
+  if (sheet.expandedNodes) {
+    const unused = NODE_CATEGORIES.filter((c) => c.custom && !customListName(scope, c.id));
+    if (unused.length) {
+      const card = el("div", { class: "card" });
+      add(card, el("h3", { text: "A list of your own" }));
+      add(card, el("p", { class: "muted", text: `The plot-node extension sheet carries two blank lists for whatever this game needs that the four base categories do not cover. ${unused.length} still unused.` }));
+      add(card, el("button", {
+        class: "btn wide",
+        onclick: () => promptModal({
+          title: "Name your list",
+          label: "What is this list of?",
+          hint: "Factions, rumours, omens, debts owed, ship systems — whatever your game keeps reaching for.",
+          onSubmit: (v) => {
+            if (!v) return;
+            store.setCustomListName(unused[0].id, v);
+            store.addJournal({ kind: "prep", title: "New plot node list", detail: v });
+            render();
+          },
+        }),
+      }, "Add a plot node list"));
+      add(card, el("p", { class: "cite", text: "PUM p.27 — point a face of the Random Prompt column at it on a Customized sheet." }));
+      add(host, card);
+    }
+  }
 }
 
 function nodeCard(scope, cat, slots) {
@@ -661,10 +744,30 @@ function nodeCard(scope, cat, slots) {
   const dieSize = nodeDie(scope, cat.id);
 
   add(card, el("div", { class: "card-head" },
-    el("h3", { text: cat.name }),
+    el("h3", { text: categoryName(scope, cat.id) }),
     el("span", { class: "pill on", text: `1d${dieSize}` }),
     el("span", { class: "cite", text: `${fill}/${slots}` })
   ));
+  if (cat.custom) {
+    add(card, el("div", { class: "btn-row" },
+      el("button", {
+        class: "btn small ghost",
+        onclick: () => promptModal({
+          title: "Rename this list", label: "Name", value: customListName(scope, cat.id),
+          onSubmit: (v) => { if (v) { store.setCustomListName(cat.id, v); render(); } },
+        }),
+      }, "Rename"),
+      el("button", {
+        class: "btn small ghost",
+        onclick: () => confirmModal({
+          title: `Remove "${categoryName(scope, cat.id)}"?`,
+          message: `The list and its ${fill} entr${fill === 1 ? "y" : "ies"} are deleted, and any prompt face pointing at it falls back to the printed column. This can be undone once from Settings.`,
+          confirmLabel: "Remove the list", danger: true,
+          onConfirm: () => { store.setCustomListName(cat.id, ""); render(); },
+        }),
+      }, "Remove")
+    ));
+  }
 
   const d = el("details", { class: "explain" },
     el("summary", null, "What goes in here"),

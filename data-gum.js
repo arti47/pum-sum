@@ -1127,6 +1127,10 @@ export const GUM_FOR_NODES = {
   questions: ["plot-hook", "initial-lead", "mission", "motivation"],
   characters: ["archetypes-1", "archetypes-2", "character-edge", "character-flaw", "good-purposes"],
   locations: ["location-archetype", "location-feature", "location-purpose", "location-worth"],
+  // The two player-named lists (PUM p.27) hold whatever this game needs, so the
+  // grand oracle — GUM's own answer to "nothing specific fits" — is what suits.
+  custom1: ["grand-action", "grand-adjective", "grand-subject"],
+  custom2: ["grand-action", "grand-adjective", "grand-subject"],
 };
 
 // A plot seed is the book's own combination, in its own order (GUM pp.6-7).

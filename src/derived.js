@@ -53,8 +53,21 @@ export function nodeSlots(scope, categoryId) {
   if (!sheet) return 0;
   const cat = NODE_CATEGORIES.find((c) => c.id === categoryId);
   if (!cat) return 0;
+  // A player-named list (PUM p.27) only exists once it has been named.
+  if (cat.custom && !customListName(scope, categoryId)) return 0;
   if (cat.expanded && !sheet.expandedNodes) return sheet.nodeSlots > 0 ? sheet.nodeSlots : 0;
   return sheet.nodeSlots;
+}
+
+// The two blank lists on the extension sheet carry whatever name you write on them.
+export function customListName(scope, categoryId) {
+  return (scope.customNames && scope.customNames[categoryId]) || "";
+}
+
+export function categoryName(scope, categoryId) {
+  const cat = NODE_CATEGORIES.find((c) => c.id === categoryId);
+  if (!cat) return categoryId;
+  return cat.custom ? (customListName(scope, categoryId) || cat.name) : cat.name;
 }
 
 export function nodeList(scope, categoryId) {
@@ -125,6 +138,11 @@ export function normalizeScope(raw = {}) {
     },
     customPrompts: Array.isArray(raw.customPrompts) && raw.customPrompts.length === 10
       ? raw.customPrompts : null,
+    customNames: {
+      custom1: (raw.customNames && typeof raw.customNames.custom1 === "string") ? raw.customNames.custom1 : "",
+      custom2: (raw.customNames && typeof raw.customNames.custom2 === "string") ? raw.customNames.custom2 : "",
+    },
+    notes: typeof raw.notes === "string" ? raw.notes : "",
     nodes: blankNodes(),
     openScene: raw.openScene && raw.openScene.id ? {
       id: raw.openScene.id,

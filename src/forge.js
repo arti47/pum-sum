@@ -12,7 +12,7 @@ import { explain, actionBar, resultCard, toast, modal, closeModal, promptModal, 
 import * as store from "./store.js";
 import { rollGum, rollGumSet, journalRoll, diceText } from "./roller.js";
 import { gumTable, gumSection } from "./rules.js";
-import { nodeSlots } from "./derived.js";
+import { nodeSlots, categoryName } from "./derived.js";
 import { sectionNav, render, go } from "./router.js";
 import { Settings } from "./settings.js";
 import { openRule } from "./screens.js";
@@ -266,10 +266,10 @@ function keepDialog(parts, label) {
         onclick: () => {
           const at = store.writeNodeToFirstEmpty(cat.id, text, slots);
           closeModal();
-          if (at < 0) toast(`${cat.name} is full — clear a slot first.`);
+          if (at < 0) toast(`${categoryName(scope, cat.id)} is full — clear a slot first.`);
           else { toast(`Written into ${cat.name}.`); go("play", "nodes"); }
         },
-      }, `Write into ${cat.name}`));
+      }, `Write into ${categoryName(scope, cat.id)}`));
     }
   }
   add(body, el("button", {
