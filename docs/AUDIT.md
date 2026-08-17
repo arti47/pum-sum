@@ -315,3 +315,114 @@ at 320/360/390 under stress. **A full cycle with no new finding.**
   `updatefound`) but is **not** covered by an automated test. It is the one PWA behaviour that
   cannot be verified by looking at the running app; verifying it needs a deploy-and-reload
   cycle the harness does not perform.
+
+---
+
+## Cycle 5 — every tab, every button, every plot sheet
+
+The stopping rule says a cycle counts only when it produces **no** finding. This cycle was
+aimed at the question the previous four never asked: *the audits run one fixture — what about
+the other nine plot sheets, and the wizard?*
+
+### Pass 1 — coverage of the audits themselves
+
+**F-14a · Two whole regions of the app had never been clicked.**
+*Target:* `tests/interaction.mjs` and `tests/audit-modals.mjs` both boot the `mid-session`
+fixture — a Standard sheet, mid-play — and the prep wizard only renders while a draft exists,
+so it never appeared on any audited route.
+*Fix:* new `tests/audit-deep.mjs`: a sheet matrix (all ten sheets × the three Play routes ×
+every control, with the dialogs of the structurally distinct sheets swept button by button),
+a wizard pass (every control on every step, re-entered in isolation), and a **write-back
+invariant** asserting no click may put more into a plot-node list than the Nodes screen can
+read back.
+*Why it mattered:* every finding below except F-20 lives in the region those two audits could
+not see.
+
+### Pass 2 — the sheet matrix
+
+**F-15 · Plot-node lists you could fill and never read again.**
+*Rule:* the expanded categories — Notable characters, Interesting locations, and the two
+player-named lists — are printed on the plot-node **extension** sheet (PUM pp.26-27), not on
+the all-in-one sheets.
+*Target:* `derived.nodeSlots` guarded them with
+`if (cat.expanded && !sheet.expandedNodes) return sheet.nodeSlots > 0 ? sheet.nodeSlots : 0;`
+— a branch that returns the same value as the line below it, so the guard did nothing. Both
+the Nodes screen and the wizard *hid* those lists on such a sheet, so a Standard sheet's own
+prompt column (face 5 reaches Notable characters, face 6 Interesting locations) rolled on a
+list with five invisible slots. "Add new" on the beat card wrote into it; so did the Forge's
+"Keep it →" and the cast's "Add to plot nodes". None of it could ever be seen or edited again.
+*Fix:* the guard returns 0. `roller.invokeNode` reports **why** a list is unavailable, and the
+beat card answers each reason properly — for a list the sheet does not print, the prompt
+stands on its own and offers *Bring one in*, *Recall* from the cast, and *Roll from GUM*.
+*Why it mattered:* this is worse than a missing feature. A missing feature is visible; a
+write with no read looks like it worked.
+
+**F-19 · A rules value hardcoded in `src/`.** `cast.addToNodes` computed the list length as
+`Math.max((scope.nodes[catId] || []).length, 5)` — the sheet's slot count restated in a screen
+module (§10.2), and wrong on a ten-slot sheet. Reads `derived.nodeSlots` now, and says so
+plainly when the sheet prints no such list.
+
+### Pass 3 — the wizard
+
+**F-16 · The same black hole, one step earlier.** `wizard.stepNodes` skipped the expanded
+categories on a sheet that does not print them but not the two *unnamed* player-named lists,
+which `nodeSlots` correctly reports as having no slots until named (PUM p.27). Prep offered
+ten slots in each of two lists called "My list"; everything typed there vanished on finish.
+*Fix:* an unnamed list gets no slots in prep either, and naming one is now part of prep —
+`draft.customNames` carried through `store.createGame` into the new scope.
+
+**F-23 · "Add protagonist" did nothing with an empty name.** Disabled until there is one.
+
+### Pass 4 — the permission sweep, re-run
+
+**F-17 · The twelfth Permission was a sentence.**
+*Rule:* a full track resolves a scope, but the scope is the player's to end — and Sandbox and
+Improvised have no track at all, so on those sheets saying so is the *only* way a scope can
+finish. The app said this in prose on the track card and offered no control (D-22).
+*Fix:* `scope.closedAt`, `store.setScopeClosed`, `derived.isEnded`, End/Reopen on the track
+card (mandatory on a trackless sheet), a rules-library entry, and normalization.
+
+**F-18 · Half of a permission had a control.** PUM p.9 allows a specific plot node invocation
+"rolled or chosen"; only *chosen* — the Invoke button on a written row — existed. Each node
+card now also rolls its own list as a beat.
+
+### Pass 5 — the audits' own detector
+
+**F-20 · A dialog opened by a dialog action was closed again by that action.**
+*Target:* `ui.modal`'s action wrapper ran `closeModal()` unconditionally after the handler.
+When the handler had itself opened a follow-up dialog, `closeModal()` closed *that*. So a
+**voluntary** track advance onto a marked box fired the timed beat, journalled it, and then
+closed the modal announcing it before it could be read; the same for a scope resolving.
+*Fix:* the wrapper closes its own dialog or nothing. Guarded in `audit-modals.mjs`, watched
+failing before the fix.
+*Why it mattered:* nothing mechanical could see it. The dialog *does* open, so every
+"changed something" check passes. It was found by reading the wrapper's contract and then
+proving it in a browser rather than trusting the reading (the F-7 lesson, applied).
+
+**F-21 · The node die switched one entry late.**
+*Rule:* PUM p.25 — "roll 1d10 in lists with less than half the entries filled; otherwise roll
+1d20". Exactly half is already *otherwise*.
+*Target:* `derived.nodeDie` used `fill > 5`, which implements "more than half". The app
+therefore disagreed with the rule text quoted in its own ruling A7, and with its own
+on-screen note ("1d10 while a list is less than half full"). At 5/10 filled — a common state
+— it rolled a d10 and could not reach the second half of the list at all.
+*Fix:* `fill >= slots / 2`. Ruling A7, the rules-library entry, `docs/rules/plot-beats.md` and
+the on-screen note all reworded to agree.
+
+**F-22 · The audits' change detector had a blind spot.** All three compared
+`innerHTML.length`. Choosing a different plot sheet in the wizard swaps "Chosen" (6) for
+"Choose this sheet" (17) on one card and back on another — a net length change of exactly
+zero, reported as "changed nothing". They hash the markup now. Controls marked
+`aria-current` / `aria-pressed` are excluded instead, because for those doing nothing *is*
+the correct behaviour.
+
+### Verified clean this cycle
+
+- Every table in all three books is reachable from a screen — now asserted, not assumed:
+  43 GUM tables, 24 SUM tables, 15 PUM oracles.
+- Every journal kind the app writes has a filter that finds it — source-scanned.
+- 3,339 write-back checks across ten sheets and the wizard: nothing written where nothing
+  can read it.
+- 1,480 controls and 1,857 in-dialog buttons clicked in isolation across the sheet matrix:
+  no JS errors, no unclickable controls, no no-ops.
+- The book's loop still walks without the tab bar; layout still clean at 320/360/390.

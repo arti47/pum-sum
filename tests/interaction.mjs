@@ -67,7 +67,14 @@ async function resetTo(tab, section) {
 
 async function snapshot() {
   return page.evaluate(() => ({
-    html: document.querySelector("#screen").innerHTML.length,
+    // Hashed, not measured: a swap that changes the DOM without changing its
+    // length would otherwise read as a no-op.
+    html: (() => {
+      const str = document.querySelector("#screen").innerHTML;
+      let h = 5381;
+      for (let i = 0; i < str.length; i++) h = ((h * 33) ^ str.charCodeAt(i)) >>> 0;
+      return str.length + ":" + h.toString(36);
+    })(),
     modal: !!document.querySelector(".modal"),
     toast: document.querySelectorAll(".toast").length,
     store: localStorage.getItem("umState") ? localStorage.getItem("umState").length : 0,
@@ -82,10 +89,12 @@ async function snapshot() {
 for (const [tab, section] of ROUTES) {
   await resetTo(tab, section);
 
+  // A control marked as the current one is meant to do nothing when tapped.
   const count = await page.evaluate(() => {
     const sel = "#screen button, #screen .btn, #action-bar button, #screen summary";
     return [...document.querySelectorAll(sel)].filter((n) =>
-      n.offsetParent !== null && !n.closest("details:not([open]) > *:not(summary)")).length;
+      n.offsetParent !== null && !n.matches('[aria-current="true"], [aria-current="page"]')
+      && !n.closest("details:not([open]) > *:not(summary)")).length;
   });
 
   for (let i = 0; i < count; i++) {
@@ -93,7 +102,8 @@ for (const [tab, section] of ROUTES) {
     const info = await page.evaluate((idx) => {
       const sel = "#screen button, #screen .btn, #action-bar button, #screen summary";
       const nodes = [...document.querySelectorAll(sel)].filter((n) =>
-        n.offsetParent !== null && !n.closest("details:not([open]) > *:not(summary)"));
+        n.offsetParent !== null && !n.matches('[aria-current="true"], [aria-current="page"]')
+        && !n.closest("details:not([open]) > *:not(summary)"));
       const n = nodes[idx];
       if (!n) return null;
       n.setAttribute("data-audit-target", "1");

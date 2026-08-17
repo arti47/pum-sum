@@ -102,7 +102,7 @@ available throughout and sit at the top of the precedence order.
 | **A4** | PUM's bias rule for Yes/No is *"roll twice and pick the result that best fits your judgment"*; SUM's is *"roll twice and keep the lowest / highest"* | **These are different mechanics and are implemented differently.** PUM bias = both results offered, player chooses. SUM bias = the engine keeps low or high per the declared expectation. Conflating them would hand the player's authorship to the machine |
 | **A5** | SUM's Intervention check and PUM's plot beats can both interrupt a scene | Both are offered; neither fires automatically. The disruption die (PUM p.9) is the only automatic interrupter and is off by default, matching the book's "optional rule" framing |
 | **A6** | Neither book names a scene/session boundary procedure beyond SUM's closure | The lifecycle engine owns **scene** boundaries only. There is no session-end bundle to fire, so none is invented; the journal marks sessions for the player's own reference |
-| **A7** | Plot-node lists: *"Roll 1d10 in lists with less than half the entries filled; otherwise roll 1d20"* (PUM p.25) applies to the 10-slot expanded sheet; the in-sheet lists have 5 slots | Die size is derived from the list's own capacity and fill: 5-slot lists always roll 1d10; 10-slot lists roll 1d10 until more than five slots are filled, then 1d20. One function, `derived.nodeDie()` |
+| **A7** | Plot-node lists: *"Roll 1d10 in lists with less than half the entries filled; otherwise roll 1d20"* (PUM p.25) applies to the 10-slot expanded sheet; the in-sheet lists have 5 slots | Die size is derived from the list's own capacity and fill: 5-slot lists always roll 1d10 (a d20 would point past their end, since slot = ceil(roll/2)); 10-slot lists roll 1d10 while **fewer than half** the slots are filled and 1d20 from the fifth entry on — *otherwise* in the printed rule includes exactly half. One function, `derived.nodeDie()`. **Corrected in cycle 5 (F-21):** the first implementation switched at *more than* five, disagreeing with the rule text this ruling quotes and with the app's own on-screen note |
 | **A9** | GUM p.21 prints "Vandalism and destruction" twice in one d100 table, at 17 and 22 | Kept as printed, so the app's odds match the book's, and recorded in `GUM_ERRATA` and the rules library. Correcting it would silently change a probability a paper player does not get to change |
 | **A10** | GUM has no bias rule and no ordering convention — unlike SUM, low does not favour the protagonists | Recorded explicitly. GUM tables are rolled straight; no bias control is offered on them, because offering one would invent a mechanic the book does not have |
 | **A8** | Neither book contains safety tools (§3.22) | Recorded as absent. Nothing invented; Settings says so plainly rather than shipping a house-aid X-card as if it were the book's |
@@ -118,7 +118,7 @@ The honest statement of what this app must be good at.
 | Shape | Count | Where they are |
 |---|---|---|
 | **Lookup** | **86** | Every oracle, prompt and generator table. 19 PUM, 24 SUM, 43 GUM |
-| **Permission** | **12** | Re-roll a result you dislike · ignore or reinterpret any answer · choose *not* to advance the track · advance it voluntarily without a beat · invoke a plot node deliberately instead of rolling · "add new, choose, or reroll" on any node slot · invent a plot node mid-play · re-roll a repeated beat · customise the Random Prompt column · pre-draw or grow a custom track · end a scope when you say it ends · name two plot-node lists of your own (p.27) |
+| **Permission** | **12** | Re-roll a result you dislike · ignore or reinterpret any answer · choose *not* to advance the track · advance it voluntarily without a beat · invoke a plot node deliberately — a chosen entry, or a chosen list rolled (p.9) · "add new, choose, or reroll" on any node slot · invent a plot node mid-play · re-roll a repeated beat · customise the Random Prompt column · pre-draw or grow a custom track · end a scope when you say it ends · name two plot-node lists of your own (p.27) |
 | **Modifier** | 2 | SUM Rule of Bias (keep low/high) · PUM bias (roll twice, pick) — different mechanics, ruling A4 |
 | **Escalation** | 1 | The plot track: each confirmed beat advances one box toward resolution |
 | **Threshold** | 1 | Track full ⇒ the scope resolves. This is the game's stakes and it lives in the persistent header |
@@ -169,7 +169,11 @@ The book names a fifth thing the app must not forget (template §6.3.7): the sco
 *starting point* — "decide on the game's starting point and what is introduced there",
 optionally *in medias res*. The home screen names it as the next step until it is written.
 
-**Plot node categories** — four base, two expanded:
+**Plot node categories** — four base, two expanded. The expanded pair (and the two
+player-named lists) are printed on the plot-node **extension** sheet, so they exist only on the
+sheets that pair with it — `expandedNodes: true`: Journey, Story-focus, Sandbox, Customized. On
+an all-in-one sheet the prompt column still reaches for a notable character and an interesting
+location; with no list to roll, the beat card offers to bring one in or recall one from the cast.
 
 | Category | What goes in it (PUM p.28) |
 |---|---|
@@ -251,7 +255,7 @@ text-size control paying back the zoom lock.
 | `data-rules-library.js` | One entry per automated rule, in the app's own words, page-cited |
 | `src/*.js` | Modules, §4.2 |
 | `manifest.json`, `service-worker.js`, `icon.svg` | PWA |
-| `tests/` | Harnesses (`harness`, `smoke`, `interaction`, `audit-modals`, `deadcode`), probes (`probe-layout`, `probe-flow`), seed fixtures, and `tests/tools/` — the retained extraction scripts |
+| `tests/` | Harnesses (`harness`, `smoke`, `interaction`, `audit-modals`, `audit-deep`, `deadcode`), probes (`probe-layout`, `probe-flow`), seed fixtures, and `tests/tools/` — the retained extraction scripts |
 | `docs/AUDIT.md` | Numbered findings per pass + the verified-clean list |
 | `docs/rules/*.md` | Distilled per-subsystem reference the audit reads against the engine |
 
@@ -263,7 +267,7 @@ text-size control paying back the zoom lock.
 | `ui.js` | `modal/toast/confirmModal/promptModal`, `explain()`, `actionBar()`, `defRow()` |
 | `rules.js` | Pure lookups over the data files: range lookup, granular band lookup, sheet lookup |
 | `derived.js` | Track position/percentage, `nodeDie()`, node fill, normalization + migration |
-| `settings.js` | Toggles: disruption die, expanded nodes, text size, theme, auto-enrich |
+| `settings.js` | Toggles: disruption die, volatile range, auto-enrich, GUM, text size, theme |
 | `store.js` | Campaign library, plot sheets, nodes, cast, journal, export/import, undo stack |
 | `roller.js` | Oracle engine, plot-beat engine, bias handling, disruption cascade, journal writes |
 | `sheet.js` | The plot sheet screen: track, beats, nodes; the persistent plot header |
@@ -283,21 +287,31 @@ text-size control paying back the zoom lock.
 
 ```
 umState
-  version, theme, textScale, settings{ disruptionDie, expandedNodes, autoEnrich }
+  version, theme, textScale
+  settings{ disruptionDie, disruptionVolatile, autoEnrich, gum, seenTutorial }
   activeGameId
   games[ {
-    id, title, universe, tone, createdAt, archivedAt|null,
+    id, title, universe, tone, inspiration, createdAt, archivedAt|null,
+    activeScopeId,
     scopes[ {                              // one per plot sheet in play
-      id, name, mission, sheetId, startingPoint, notes,
+      id, name, mission, sheetId, startingPoint, notes, createdAt,
+      closedAt|null,                       // "it ends when I say it ends" (PUM p.7)
       customNames: { custom1, custom2 },   // the extension sheet's two blank lists
-      track: { crossed:int, marks:{ index -> label } },   // timed beats (PUM p.9)
+      customPrompts: [10 prompts]|null,    // the Customized sheet's own column
+      track: {
+        crossed:int,
+        marks:{ index -> label },          // timed beats (PUM p.9)
+        fired:{ index -> true },           // each mark fires exactly once
+        custom:[ {name,boxes} ]|null,      // a track grown or pre-drawn in play
+      },
       nodes: { world[], problems[], findings[], questions[], characters[], locations[],
-               custom1[], custom2[] },
-      openScene: { id, openedAt, opener, interventions[] } | null
+               custom1[], custom2[] },     // only the lists the sheet prints are read
+      openScene: { id, openedAt, opener, interventions[] } | null,
+      lastBeat: { key, text, open } | null
     } ],
     protagonists[ { id, name, notes } ],
-    cast[ { id, kind:'character'|'location', name, notes, traits[] } ],
-    journal[ { id, ts, kind, title, dice[], detail, note, scopeId, sceneId } ]
+    cast[ { id, kind:'character'|'location', name, notes, traits[{table,label,text,roll}] } ],
+    journal[ { id, ts, kind, title, dice[], detail, note, scopeId, sceneId, linkedTo } ]
   } ]
 ```
 
@@ -360,6 +374,9 @@ All ticked boxes are extracted, cited and unit-checked for row count and range c
 | Track full ⇒ scope resolved | Threshold | — | `derived.isResolved` | Persistent header | `predicate flips on the final box` |
 | Voluntary track advance without a beat | Permission | — | `store.confirmBeat({voluntary:true})` | Track → Advance without a beat | `voluntary advance is journalled as such` |
 | Deliberate node invocation without a roll | Permission | — | `roller.invokeNode({chosen})` | Node row → Invoke | `chosen node bypasses the die` |
+| Deliberate invocation of a whole list, rolled | Permission | — | `roller.invokeNode` | Node card → Roll this list | `a chosen list still rolls its own die` |
+| A list the sheet does not print has no slots | Lookup | `PLOT_SHEETS[].expandedNodes` | `derived.nodeSlots`, `derived.nodeUnavailableReason` | Beat card → bring one in / recall / GUM | `slots only where the sheet prints the list` |
+| A scope ends when you say it ends | Permission | `scope.closedAt` | `store.setScopeClosed`, `derived.isEnded` | Track → End this scope / Reopen | `declaring it ended finishes it without pretending the track resolved` |
 | Re-roll a repeated beat | Permission | — | `roller.rollBeat` flags a repeat | "Same as last time — reroll?" | `a repeat is flagged, not forced` |
 | Re-roll / ignore any oracle answer | Permission | — | `roller.reroll` | Reroll on every result card | `reroll writes a linked journal entry` |
 | Timed plot beat on a marked box | Lookup | `track.marks` | `store.confirmBeat` | Track box badge + modal on arrival | `arriving at a marked box fires once` |
@@ -399,6 +416,9 @@ All ticked boxes are extracted, cited and unit-checked for row count and range c
 - [x] **Phase 7 — GUM v2.2**: all 43 generator tables, the Forge tab, and GUM wired into every
       blank-filling point the app already had.
 - [x] **Hardening**: harnesses, accessibility, layout/stress probes, audit to a clean cycle.
+- [x] **Audit cycle 5 — every tab, every button, every sheet**: the audit matrix widened from
+      one fixture to all ten plot sheets and the prep wizard (`tests/audit-deep.mjs`), which is
+      where the write-back defect and the two missing controls were found. See §8.
 
 ---
 
@@ -432,6 +452,7 @@ that means, for any change worth committing:
 
 | Date | Change | Verification | Cache |
 |---|---|---|---|
+| 2026-08-17 | **Audit cycle 5 — every tab, every button, every plot sheet.** The interaction and modal audits had only ever run one fixture (a Standard sheet), so nine plot sheets and the whole prep wizard were unaudited; new `tests/audit-deep.mjs` sweeps all ten sheets, the wizard step by step, and a write-back invariant. Five findings. F-15 `derived.nodeSlots` gave the extension-sheet lists slots on sheets that do not print them, so the wizard, the beat card, the Forge's "Keep it" and the cast's "Add to plot nodes" could all write into a list the Nodes screen then hid — data with no way back. F-16 the wizard offered the two player-named lists before they were named (`nodeSlots` returns 0 for those), the same black hole; naming now happens in prep and `customNames` is carried into the new scope. F-17 the twelfth Permission — *end a scope when you say it ends* — was a sentence on the track card, and on the trackless Sandbox and Improvised sheets it was the only way a scope could ever finish; now `scope.closedAt` with End/Reopen controls and a rules-library entry. F-18 PUM p.9's specific plot node invocation is allowed "rolled or chosen" and only *chosen* had a control; each node card now rolls its own list as a beat. F-19 `cast.addToNodes` hard-coded a five-slot list in `src/` (§10.2) and mis-read the list length. F-20 a dialog opened from inside a dialog action was closed again by the action wrapper, so a *voluntary* advance onto a marked box fired the timed beat and swallowed the modal announcing it — `ui.modal` now closes its own dialog rather than whatever is open, and `audit-modals` carries a guard that was watched failing. F-21 `derived.nodeDie` switched a ten-slot list to 1d20 at *more than* five entries; PUM p.25 says 1d10 with **less than** half filled, "otherwise" 1d20, and exactly half is already otherwise — the app disagreed with the rule text quoted in its own ruling A7 and with its own on-screen note. Corrected at fill ≥ half, ruling A7 reworded. F-22 the audits compared `innerHTML.length`, so a symmetric swap (which plot-sheet card is chosen) read as a no-op; all three now hash the markup, and controls marked `aria-current`/`aria-pressed` are excluded because doing nothing is their correct behaviour. F-23 the wizard's "Add protagonist" silently did nothing with an empty name; it is disabled until there is one. Plus: the Scene arc and Characters screens showed a result card left over from an unrelated SUM table; Home counted hidden node lists as prep done; archived games sink below live ones. | unit 1492 · dead-data clean · smoke 362 · interaction 435 controls · modal audit 300 in-dialog buttons · deep audit 10 sheets + the wizard, 1,480 controls · 1,857 in-dialog buttons · 3,339 write-back checks · flow probe clean · layout clean at 320/360/390 | v7 |
 | 2026-08-16 | Instantiated from template v3. Stage A extraction complete (bbox reconstruction + 300 dpi vector measurement); Stage B decisions recorded; full build of Phases 0–4 and 6. | `npm test` 930 assertions green; parse gate clean | v1 |
 | 2026-08-16 | Audit cycle 1: nine findings, all fixed. F-1 proposal notes extracted and never shown (the §0 defect) → `PROPOSAL_KINDS` + `rules.proposalNote`, surfaced on the beat card. F-2 three custom-sheet Permissions with an engine and no control → the Customize dialog. F-3 `updateGame` unreachable → Edit on the Home game card. F-4 SUM section names hardcoded in `src/` → read `SUM_SECTIONS`. F-5 transient view state leaked across scopes → new `src/viewstate.js` clearer registry. F-6 dead exports and unused imports removed. F-7 the dead-data scan's own `\b$\b` bug, which I acted on before verifying. F-8 tap targets raised to 40px. F-9 two primary actions below the fold → Home pinned, Settings reordered by frequency. F-10 `viewstate.js` missing from the service-worker app shell (offline boot failure) → listed, cache bumped to v2, and a harness check added. | `npm test` · `npm run deadcode` · `npm run smoke` (304 checks) · `npm run audit` · layout probe at 320/360/390 under the stress fixture; three data guards and one layout guard each watched failing before restore | v2 |
 | 2026-08-16 | Audit cycle 2, run against the cycle-1 fixes: four findings, three of them regressions the fixes introduced. F-11 the wizard hijacked every More route → it renders on Home only. F-12 illegal wizard steps were enabled and inert → disabled with a reason. F-13 `store.createGame` fired the clearers and nulled the draft mid-`finish()` → local copy taken first. F-14 track boxes 36px at 320px → min-width raised. Re-ran the full cycle afterwards with no new finding. | unit 945 · dead-data clean · smoke 304 · interaction audit 338 controls · layout probe clean at 320/360/390 under stress | v3 |

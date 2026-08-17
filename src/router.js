@@ -3,7 +3,7 @@
 import { el, add, clear, $ } from "./core.js";
 import { clearActionBar } from "./ui.js";
 import * as store from "./store.js";
-import { crossed, trackLength, hasTrack, isResolved, currentSection } from "./derived.js";
+import { crossed, trackLength, hasTrack, isResolved, isEnded, currentSection } from "./derived.js";
 import { plotSheet } from "./rules.js";
 import { Settings } from "./settings.js";
 
@@ -52,7 +52,7 @@ function liveState() {
   return {
     sceneOpen: !!(scope && scope.openScene),
     beatOpen: !!(scope && scope.lastBeat && scope.lastBeat.open),
-    resolved: !!(scope && isResolved(scope)),
+    resolved: !!(scope && isEnded(scope)),
     needsStart: !!(scope && !scope.startingPoint),
     noGame: !game,
   };
@@ -109,13 +109,13 @@ function renderPlotHeader() {
 
   const sheet = plotSheet(scope.sheetId);
   const sec = currentSection(scope);
-  const resolved = isResolved(scope);
+  const resolved = isEnded(scope);
 
   const row = el("div", { class: "ph-row" },
     el("span", { class: "ph-name", text: scope.name }),
     el("span", { class: "ph-sec" },
       resolved
-        ? el("span", { class: "ph-resolved", text: "Resolved" })
+        ? el("span", { class: "ph-resolved", text: isResolved(scope) ? "Resolved" : "Ended" })
         : (sec ? sec.name : (sheet ? sheet.name : "")),
       hasTrack(scope) ? " " : null,
       hasTrack(scope)

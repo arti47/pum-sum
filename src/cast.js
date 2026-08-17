@@ -5,12 +5,12 @@ import { el, add, announce } from "./core.js";
 import { explain, modal, closeModal, promptModal, confirmModal, toast } from "./ui.js";
 import * as store from "./store.js";
 import { rollSum, journalRoll, diceText } from "./roller.js";
-import { sumTable } from "./rules.js";
+import { sumTable, plotSheet } from "./rules.js";
 import { render, go } from "./router.js";
 import { currentBias } from "./scene.js";
 import { CHARACTER_TABLE_IDS } from "../data-sum.js";
 import { NODE_CATEGORIES } from "../data-pum-plot.js";
-import { categoryName } from "./derived.js";
+import { categoryName, nodeSlots } from "./derived.js";
 import { gumSuggest, gumTablesForNode } from "./forge.js";
 import { Settings } from "./settings.js";
 
@@ -253,21 +253,38 @@ function addToNodes(c) {
   const scope = store.currentScope();
   const catId = c.kind === "character" ? "characters" : "locations";
   const cat = NODE_CATEGORIES.find((x) => x.id === catId);
-  const slots = scope ? (scope.nodes[catId] || []).length : 0;
+  // The list's length is the sheet's, never a number chosen here (§10.2).
+  const slots = scope ? nodeSlots(scope, catId) : 0;
+
+  if (!slots) {
+    const sheet = scope ? plotSheet(scope.sheetId) : null;
+    modal({
+      title: "Add to plot nodes",
+      body: el("div", null,
+        el("p", { text: `${sheet ? sheet.name : "This plot sheet"} prints no ${cat.name.toLowerCase()} list, so there is no slot to write ${c.name} into.` }),
+        el("p", { class: "muted", text: "They stay in the cast either way — a prompt that reaches for a character will offer to recall them. The Journey, Story-focus, Sandbox and Customized sheets pair with the extension sheet that carries these lists." })
+      ),
+      actions: [
+        { label: "Back to the cast", primary: true, onClick: () => go("play", "cast") },
+        { label: "Close" },
+      ],
+    });
+    return;
+  }
+
   modal({
     title: "Add to plot nodes",
     body: el("div", null,
-      el("p", null, `Write `, el("strong", { text: c.name }), ` into `, el("strong", { text: scope ? categoryName(scope, catId) : cat.name }), `.`),
+      el("p", null, `Write `, el("strong", { text: c.name }), ` into `, el("strong", { text: categoryName(scope, catId) }), `.`),
       el("p", { class: "muted", text: "Until a name sits in a plot node list, a random prompt can never reach them." })
     ),
     actions: [
       {
         label: "Write it in", primary: true,
         onClick: () => {
-          const sheetSlots = Math.max(slots, 5);
-          const at = store.writeNodeToFirstEmpty(catId, c.name, sheetSlots);
-          if (at < 0) toast("That list is full — clear a slot first.");
-          else { toast(`Added to ${cat.name}.`); go("play", "nodes"); }
+          const at = store.writeNodeToFirstEmpty(catId, c.name, slots);
+          if (at < 0) toast(`${categoryName(scope, catId)} is full — clear a slot first.`);
+          else { toast(`Added to ${categoryName(scope, catId)}.`); go("play", "nodes"); }
         },
       },
       { label: "Cancel" },

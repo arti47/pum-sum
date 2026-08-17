@@ -32,6 +32,7 @@ export function startWizard(after = null) {
     scopeName: "", mission: "", startingPoint: "",
     protagonists: [],
     sheetId: "standard",
+    customNames: { custom1: "", custom2: "" },
     nodes: {},
   };
   for (const c of NODE_CATEGORIES) draft.nodes[c.id] = [];
@@ -186,6 +187,7 @@ function stepProtagonists(host) {
   }
   const name = el("input", { type: "text", placeholder: "Name" });
   const notes = el("input", { type: "text", placeholder: "A line about them (optional)" });
+  const addBtn = el("button", { class: "btn wide", disabled: true }, "Add protagonist");
   const addOne = () => {
     const v = name.value.trim();
     if (!v) return;
@@ -193,10 +195,14 @@ function stepProtagonists(host) {
     name.value = ""; notes.value = "";
     render();
   };
+  addBtn.addEventListener("click", addOne);
+  // A control that silently does nothing is worse than one that says why it
+  // cannot act yet (§6.4): it stays disabled until there is a name to add.
+  name.addEventListener("input", () => { addBtn.disabled = !name.value.trim(); });
   name.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addOne(); } });
   add(card, el("label", { class: "field" }, el("span", { class: "lbl", text: "Name" }), name));
   add(card, el("label", { class: "field" }, el("span", { class: "lbl", text: "Notes" }), notes));
-  add(card, el("button", { class: "btn wide", onclick: addOne }, "Add protagonist"));
+  add(card, addBtn);
   add(host, card);
 }
 
@@ -253,9 +259,12 @@ function stepNodes(host) {
 
   for (const cat of NODE_CATEGORIES) {
     if (cat.expanded && !sheet.expandedNodes) continue;
+    // A list of your own does not exist until it is named (PUM p.27), so it gets
+    // no slots here either — writing into one would be writing into nothing.
+    if (cat.custom && !draft.customNames[cat.id]) continue;
     const card = el("div", { class: "card" });
     add(card, el("div", { class: "card-head" },
-      el("h3", { text: cat.name }),
+      el("h3", { text: draft.customNames[cat.id] || cat.name }),
       el("span", { class: "cite", text: `${(draft.nodes[cat.id] || []).filter(Boolean).length}/${sheet.nodeSlots}` })
     ));
     add(card, el("p", { class: "muted", text: cat.definition }));
@@ -280,6 +289,29 @@ function stepNodes(host) {
       ));
     }
     add(host, card);
+  }
+
+  // The plot-node extension sheet prints two blank lists you name yourself (p.27).
+  if (sheet.expandedNodes) {
+    const unused = NODE_CATEGORIES.filter((c) => c.custom && !draft.customNames[c.id]);
+    if (unused.length) {
+      const card = el("div", { class: "card" });
+      add(card, el("h3", { text: "A list of your own" }));
+      add(card, el("p", { class: "muted", text: `${sheet.name} pairs with the plot-node extension sheet, which carries two blank lists for whatever this game needs that the printed categories do not cover. ${unused.length} still unused.` }));
+      const name = el("input", { type: "text", placeholder: "Factions · rumours · omens · debts owed" });
+      const addList = () => {
+        const v = name.value.trim();
+        if (!v) return;
+        draft.customNames[unused[0].id] = v;
+        name.value = "";
+        render();
+      };
+      name.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addList(); } });
+      add(card, el("label", { class: "field" }, el("span", { class: "lbl", text: "What is this list of?" }), name));
+      add(card, el("button", { class: "btn wide", onclick: addList }, "Add a plot node list"));
+      add(card, el("p", { class: "cite", text: "PUM p.27 — point a face of the Random Prompt column at it on a Customized sheet." }));
+      add(host, card);
+    }
   }
 }
 

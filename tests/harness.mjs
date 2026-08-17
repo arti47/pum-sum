@@ -202,6 +202,69 @@ ok("every category has a definition and examples",
 ok("every node-invoking prompt has a play note",
   Object.keys(plot.PROMPT_NOTES).length === plot.NODE_CATEGORIES.length);
 
+// --- 12a. Node-list reachability -------------------------------------------
+// Anything the engine can WRITE the player must be able to SEE and edit. The
+// Nodes screen and the wizard both hide a category the chosen sheet does not
+// print, so a category with slots on such a sheet is a list you can fill and
+// never read back.
+{
+  for (const sheet of plot.PLOT_SHEETS) {
+    const scope = derived.normalizeScope({
+      sheetId: sheet.id,
+      customNames: { custom1: "Rumours", custom2: "Omens" },
+    });
+    for (const cat of plot.NODE_CATEGORIES) {
+      const slots = derived.nodeSlots(scope, cat.id);
+      const printed = !cat.expanded || sheet.expandedNodes;
+      ok(`${sheet.id}/${cat.id}: slots only where the sheet prints the list`,
+        slots === 0 || printed, `${slots} slots on a sheet that does not print it`);
+      if (printed && sheet.nodeSlots > 0) {
+        eq(`${sheet.id}/${cat.id} carries the sheet's slot count`, slots, sheet.nodeSlots);
+      }
+    }
+  }
+  const std = derived.normalizeScope({ sheetId: "standard" });
+  eq("the standard sheet prints four node lists",
+    plot.NODE_CATEGORIES.filter((c) => derived.nodeSlots(std, c.id) > 0).length, 4);
+  const jrn = derived.normalizeScope({ sheetId: "journey" });
+  eq("the journey sheet prints six, before any list of your own",
+    plot.NODE_CATEGORIES.filter((c) => derived.nodeSlots(jrn, c.id) > 0).length, 6);
+}
+
+// --- 12b. Every journal kind is findable ------------------------------------
+// A kind the app writes but the Journal cannot filter for is a record you cannot
+// find again in a 500-entry log. Source-scanned so a new kind fails here rather
+// than quietly disappearing into "All".
+{
+  const written = new Set();
+  for (const f of readdirSync(join(root, "src")).filter((n) => n.endsWith(".js"))) {
+    const src = readFileSync(join(root, "src", f), "utf8");
+    for (const m of src.matchAll(/kind:\s*"([a-z-]+)"/g)) written.add(m[1]);
+  }
+  const journal = readFileSync(join(root, "src/journal.js"), "utf8");
+  const filters = new Set(
+    [...journal.matchAll(/\["([a-z-]+)",\s*"[^"]+"\]/g)].map((m) => m[1])
+  );
+  // The Journal folds the granular variant into the Oracles filter by hand.
+  const folded = new Set(["granular"]);
+  // rollGumSet's own kind is always overridden at the journal write; if one ever
+  // reaches the log it has no filter, so assert it cannot.
+  const neverJournalled = new Set(["gum-set"]);
+  ok("the Journal offers an All filter", filters.has("all"));
+  for (const kind of written) {
+    if (neverJournalled.has(kind)) continue;
+    ok(`journal kind "${kind}" can be filtered for`,
+      filters.has(kind) || folded.has(kind));
+  }
+  const rollerSrc = readFileSync(join(root, "src/roller.js"), "utf8");
+  ok("journalRoll lets its caller name the kind", rollerSrc.includes("extra.kind || result.kind"));
+  for (const f of ["src/forge.js"]) {
+    const src = readFileSync(join(root, f), "utf8");
+    ok(`${f} names the kind on every GUM journal write`,
+      !/journalRoll\(r,\s*\{\s*title/.test(src));
+  }
+}
+
 // --- 13-20. SUM tables ------------------------------------------------------
 eq("twenty-four SUM tables", sum.SUM_TABLES.length, 24);
 eq("eight SUM sections", sum.SUM_SECTIONS.length, 8);
@@ -290,6 +353,39 @@ ok("every plot-node category has GUM tables offered for it",
   derived.NODE_IDS.every((id) => (gum.GUM_FOR_NODES[id] || []).length > 0));
 ok("every GUM_FOR_NODES id is a real table",
   Object.values(gum.GUM_FOR_NODES).flat().every((id) => rules.gumTable(id)));
+// A table with no surface is the §0 defect: extracted, unit-checked, unreachable.
+// The Forge reaches the seeding section through the plot-seed and world-truths
+// cards, and the other two sections through their own grouped screens.
+{
+  const reachable = new Set([...gum.GUM_PLOT_SEED, ...gum.GUM_GRAND,
+    "location-archetype", "background-problem"]);
+  for (const t of gum.GUM_TABLES) {
+    if (t.section === "world" || t.section === "character") reachable.add(t.id);
+  }
+  const orphans = gum.GUM_TABLES.filter((t) => !reachable.has(t.id)).map((t) => t.id);
+  ok("every GUM table is reachable from a Forge screen", orphans.length === 0, orphans.join(", "));
+}
+// The same question of SUM: every table has a screen that rolls it.
+{
+  const scene = ["location-features", "core-challenge", "challenge-conditions",
+    "terrain-features", "enemy-tactics", "enemy-composition",
+    "type-of-clue", "revealing-finding", "opposition-activity"];
+  const arc = ["scene-opener", "intervention", "scene-closure"];
+  const reachable = new Set([...scene, ...arc, ...sum.CHARACTER_TABLE_IDS]);
+  const orphans = sum.SUM_TABLES.filter((t) => !reachable.has(t.id)).map((t) => t.id);
+  ok("every SUM table is reachable from a Scene screen", orphans.length === 0, orphans.join(", "));
+}
+// And of PUM: every oracle the data carries is offered by the console.
+{
+  const offered = new Set([
+    ...oracles.DESCRIPTIVE.map((o) => o.id),
+    ...oracles.STORY.map((o) => o.id),
+    ...oracles.QUANTIFIERS.map((o) => o.id),
+  ]);
+  ok("every descriptive, story and quantifier oracle is offered", offered.size === 15,
+    `${offered.size} oracles`);
+  ok("and each resolves through rules.oracle()", [...offered].every((id) => rules.oracle(id)));
+}
 
 // --- 21-24. Guidance and library --------------------------------------------
 eq("three play states", guidance.PLAY_STATES.length, 3);
@@ -313,7 +409,9 @@ eq("two errata recorded", plot.PUM_ERRATA.length, 2);
   });
   eq("5-slot list always rolls d10 when empty", derived.nodeDie(mk("standard", 0), "world"), 10);
   eq("5-slot list still rolls d10 when full", derived.nodeDie(mk("standard", 5), "world"), 10);
-  eq("10-slot list rolls d10 at 5 filled", derived.nodeDie(mk("journey", 5), "world"), 10);
+  eq("10-slot list rolls d10 below half", derived.nodeDie(mk("journey", 4), "world"), 10);
+  // "less than half … otherwise 1d20" — exactly half is already "otherwise".
+  eq("10-slot list rolls d20 at exactly half", derived.nodeDie(mk("journey", 5), "world"), 20);
   eq("10-slot list rolls d20 past half", derived.nodeDie(mk("journey", 6), "world"), 20);
   eq("10-slot list rolls d20 when full", derived.nodeDie(mk("journey", 10), "world"), 20);
 }
@@ -462,6 +560,27 @@ const core = await import("../src/core.js");
   ok("the standard column reaches ABCD events", sawEvent);
   ok("the standard column reaches plot nodes", sawNode);
 
+  // Whatever prep wrote must be readable back: a scope's filled lists are
+  // exactly the lists its sheet prints (the wizard and the Nodes screen agree).
+  {
+    const prepped = store.createGame({
+      title: "Prep round-trip", scopeName: "Scope", sheetId: "journey",
+      protagonists: [{ id: "p1", name: "PC" }],
+      customNames: { custom1: "Rumours" },
+      nodes: { world: ["a storm"], custom1: ["a whisper in the market"] },
+    });
+    const sc = prepped.scopes[0];
+    eq("a named list survives prep", derived.customListName(sc, "custom1"), "Rumours");
+    eq("and carries the sheet's slots", derived.nodeSlots(sc, "custom1"), 10);
+    eq("and holds what prep wrote", derived.nodeList(sc, "custom1")[0], "a whisper in the market");
+    for (const cat of plot.NODE_CATEGORIES) {
+      const written = (sc.nodes[cat.id] || []).filter((s) => s && s.trim()).length;
+      ok(`nothing was written into an invisible ${cat.id} list`,
+        written === 0 || derived.nodeSlots(sc, cat.id) > 0);
+    }
+    store.deleteGame(prepped.id);
+  }
+
   // an empty slot offers add / choose / reroll — the engine reports it as empty
   let sawEmpty = false, sawFilled = false;
   for (let i = 0; i < 200; i++) {
@@ -494,6 +613,14 @@ const core = await import("../src/core.js");
   const impro = store.currentScope();
   const none = roller.invokeNode(impro, "world");
   ok("a nodeless sheet reports the list unavailable", none.unavailable === true);
+
+  // A prompt face reaching a list the chosen sheet does not print must report
+  // itself unavailable rather than rolling on a list the player cannot see.
+  const std = derived.normalizeScope({ sheetId: "standard" });
+  const ghost = roller.invokeNode(std, "characters");
+  ok("a prompt reaching an unprinted list reports it unavailable", ghost.unavailable === true);
+  eq("and rolls no die for it", ghost.dice.length, 0);
+
   store.setActiveScope(scope.id);
 }
 
@@ -511,6 +638,31 @@ const core = await import("../src/core.js");
   ok("the threshold has flipped", derived.isResolved(sc));
   const past = store.confirmBeat({});
   ok("confirming a full track reports resolved without overrunning", past.resolved && past.crossed === derived.trackLength(sc));
+}
+
+// the permission to end a scope when you say it ends
+{
+  const game = store.createGame({
+    title: "Ending game", scopeName: "Open ended", sheetId: "sandbox",
+    protagonists: [{ id: "p1", name: "PC" }],
+  });
+  const sc = store.currentScope();
+  ok("a trackless scope has no Threshold to meet", !derived.isResolved(sc));
+  ok("and starts unfinished", !derived.isEnded(sc));
+  store.setScopeClosed(true);
+  ok("declaring it ended finishes it", derived.isEnded(store.currentScope()));
+  ok("without pretending the track resolved it", !derived.isResolved(store.currentScope()));
+  ok("and the summary says so", derived.scopeSummary(store.currentScope()).includes("ended"));
+  store.setScopeClosed(false);
+  ok("reopening it is one tap back", !derived.isEnded(store.currentScope()));
+  store.setScopeClosed(true);
+  store.undo();
+  ok("ending a scope is undoable", !derived.isEnded(store.currentScope()));
+  // and it survives a save/load round trip
+  const round = derived.normalizeScope({ ...store.currentScope(), closedAt: 12345 });
+  eq("an ending survives normalization", round.closedAt, 12345);
+  eq("a junk value normalizes away", derived.normalizeScope({ closedAt: "soon" }).closedAt, null);
+  store.deleteGame(game.id);
 }
 
 // timed beats fire exactly once

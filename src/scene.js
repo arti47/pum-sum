@@ -44,7 +44,9 @@ function renderArc(host, scope) {
   }
 
   add(host, biasCard());
-  if (last) add(host, renderLast());
+  // Only a controller roll belongs on this screen: an enemy-tactics result left
+  // over from the Battle tab reads as if this scene had rolled it.
+  if (last && last.result.table.section === "controller") add(host, renderLast());
 
   const open = scope && scope.openScene;
 
@@ -316,7 +318,9 @@ function renderPeopleTables(host) {
     "To keep a result attached to someone, roll it from their entry in the cast instead — it is stored with them.",
   ], "sum-characters", openRule));
   add(host, biasCard());
-  if (last) add(host, renderLast());
+  if (last && ["first-contact", "shallow", "trust", "deep"].includes(last.result.table.section)) {
+    add(host, renderLast());
+  }
 
   const bySection = {};
   for (const t of SUM_TABLES) {

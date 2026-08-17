@@ -39,7 +39,8 @@ Sheets 26 and 27 also carry a **Game notes** area → `scope.notes`, on the plot
 "This scope".
 
 ## Which die a node list uses
-Roll 1d10 in lists with less than half the entries filled; otherwise 1d20. A five-slot list
+Roll 1d10 in lists with less than half the entries filled; otherwise 1d20 — and exactly half
+is already "otherwise", so a ten-slot list switches at its fifth entry. A five-slot list
 can never pass half of ten, so it always rolls 1d10.
 → `derived.nodeDie`; shown as a pill above each list.
 

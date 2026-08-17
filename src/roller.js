@@ -6,7 +6,8 @@ import {
   rangeLookup, yesNoAnswer, granularLookup, oracle, oracleFamily, enrichmentFor,
   pairedLookup, proposalAt, promptAt, abcd, plotSheet, sumTable, gumTable, gumRow,
 } from "./rules.js";
-import { nodeDie, nodeList, slotForRoll, slotRange, nodeSlots } from "./derived.js";
+import { nodeDie, nodeList, slotForRoll, slotRange, nodeSlots, nodeUnavailableReason }
+  from "./derived.js";
 import { Settings } from "./settings.js";
 import * as store from "./store.js";
 import { DISRUPTION } from "../data-pum-plot.js";
@@ -182,7 +183,11 @@ export function invokeNode(scope, categoryId, { force = false, chosen = null } =
   }
 
   if (slots === 0) {
-    return { categoryId, slots: 0, slot: -1, text: "", empty: true, unavailable: true, dice: [], die: null, rolls: [] };
+    return {
+      categoryId, slots: 0, slot: -1, text: "", empty: true, unavailable: true,
+      reason: nodeUnavailableReason(scope, categoryId),
+      dice: [], die: null, rolls: [],
+    };
   }
 
   const size = nodeDie(scope, categoryId);

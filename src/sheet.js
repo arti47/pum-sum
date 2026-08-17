@@ -8,7 +8,7 @@ import {
 } from "./ui.js";
 import * as store from "./store.js";
 import {
-  sectionsOf, crossed, trackLength, hasTrack, isResolved, currentSection,
+  sectionsOf, crossed, trackLength, hasTrack, isResolved, isEnded, currentSection,
   nodeList, nodeDie, nodeFill, nodeSlots, slotRange, categoryName, customListName,
 } from "./derived.js";
 import { plotSheet, nodeCategory, sectionOfBox, proposalNote, abcd } from "./rules.js";
@@ -44,7 +44,7 @@ export function renderPlay(host, section) {
   }
   const scope = store.currentScope();
   add(host, sectionNav("play", section, {
-    track: !!openBeat || isResolved(scope),
+    track: !!openBeat || isEnded(scope),
   }));
 
   if (section === "nodes") return renderNodes(host, scope);
@@ -140,8 +140,10 @@ function whatNowCard(scope) {
     el("span", { class: "cite", text: "PUM p.5" })
   ));
 
-  if (isResolved(scope)) {
-    add(card, el("p", { class: "muted", text: "The track is full. Bring this thread to its end, then open the next plot sheet." }));
+  if (isEnded(scope)) {
+    add(card, el("p", { class: "muted", text: isResolved(scope)
+      ? "The track is full. Bring this thread to its end, then open the next plot sheet."
+      : "You called this scope finished. Start the next plot sheet, or reopen it from the track below." }));
     add(card, el("button", { class: "btn wide", onclick: () => go("more", "home") }, "Start another plot sheet"));
     return card;
   }
@@ -186,6 +188,9 @@ function trackCard(scope) {
     if (sheet && sheet.customizable) {
       add(card, el("button", { class: "btn wide", onclick: () => addSectionDialog() }, "Add a track section"));
     }
+    // Without a track there is no Threshold, so the only thing that can finish
+    // this scope is you saying so. That makes the control mandatory here.
+    add(card, endScopeRow(scope));
     return card;
   }
 
@@ -214,10 +219,12 @@ function trackCard(scope) {
   }
   add(card, track);
 
-  if (isResolved(scope)) {
+  if (isEnded(scope)) {
     add(card, el("p", { class: "muted" },
-      el("strong", { text: "This scope has resolved. " }),
-      "The track is full — bring the thread to its end, then start a new plot sheet for what comes next."
+      el("strong", { text: isResolved(scope) ? "This scope has resolved. " : "This scope is finished. " }),
+      isResolved(scope)
+        ? "The track is full — bring the thread to its end, then start a new plot sheet for what comes next."
+        : "You called it, with boxes still empty. That is yours to call — start a new plot sheet, or reopen this one."
     ));
     add(card, el("button", { class: "btn wide", onclick: () => go("more", "home") }, "Start another plot sheet"));
   }
@@ -236,7 +243,56 @@ function trackCard(scope) {
     add(row, el("button", { class: "btn small", onclick: () => customizeDialog(scope) }, "Customize"));
   }
   add(card, row);
+  add(card, endScopeRow(scope));
   return card;
+}
+
+// Permission: a scope ends when you say it ends. The track is one way to get
+// there; it is not the only one, and on a trackless sheet it is not available
+// at all. Reversible, because calling it early is a judgement, not a mistake.
+function endScopeRow(scope) {
+  const row = el("div", { class: "btn-row" });
+  if (scope.closedAt) {
+    add(row, el("button", {
+      class: "btn small",
+      onclick: () => {
+        store.setScopeClosed(false);
+        store.addJournal({ kind: "track", title: "Plot scope reopened", detail: scope.name });
+        toast("Reopened — play on.");
+        render();
+      },
+    }, "Reopen this scope"));
+    return row;
+  }
+  add(row, el("button", {
+    class: "btn small",
+    onclick: () => confirmModal({
+      title: `End "${scope.name}"?`,
+      message: hasTrack(scope)
+        ? `The track stands at ${crossed(scope)}/${trackLength(scope)}. PUM lets you end a scope whenever you judge the thread told — the empty boxes are not a debt. Nothing is deleted, and you can reopen it.`
+        : "This sheet has no track, so this is how it finishes: when you say the story is told. Nothing is deleted, and you can reopen it.",
+      confirmLabel: "End the scope",
+      onConfirm: () => {
+        store.setScopeClosed(true);
+        store.addJournal({
+          kind: "track", title: "Plot scope ended",
+          detail: hasTrack(scope)
+            ? `${scope.name} — called finished at ${crossed(scope)}/${trackLength(scope)}`
+            : `${scope.name} — called finished`,
+        });
+        announce("Plot scope ended.");
+        modal({
+          title: "The scope is finished",
+          body: el("p", { text: "That thread is told. Start a new plot sheet for whatever comes next — this one stays in the library as a record." }),
+          actions: [
+            { label: "Start another plot sheet", primary: true, onClick: () => go("more", "home") },
+            { label: "Stay here", onClick: () => render() },
+          ],
+        });
+      },
+    }),
+  }, "End this scope"));
+  return row;
 }
 
 // The Customized sheet's own permissions (PUM p.9): grow the track as you play,
@@ -517,7 +573,7 @@ function beatCard(scope) {
   }
 
   const actions = [];
-  if (hasTrack(scope) && !isResolved(scope)) {
+  if (hasTrack(scope) && !isEnded(scope)) {
     actions.push({
       label: "Confirm — cross a box", primary: true,
       onClick: () => {
@@ -574,6 +630,24 @@ function nodeBlock(scope, beat) {
   add(wrap, el("div", { class: "strip-k", text: `${categoryName(scope, n.categoryId)}${n.die ? ` — 1d${n.die}` : ""}` }));
 
   if (n.unavailable) {
+    if (n.reason === "not-on-this-sheet") return unprintedListBlock(scope, wrap, n, cat, beat);
+    if (n.reason === "unnamed-list") {
+      add(wrap, el("div", { text: "A face of your prompt column points at a list of your own that has no name yet — so it has no slots." }));
+      add(wrap, el("button", {
+        class: "btn small primary",
+        onclick: () => promptModal({
+          title: "Name your list", label: "What is this list of?",
+          hint: "Factions, rumours, omens, debts owed — whatever this game keeps reaching for.",
+          onSubmit: (v) => {
+            if (!v) return;
+            store.setCustomListName(n.categoryId, v);
+            openBeat.node = invokeNode(store.currentScope(), n.categoryId);
+            render();
+          },
+        }),
+      }, "Name it and roll"));
+      return wrap;
+    }
     add(wrap, el("div", { text: "This sheet carries no plot nodes. Read the prompt as a free invitation, or switch to a sheet that does." }));
     return wrap;
   }
@@ -647,6 +721,77 @@ function nodeBlock(scope, beat) {
   return wrap;
 }
 
+// The all-in-one sheets print four node lists but their prompt column still
+// reaches for a notable character and an interesting location (PUM p.14). With
+// no list to roll on, the prompt is exactly what it says: bring one in, or
+// recall one you have already met. The cast is where those live.
+function unprintedListBlock(scope, wrap, n, cat, beat) {
+  const kind = n.categoryId === "locations" ? "location" : "character";
+  const game = store.activeGame();
+  const known = game ? game.cast.filter((c) => c.kind === kind) : [];
+  const sheet = plotSheet(scope.sheetId);
+  add(wrap, el("div", { text: `${sheet ? sheet.name : "This sheet"} does not print this list — the prompt stands on its own. Bring one in, or recall one you have already met.` }));
+  add(wrap, el("div", { class: "cite", text: "The extension sheet (PUM p.26) adds these lists; the Journey, Story-focus, Sandbox and Customized sheets use it." }));
+
+  const row = el("div", { class: "btn-row" });
+  const keep = (name, notes = "") => {
+    store.addCast(kind, name, notes);
+    openBeat.node = { ...n, unavailable: false, empty: false, text: name, chosen: true, slot: -1 };
+    store.addJournal({
+      kind: "node", title: kind === "location" ? "Location brought in" : "Character brought in",
+      detail: name, linkedTo: beat.journalId,
+    });
+    render();
+  };
+
+  add(row, el("button", {
+    class: "btn small primary",
+    onclick: () => promptModal({
+      title: kind === "location" ? "An interesting location" : "A notable character",
+      label: "Name",
+      hint: "Whoever the moment asks for. They are kept in the cast so you can reach for them again.",
+      onSubmit: (v) => { if (v) keep(v); },
+    }),
+  }, "Bring one in"));
+
+  if (known.length) {
+    add(row, el("button", {
+      class: "btn small",
+      onclick: () => {
+        const body = el("div");
+        for (const c of known) {
+          add(body, el("button", {
+            class: "btn wide",
+            onclick: () => {
+              closeModal();
+              openBeat.node = { ...n, unavailable: false, empty: false, text: c.name, chosen: true, slot: -1 };
+              store.addJournal({ kind: "node", title: "Recalled from the cast", detail: c.name, linkedTo: beat.journalId });
+              render();
+            },
+          }, c.name));
+        }
+        modal({ title: kind === "location" ? "Recall a location" : "Recall a character", body, actions: [{ label: "Cancel" }] });
+      },
+    }, `Recall (${known.length})`));
+  }
+
+  if (Settings.gum() && gumTablesForNode(n.categoryId).length) {
+    add(row, el("button", {
+      class: "btn small",
+      onclick: () => gumSuggest({
+        title: cat ? cat.name : "Plot node",
+        tableIds: gumTablesForNode(n.categoryId),
+        onPick: (text) => promptModal({
+          title: "Name them", label: "Name", hint: text,
+          onSubmit: (v) => { if (v) keep(v, text); },
+        }),
+      }),
+    }, "Roll from GUM"));
+  }
+  add(wrap, row);
+  return wrap;
+}
+
 function chooseNodeDialog(scope, n, beat) {
   const cat = nodeCategory(n.categoryId);
   const list = nodeList(scope, n.categoryId);
@@ -691,7 +836,7 @@ function renderNodes(host, scope) {
   add(host, el("h1", { text: "Plot nodes" }));
   add(host, explain([
     "Plot nodes are your game's own content — the things a random prompt can reach into. Write them at the start and keep them alive as you play.",
-    "The die above each list is the one the app will roll: 1d10 while a list is less than half full, 1d20 after that.",
+    "The die above each list is the one the app will roll: 1d10 while a list is less than half full, 1d20 from the halfway entry on.",
   ], "nodes", openRule));
 
   if (!sheet || sheet.nodeSlots === 0) {
@@ -748,6 +893,18 @@ function nodeCard(scope, cat, slots) {
     el("span", { class: "pill on", text: `1d${dieSize}` }),
     el("span", { class: "cite", text: `${fill}/${slots}` })
   ));
+  // PUM p.9 lets you reach for a whole list on purpose — world elements while
+  // travelling, a pending question when the PCs have earned an answer — and the
+  // book allows it "rolled or chosen". Choosing is the Invoke button on a row;
+  // this is the rolled half, which had no control.
+  const rollRow = el("div", { class: "btn-row" });
+  add(rollRow, el("button", {
+    class: "btn small",
+    "aria-label": `Roll 1d${dieSize} on ${categoryName(scope, cat.id)}`,
+    onclick: () => invokeListDeliberately(scope, cat),
+  }, `Roll this list — 1d${dieSize}`));
+  add(card, rollRow);
+
   if (cat.custom) {
     add(card, el("div", { class: "btn-row" },
       el("button", {
@@ -838,6 +995,44 @@ function invokeDeliberately(scope, cat, index, text) {
           });
           openBeat.journalId = entry.id;
           store.setLastBeat({ key: openBeat.key, text: openBeat.text, open: true });
+          go("play", "track");
+        },
+      },
+      { label: "Cancel" },
+    ],
+  });
+}
+
+// The rolled half of the same permission: you pick the list, the die picks the
+// entry. It still counts as a beat, so it lands on the plot sheet like one.
+function invokeListDeliberately(scope, cat) {
+  const name = categoryName(scope, cat.id);
+  modal({
+    title: `Roll on ${name}`,
+    body: el("div", null,
+      el("p", { class: "muted", text: "Reach for this list on purpose — a world element while travelling, a problem when it is time for a confrontation, an answer when the PCs have earned one." }),
+      el("p", { class: "muted", text: "You chose the list; the die chooses the entry. It counts as a beat, so you can confirm it and cross a box." }),
+      el("p", { class: "cite", text: "PUM p.9 — specific plot node invocations" })
+    ),
+    actions: [
+      {
+        label: `Roll 1d${nodeDie(scope, cat.id)}`, primary: true,
+        onClick: () => {
+          const node = invokeNode(scope, cat.id);
+          openBeat = {
+            kind: "beat", beatType: "prompt", roll: 0,
+            text: `${name} (chosen list)`, prompt: { label: name, node: cat.id },
+            dice: node.dice, repeat: false, key: "list:" + cat.id,
+            node, event: null, journalId: null,
+          };
+          const entry = store.addJournal({
+            kind: "beat", title: "Plot node list invoked deliberately",
+            detail: `${name}: ${node.text || "empty slot — add, choose, or reroll"}`,
+            dice: node.dice.map((d) => ({ label: d.label, value: d.value, kept: d.kept })),
+          });
+          openBeat.journalId = entry.id;
+          store.setLastBeat({ key: openBeat.key, text: openBeat.text, open: true });
+          announce(`${name}: ${node.text || "empty slot"}`);
           go("play", "track");
         },
       },

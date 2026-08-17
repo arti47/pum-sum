@@ -99,6 +99,7 @@ export function createGame(data) {
       mission: data.mission || "",
       sheetId: data.sheetId || "standard",
       startingPoint: data.startingPoint || "",
+      customNames: data.customNames || {},
       nodes: data.nodes || {},
     })],
   });
@@ -200,6 +201,16 @@ export function uncrossBox() {
   mutate("Step the track back", () => {
     const sc = currentScope();
     if (sc && crossed(sc) > 0) sc.track.crossed -= 1;
+  });
+}
+
+// Permission: end a plot scope when you say it ends — the only way to finish a
+// trackless sheet, and always available on a tracked one (PUM p.7).
+export function setScopeClosed(closed, id = null) {
+  mutate(closed ? "End the plot scope" : "Reopen the plot scope", () => {
+    const g = activeGame();
+    const sc = id ? (g && g.scopes.find((s) => s.id === id)) : currentScope();
+    if (sc) sc.closedAt = closed ? Date.now() : null;
   });
 }
 

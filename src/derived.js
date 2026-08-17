@@ -32,6 +32,13 @@ export function isResolved(scope) {
   return total > 0 && crossed(scope) >= total;
 }
 
+// Permission (PUM p.7, and the trackless sheets' whole premise): you may end a
+// plot scope when you say it ends, track or no track. A scope is over when the
+// Threshold is met OR when the player has declared it over.
+export function isEnded(scope) {
+  return !!(scope && scope.closedAt) || isResolved(scope);
+}
+
 // Where play currently stands: the section holding the next empty box.
 export function currentSection(scope) {
   const sections = sectionsOf(scope);
@@ -53,10 +60,27 @@ export function nodeSlots(scope, categoryId) {
   if (!sheet) return 0;
   const cat = NODE_CATEGORIES.find((c) => c.id === categoryId);
   if (!cat) return 0;
+  // The expanded categories are printed on the plot-node extension sheet, not on
+  // the all-in-one sheets (PUM p.14 vs pp.26-27). A sheet that does not print a
+  // list has no list: giving it slots would let the player fill a list that the
+  // Nodes screen then hides, and writing where nothing can be read is worse than
+  // an honest empty hand.
+  if (cat.expanded && !sheet.expandedNodes) return 0;
   // A player-named list (PUM p.27) only exists once it has been named.
   if (cat.custom && !customListName(scope, categoryId)) return 0;
-  if (cat.expanded && !sheet.expandedNodes) return sheet.nodeSlots > 0 ? sheet.nodeSlots : 0;
   return sheet.nodeSlots;
+}
+
+// Why a category has no slots, so a surface can say the true thing rather than
+// one message for three different situations.
+export function nodeUnavailableReason(scope, categoryId) {
+  const sheet = plotSheet(scope.sheetId);
+  const cat = NODE_CATEGORIES.find((c) => c.id === categoryId);
+  if (!sheet || !cat) return "unknown";
+  if (sheet.nodeSlots === 0) return "no-nodes";
+  if (cat.expanded && !sheet.expandedNodes) return "not-on-this-sheet";
+  if (cat.custom && !customListName(scope, categoryId)) return "unnamed-list";
+  return null;
 }
 
 // The two blank lists on the extension sheet carry whatever name you write on them.
@@ -82,12 +106,17 @@ export function nodeFill(scope, categoryId) {
   return nodeList(scope, categoryId).filter((s) => s && s.trim()).length;
 }
 
-// Ruling A7 / PUM p.25: roll 1d10 in lists with less than half the entries filled,
-// otherwise 1d20. A 5-slot list can never exceed half of 10, so it always rolls d10.
+// Ruling A7 / PUM p.25: roll 1d10 in lists with LESS THAN half the entries
+// filled; otherwise 1d20. "Otherwise" includes exactly half, so a ten-slot list
+// switches at the fifth entry, not the sixth.
+//
+// A d10 reaches five slots and a d20 reaches ten (slot = ceil(roll/2)), so a
+// five-slot list can only ever be rolled with a d10 — a d20 would point past its
+// end. That is why the die follows the list's capacity as well as its fill.
 export function nodeDie(scope, categoryId) {
   const slots = nodeSlots(scope, categoryId);
   if (slots <= 5) return 10;
-  return nodeFill(scope, categoryId) > 5 ? 20 : 10;
+  return nodeFill(scope, categoryId) >= slots / 2 ? 20 : 10;
 }
 
 // A node die result maps to a slot: ranges are 1-2, 3-4, ... so slot = ceil(roll/2).
@@ -105,6 +134,7 @@ export function scopeSummary(scope) {
   const bits = [sheet ? sheet.name : "Unknown sheet"];
   if (hasTrack(scope)) bits.push(trackLabel(scope));
   if (isResolved(scope)) bits.push("resolved");
+  else if (isEnded(scope)) bits.push("ended");
   return bits.join(" · ");
 }
 
@@ -143,6 +173,7 @@ export function normalizeScope(raw = {}) {
       custom2: (raw.customNames && typeof raw.customNames.custom2 === "string") ? raw.customNames.custom2 : "",
     },
     notes: typeof raw.notes === "string" ? raw.notes : "",
+    closedAt: Number(raw.closedAt) > 0 ? Number(raw.closedAt) : null,
     nodes: blankNodes(),
     openScene: raw.openScene && raw.openScene.id ? {
       id: raw.openScene.id,

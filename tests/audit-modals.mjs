@@ -33,7 +33,17 @@ const jsErrors = [];
 page.on("pageerror", (e) => jsErrors.push(String(e)));
 page.on("console", (m) => { if (m.type() === "error") jsErrors.push(m.text()); });
 
-await page.addInitScript((s) => localStorage.setItem("umState", JSON.stringify(s)), MID);
+await page.addInitScript((s) => {
+  localStorage.setItem("umState", JSON.stringify(s));
+  // Hashed, not measured: a swap that changes the DOM without changing its
+  // length would otherwise read as a no-op.
+  window.__hash = (node) => {
+    const str = node ? node.innerHTML : "";
+    let h = 5381;
+    for (let i = 0; i < str.length; i++) h = ((h * 33) ^ str.charCodeAt(i)) >>> 0;
+    return str.length + ":" + h.toString(36);
+  };
+}, MID);
 await page.goto(url, { waitUntil: "networkidle" });
 
 const findings = [];
@@ -108,13 +118,13 @@ for (const [tab, section] of ROUTES) {
 
       const before = await page.evaluate(() => ({
         store: localStorage.getItem("umState") || "",
-        html: document.querySelector("#screen").innerHTML.length,
+        html: window.__hash(document.querySelector("#screen")),
         modals: document.querySelectorAll(".modal").length,
         toasts: document.querySelectorAll(".toast").length,
         // A dialog that closes itself and opens another leaves the COUNT at 1.
         // Fingerprint the dialog itself or those swaps read as no-ops.
         modalId: [...document.querySelectorAll(".modal")]
-          .map((m) => m.getAttribute("aria-label") + "#" + m.innerHTML.length).join("|"),
+          .map((m) => m.getAttribute("aria-label") + "#" + window.__hash(m)).join("|"),
       }));
       const errsBefore = jsErrors.length;
 
@@ -132,11 +142,11 @@ for (const [tab, section] of ROUTES) {
         await page.waitForTimeout(40);
         const after = await page.evaluate(() => ({
           store: localStorage.getItem("umState") || "",
-          html: document.querySelector("#screen").innerHTML.length,
+          html: window.__hash(document.querySelector("#screen")),
           modals: document.querySelectorAll(".modal").length,
           toasts: document.querySelectorAll(".toast").length,
           modalId: [...document.querySelectorAll(".modal")]
-            .map((m) => m.getAttribute("aria-label") + "#" + m.innerHTML.length).join("|"),
+            .map((m) => m.getAttribute("aria-label") + "#" + window.__hash(m)).join("|"),
         }));
         changed = after.store !== before.store || after.html !== before.html
           || after.modals !== before.modals || after.toasts !== before.toasts
@@ -151,6 +161,53 @@ for (const [tab, section] of ROUTES) {
       }
       await page.evaluate(() => document.querySelectorAll(".modal-back").forEach((n) => n.remove()));
     }
+  }
+}
+
+// --- a dialog opened BY a dialog action must survive that action ----------
+// The action wrapper closes the dialog after its handler runs. If it closed
+// whatever is open now rather than its own dialog, a handler that opens a
+// follow-up — a timed beat firing, a scope resolving — would have that
+// follow-up closed the instant it appeared, and the app would look as though
+// it had swallowed the news. Nothing else in this file can catch that: the
+// dialog does open, so every "changed something" check passes.
+{
+  const state = JSON.parse(JSON.stringify(MID));
+  const sc = state.games[0].scopes[0];
+  sc.track.marks = { [String(sc.track.crossed || 0)]: "The horde arrives" };
+  sc.track.fired = {};
+  await page.evaluate(async ([s]) => {
+    localStorage.setItem("umState", JSON.stringify(s));
+    (await import("./src/store.js")).load();
+    (await import("./src/viewstate.js")).clearTransient();
+    document.querySelectorAll(".modal-back").forEach((n) => n.remove());
+    (await import("./src/router.js")).go("play", "track");
+  }, [state]);
+  await page.waitForTimeout(80);
+
+  const opened = await page.evaluate(() => {
+    const b = [...document.querySelectorAll("#screen button")]
+      .find((n) => n.textContent.includes("Advance without a beat") && !n.disabled);
+    if (!b) return false;
+    b.click();
+    return true;
+  });
+  if (!opened) {
+    findings.push("the voluntary-advance control was not offered on the plot sheet");
+  } else {
+    await page.waitForTimeout(120);
+    await page.evaluate(() => {
+      const b = [...document.querySelectorAll(".modal button")]
+        .find((n) => n.textContent.includes("Cross the next box"));
+      b && b.click();
+    });
+    await page.waitForTimeout(300);
+    const title = await page.locator(".modal h2").first().textContent().catch(() => null);
+    if (title !== "A timed plot beat fires") {
+      findings.push(`a dialog opened from inside a dialog action did not survive it — saw ${title === null ? "no dialog" : `"${title}"`}`);
+    }
+    innerClicks += 2;
+    await page.evaluate(() => document.querySelectorAll(".modal-back").forEach((n) => n.remove()));
   }
 }
 

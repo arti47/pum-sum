@@ -7,14 +7,14 @@ import * as store from "./store.js";
 import { Settings, applyTheme, cycleTheme } from "./settings.js";
 import { plotSheet } from "./rules.js";
 import {
-  scopeSummary, crossed, trackLength, hasTrack, isResolved, currentSection,
+  scopeSummary, crossed, trackLength, hasTrack, isResolved, nodeList, currentSection,
 } from "./derived.js";
 import { sectionNav, go, render } from "./router.js";
 import { startWizard, inWizard, renderWizard, addScopeDialog } from "./wizard.js";
 import { renderTutorial } from "./tutorial.js";
 import { RULES_LIBRARY } from "../data-rules-library.js";
 import { PLAY_STATES, FLOWCHART, ADVICE, ADVANCED, MACHINES } from "../data-guidance.js";
-import { PUM_ERRATA } from "../data-pum-plot.js";
+import { PUM_ERRATA, NODE_CATEGORIES } from "../data-pum-plot.js";
 import { GUM_ERRATA } from "../data-gum.js";
 
 let ruleSearch = "";
@@ -81,7 +81,11 @@ function renderHome(host) {
   if (!scope.startingPoint) todo.push({ text: "Decide the starting point and what is introduced there", to: () => go("play", "track") });
   if (!game.protagonists.length) todo.push({ text: "Create your protagonists", to: () => go("play", "cast") });
   const sheet = plotSheet(scope.sheetId);
-  if (sheet && sheet.nodeSlots && !Object.values(scope.nodes).some((l) => l.some((s) => s && s.trim()))) {
+  // Count only the lists this sheet actually prints: a legacy save can carry
+  // entries in a list the current sheet hides, and those are not prep done.
+  const writtenNodes = NODE_CATEGORIES.some((c) =>
+    nodeList(scope, c.id).some((s) => s && s.trim()));
+  if (sheet && sheet.nodeSlots && !writtenNodes) {
     todo.push({ text: "Write some plot nodes for this scope", to: () => go("play", "nodes") });
   }
   if (todo.length) {
@@ -236,7 +240,9 @@ function editScope(s) {
 
 function gamesCard(current) {
   const card = el("div", { class: "card" });
-  const all = store.games();
+  // Archiving is a shelving action, so an archived game sinks below the live
+  // ones rather than sitting among them wearing a label.
+  const all = [...store.games()].sort((a, b) => (a.archivedAt ? 1 : 0) - (b.archivedAt ? 1 : 0));
   add(card, el("div", { class: "card-head" },
     el("h3", { text: "Your games" }),
     el("span", { class: "cite", text: String(all.length) })
@@ -256,7 +262,7 @@ function gamesCard(current) {
         }, "Open"),
         el("button", {
           class: "btn small ghost",
-          onclick: () => store.archiveGame(g.id, !g.archivedAt) || render(),
+          onclick: () => { store.archiveGame(g.id, !g.archivedAt); render(); },
         }, g.archivedAt ? "Restore" : "Archive")
       )
     ));
@@ -573,6 +579,7 @@ function exportReadable() {
     if (s.mission) lines.push(`Mission: ${s.mission}`);
     if (s.startingPoint) lines.push(`Starting point: ${s.startingPoint}`);
     if (hasTrack(s)) lines.push(`Track: ${crossed(s)}/${trackLength(s)}${isResolved(s) ? " — resolved" : ""}`);
+    if (s.closedAt && !isResolved(s)) lines.push("Ended by the player.");
     for (const [key, list] of Object.entries(s.nodes)) {
       const filled = list.filter((x) => x && x.trim());
       if (filled.length) lines.push(`  ${key}: ${filled.join(" · ")}`);

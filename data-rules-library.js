@@ -71,7 +71,7 @@ export const RULES_LIBRARY = [
       },
       {
         id: "node-die", title: "Which die a node list uses", page: "PUM p.25",
-        body: "Roll 1d10 in lists with less than half the entries filled; otherwise roll 1d20. Five-slot lists always use 1d10. Ten-slot lists switch to 1d20 once more than five slots are filled. The app shows which die it is about to roll above each list.",
+        body: "Roll 1d10 in lists with less than half the entries filled; otherwise roll 1d20. Exactly half is already \"otherwise\", so a ten-slot list switches at its fifth entry. Five-slot lists always use 1d10: a d20 would point past their end. The app shows which die it is about to roll above each list.",
       },
       {
         id: "still-stuck", title: "Still stuck? Leave it to destiny", page: "PUM p.6",
@@ -105,6 +105,10 @@ export const RULES_LIBRARY = [
       {
         id: "timed", title: "Timed plot beats", page: "PUM p.9",
         body: "Mark a future box with an event you know is coming — a horde, a siege, an awakening. When play reaches that box, the event unfolds and counts as a random prompt. You still don't know the circumstances, so it can still surprise you.",
+      },
+      {
+        id: "end-scope", title: "Ending a plot scope", page: "PUM p.7",
+        body: "A full track resolves the scope — that is the Threshold the sheet is built around. But the scope is yours: you may call it finished whenever you judge the thread told, with boxes still empty, and on Sandbox and Improvised there is no track to fill, so saying so is the only way it ends. The app records the ending and lets you reopen it.",
       },
       {
         id: "sheets", title: "Choosing a plot sheet", page: "PUM p.7",

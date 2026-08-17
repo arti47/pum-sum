@@ -20,7 +20,10 @@ export function modal({ title, body, actions = [], onClose = null, dismissable =
       class: `btn ${a.primary ? "primary" : ""} ${a.danger ? "danger" : ""}`.trim(),
       onclick: () => {
         const keep = a.onClick ? a.onClick() : undefined;
-        if (keep !== true) closeModal();
+        // Close THIS dialog, not whatever is open now: a handler may have opened
+        // a follow-up dialog (a timed beat firing, a resolved scope), and closing
+        // that one instead makes the app look like it swallowed the news.
+        if (keep !== true && openModal && openModal.back === back) closeModal();
       },
     }, a.label));
   }
