@@ -7,11 +7,14 @@
   --paper-sunk:   #efe7d4;
   --ink:          #1b2130;
   --ink-2:        #46506a;
-  --ink-3:        #6c7590;
+  --ink-3:        #656d87;   /* 4.56 on paper */
   --rule:         #d9cfb8;
   --rule-2:       #c3b79b;
-  --accent:       #e2603c;   /* machine orange — rolls, the track, the primary action */
-  --accent-ink:   #ffffff;
+  --accent:       #e2603c;   /* machine orange — fills: rolls, the track, the primary action */
+  /* The same orange as TEXT on paper is 3.12:1, so it gets a darker sibling.
+     Fills keep the identity colour; anything read as words uses this one. */
+  --accent-text:  #b64d30;   /* 4.56 on paper, 4.93 on card */
+  --accent-ink:   #1b2130;   /* label on an accent fill — 4.57 on the orange */
   --accent-soft:  #fbe4dc;
   --good:         #3f7d58;
   --warn:         #a8631a;
@@ -31,10 +34,11 @@
     --paper-sunk: #0f1116;
     --ink:        #ece5d6;
     --ink-2:      #b3ab9a;
-    --ink-3:      #8b8577;
+    --ink-3:      #8c8678;   /* 4.54 on a card, 4.99 on paper */
     --rule:       #333744;
     --rule-2:     #454a5b;
     --accent:     #f4784f;
+    --accent-text:#f4784f;   /* 6.58 on dark paper — the fill colour already passes */
     --accent-ink: #14161d;
     --accent-soft:#3a241d;
     --good:       #6fb98c;
@@ -49,10 +53,11 @@
   --paper-sunk: #0f1116;
   --ink:        #ece5d6;
   --ink-2:      #b3ab9a;
-  --ink-3:      #8b8577;
+  --ink-3:      #8c8678;
   --rule:       #333744;
   --rule-2:     #454a5b;
   --accent:     #f4784f;
+  --accent-text:#f4784f;
   --accent-ink: #14161d;
   --accent-soft:#3a241d;
   --good:       #6fb98c;
@@ -140,7 +145,7 @@ body {
 .ph-sec { font-size: .75rem; color: var(--ink-3); margin-left: auto; white-space: nowrap; }
 .ph-count {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: .75rem; color: var(--accent); font-weight: 700;
+  font-size: .75rem; color: var(--accent-text); font-weight: 700;
 }
 .ph-mini { display: flex; gap: 2px; margin-top: .35rem; }
 .ph-mini i {
@@ -194,7 +199,7 @@ body.has-actionbar .screen {
   padding: .2rem .1rem; position: relative;
 }
 .tab-bar button .ti { font-size: 1.15rem; line-height: 1; }
-.tab-bar button[aria-current="page"] { color: var(--accent); font-weight: 700; }
+.tab-bar button[aria-current="page"] { color: var(--accent-text); font-weight: 700; }
 .tab-bar button .badge {
   position: absolute; top: 6px; right: 50%; transform: translateX(20px);
   min-width: 8px; height: 8px; border-radius: 5px; background: var(--accent);
@@ -248,7 +253,15 @@ p  { margin: .4rem 0; }
   display: flex; align-items: center; gap: .4rem;
 }
 .explain > summary::-webkit-details-marker { display: none; }
-.explain > summary::before { content: "?"; font-weight: 700; color: var(--accent); }
+.explain > summary::before { content: "?"; font-weight: 700; color: var(--accent-text); }
+/* Open/closed state, as .acc folds have — a static marker gives no clue that
+   the row does anything. */
+.explain > summary::after {
+  content: "+"; margin-left: auto; color: var(--accent-text); font-weight: 700;
+}
+.explain[open] > summary::after { content: "\2013"; }
+/* The inspiration block is not an explanation; it should not wear the "?". */
+.explain.inspire > summary::before { content: none; }
 .explain[open] > summary { border-bottom: 1px dashed var(--rule-2); }
 .explain .body { padding: .6rem .7rem; font-size: .86rem; color: var(--ink-2); }
 .explain .body p { margin: .35rem 0; }
@@ -302,7 +315,7 @@ button, .btn {
 .btn.primary:hover { filter: brightness(1.05); }
 .btn.wide { width: 100%; }
 .btn.small { min-height: 40px; padding: .35rem .65rem; font-size: .82rem; }
-.btn.danger { color: var(--accent); border-color: var(--accent); }
+.btn.danger { color: var(--accent-text); border-color: var(--accent-text); }
 .btn.ghost { border-color: transparent; background: transparent; }
 .btn-row { display: flex; gap: .5rem; flex-wrap: wrap; }
 .btn-row > .btn { flex: 1 1 auto; }
@@ -340,7 +353,7 @@ label.check .ct small { display: block; color: var(--ink-3); font-size: .78rem; 
   font-size: .74rem; text-transform: uppercase; letter-spacing: .05em;
   color: var(--ink-3); margin-bottom: .18rem;
 }
-.track-sec.current .track-sec-name { color: var(--accent); font-weight: 700; }
+.track-sec.current .track-sec-name { color: var(--accent-text); font-weight: 700; }
 .track-boxes { display: flex; gap: 4px; flex-wrap: wrap; }
 .track-box {
   position: relative;
@@ -392,7 +405,7 @@ label.check .ct small { display: block; color: var(--ink-3); font-size: .78rem; 
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: .8rem; font-weight: 700;
 }
-.die.kept { border-color: var(--accent); color: var(--accent); }
+.die.kept { border-color: var(--accent-text); color: var(--accent-text); }
 .die.dropped { opacity: .4; text-decoration: line-through; }
 .die-label {
   font-size: .64rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em;
@@ -431,7 +444,7 @@ label.check .ct small { display: block; color: var(--ink-3); font-size: .78rem; 
 .node-idx {
   flex: none; width: 42px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: .74rem; color: var(--accent); font-weight: 700;
+  font-size: .74rem; color: var(--accent-text); font-weight: 700;
 }
 .node-txt { flex: 1; min-width: 0; word-break: break-word; }
 .node-txt.empty { color: var(--ink-3); font-style: italic; }
@@ -443,7 +456,7 @@ label.check .ct small { display: block; color: var(--ink-3); font-size: .78rem; 
 .entry-head { display: flex; gap: .5rem; align-items: baseline; }
 .entry-kind {
   font-size: .68rem; text-transform: uppercase; letter-spacing: .05em;
-  color: var(--accent); font-weight: 700; flex: none;
+  color: var(--accent-text); font-weight: 700; flex: none;
 }
 .entry-ts { margin-left: auto; font-size: .7rem; color: var(--ink-3); flex: none; }
 .entry-title { font-weight: 700; margin-top: .1rem; }
@@ -463,7 +476,7 @@ details.acc > summary {
   font-weight: 700; font-size: .93rem;
 }
 details.acc > summary::-webkit-details-marker { display: none; }
-details.acc > summary::after { content: "+"; margin-left: auto; color: var(--accent); font-weight: 700; }
+details.acc > summary::after { content: "+"; margin-left: auto; color: var(--accent-text); font-weight: 700; }
 details.acc[open] > summary::after { content: "–"; }
 details.acc .acc-body { padding: 0 .1rem .7rem; color: var(--ink-2); font-size: .9rem; }
 details.acc:target > summary, details.acc.flash > summary { background: var(--accent-soft); }
@@ -514,13 +527,13 @@ details.acc:target > summary, details.acc.flash > summary { background: var(--ac
   font-size: .7rem; border: 1px solid var(--rule-2); color: var(--ink-3);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
-.pill.on { border-color: var(--accent); color: var(--accent); }
+.pill.on { border-color: var(--accent-text); color: var(--accent-text); }
 
 .table-scroll { overflow-x: auto; }
 table.rows { width: 100%; border-collapse: collapse; font-size: .86rem; }
 table.rows td { padding: .3rem .4rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
 table.rows td.r {
-  width: 3.6rem; white-space: nowrap; color: var(--accent);
+  width: 3.6rem; white-space: nowrap; color: var(--accent-text);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .76rem;
 }
 table.rows tr.hit td { background: var(--accent-soft); font-weight: 700; }
@@ -552,12 +565,12 @@ details.inspire {
   margin-top: -.2rem;
 }
 details.inspire > summary {
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: .82rem;
 }
 details.inspire > summary::marker,
 details.inspire > summary::-webkit-details-marker {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 details.inspire .body {
   padding-top: .2rem;

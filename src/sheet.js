@@ -523,9 +523,12 @@ function beatChooser(scope) {
   const card = el("div", { class: "card" });
   add(card, el("div", { class: "card-head" }, el("h2", { text: "1 · Call a plot beat" })));
   add(card, el("p", { class: "muted", text: "A proposal twists an idea you already have. A prompt tells you what happens when you don't." }));
+  // The pinned bar already carries the primary, and carried the same label:
+  // "Random prompt" appeared twice on one screen, both in accent. These are the
+  // same two actions spelled out, so they read as the explanation, not the call.
   add(card, el("div", { class: "btn-row" },
-    el("button", { class: "btn primary", onclick: () => doProposal(scope) }, "Modified proposal"),
-    el("button", { class: "btn primary", onclick: () => doPrompt(scope) }, "Random prompt")
+    el("button", { class: "btn", onclick: () => doProposal(scope) }, "Modified proposal"),
+    el("button", { class: "btn", onclick: () => doPrompt(scope) }, "Random prompt")
   ));
   if (scope.lastBeat) {
     add(card, el("p", { class: "cite", text: `Last beat: ${scope.lastBeat.text}` }));

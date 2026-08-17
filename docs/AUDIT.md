@@ -600,3 +600,46 @@ primary action; it pins *Prepare a game*.
 **A refactor the fixes required.** Three bar heights were restated as literals inside five
 `calc()` expressions. They are `--hdr-h`, `--tabbar-h` and `--actionbar-h` now, so a media
 query can shrink a bar and every dependent spacer follows.
+
+---
+
+## Phase 9b — the palette, looked at rather than measured around
+
+Every previous pass measured *structure* — heights, control counts, overflow, taps. None of
+them rendered the app and looked at it. This one did: screenshots in both themes at 390×780,
+740×360 and 1440×900, plus a contrast audit of every visible text node against whatever is
+actually painted behind it (not the theme's nominal paper — most text sits on a card).
+
+**F-32 · The palette had never met WCAG AA.** 145 failing text nodes in light, 41 in dark.
+
+| | ratio | needs |
+|---|---|---|
+| label on the primary action | **3.52** | 4.5 |
+| accent as text (`2/11`, section names) | **3.12** | 4.5 |
+| `--ink-3` on paper (`.muted`, `.cite`, hints) | 4.07 | 4.5 |
+| `--ink-3` on a card, dark theme | 4.48 | 4.5 |
+
+*Fix:* split the accent rather than repaint the app. `--accent` stays the identity colour for
+fills; a new `--accent-text` (#b64d30) carries anything read as words; `--accent-ink` becomes
+ink instead of white, which fixes the primary button at 4.57 **without** darkening the orange
+that §1 builds the whole theme around. `--ink-3` moves to #656d87 light, #8c8678 dark.
+
+The alternative — darkening the fill to #c35334 — also reaches 4.56, and was rejected because
+it repositions the app's one accent colour to fix a label.
+
+**F-33 · Two equal-weight primaries, one of them a duplicate.** The plot sheet's "Call a plot
+beat" card offered *Modified proposal* and *Random prompt* both in accent, while the pinned bar
+carried *Random prompt* again — the same label twice on one screen, three accent buttons
+competing. The card's pair are secondary now; the pinned bar is the call.
+
+**F-34 · The `explain` fold had no open/closed state**, while `.acc` folds have carried `+`/`–`
+since Phase 6. It has one now. And because the inspiration block reuses `.explain`, it wore the
+`?` that means "explanation" — reading as *"? Stuck? Roll three words"*. Dropped.
+
+**The gate.** A contrast sweep over both themes and every route joins the smoke harness, with
+two decimal places of slack for sub-pixel colour rounding. Watched failing on the old tokens
+before the new ones were trusted.
+
+**Stopping here.** Three friendliness rounds have run: the structural pass, orientation and
+width, and now colour. What remains is preference rather than defect, and the honest thing is
+to say so rather than keep generating lists.

@@ -148,6 +148,65 @@ for (const width of WIDTHS) {
   await ctx.close();
 }
 
+// --- 2d. WCAG AA contrast, both themes ------------------------------------
+// The palette had never been checked: 145 failing text nodes in light, the worst
+// of them the label on the primary action (3.52:1). Measured against whatever is
+// actually painted behind each node, not against the theme's nominal paper.
+for (const theme of ["light", "dark"]) {
+  const { ctx, page } = await newPage(FIXTURES.mid);
+  await page.evaluate(async (t) => {
+    const st = await import("./src/settings.js");
+    st.Settings.setTheme(t);
+    st.applyTheme();
+  }, theme);
+  const seen = new Map();
+  for (const [tab, section] of ROUTES) {
+    await goto(page, tab, section);
+    const bad = await page.evaluate(() => {
+      const lum = (c) => {
+        const [r, g, b] = c.map((v) => {
+          v /= 255;
+          return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      const parse = (s) => (s.match(/[\d.]+/g) || [0, 0, 0]).slice(0, 3).map(Number);
+      const bgOf = (n) => {
+        let e = n;
+        while (e) {
+          const b = getComputedStyle(e).backgroundColor;
+          if (b && !/rgba\(0, 0, 0, 0\)|transparent/.test(b)) return parse(b);
+          e = e.parentElement;
+        }
+        return [255, 255, 255];
+      };
+      const out = [];
+      for (const n of document.querySelectorAll("#screen *, .tab-bar button, .plot-header *")) {
+        if (!n.offsetParent && !n.closest(".tab-bar")) continue;
+        const txt = [...n.childNodes]
+          .filter((c) => c.nodeType === 3 && c.textContent.trim())
+          .map((c) => c.textContent.trim()).join("");
+        if (!txt) continue;
+        const cs = getComputedStyle(n);
+        const L1 = lum(parse(cs.color)), L2 = lum(bgOf(n));
+        const ratio = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+        const size = parseFloat(cs.fontSize);
+        const large = size >= 24 || (size >= 18.66 && parseInt(cs.fontWeight, 10) >= 700);
+        const need = large ? 3 : 4.5;
+        // Two decimals of slack: sub-pixel colour rounding, not a real miss.
+        if (ratio < need - 0.005) {
+          out.push(`${(n.className || n.tagName).toString().slice(0, 24)} ${ratio.toFixed(2)}/${need}`);
+        }
+      }
+      return out;
+    });
+    for (const b of bad) if (!seen.has(b)) seen.set(b, `${tab}/${section}`);
+  }
+  ok(`${theme} theme meets WCAG AA contrast`, seen.size === 0,
+    [...seen].slice(0, 6).map(([k, v]) => `${v} ${k}`).join(" | "));
+  await ctx.close();
+}
+
 // --- 3. primary action above the fold, nothing under the tab bar ----------
 {
   const { ctx, page } = await newPage(FIXTURES.mid);
