@@ -19,6 +19,8 @@ import { NODE_CATEGORIES, PROMPT_NOTES } from "../data-pum-plot.js";
 import { BEAT_TRIGGERS } from "../data-guidance.js";
 import { renderCast } from "./cast.js";
 import { registerClearer } from "./viewstate.js";
+import { gumSuggest, gumTablesForNode } from "./forge.js";
+import { Settings } from "./settings.js";
 
 // The beat currently on the table, if any. Held in module state so a re-render
 // never re-rolls it (§5.1: roll once, store it, render from the stored value).
@@ -555,6 +557,25 @@ function nodeBlock(scope, beat) {
       render();
     },
   }, "Reroll"));
+  if (Settings.gum() && gumTablesForNode(n.categoryId).length) {
+    add(row, el("button", {
+      class: "btn small",
+      onclick: () => gumSuggest({
+        title: cat ? cat.name : "Plot node",
+        tableIds: gumTablesForNode(n.categoryId),
+        onPick: (text) => {
+          const slots = nodeSlots(scope, n.categoryId);
+          const at = store.writeNodeToFirstEmpty(n.categoryId, text, slots);
+          openBeat.node = { ...n, text, empty: false, slot: at >= 0 ? at : n.slot };
+          store.addJournal({
+            kind: "node", title: "Plot node from GUM",
+            detail: `${cat ? cat.name : ""}: ${text}`, linkedTo: beat.journalId,
+          });
+          render();
+        },
+      }),
+    }, "Roll from GUM"));
+  }
   // The Compulsion: reroll until an entry comes up (PUM p.6).
   add(row, el("button", {
     class: "btn small",
@@ -674,7 +695,16 @@ function nodeCard(scope, cat, slots) {
         class: "btn small",
         "aria-label": `Invoke ${text}`,
         onclick: () => invokeDeliberately(scope, cat, i, text),
-      }, "Invoke") : null
+      }, "Invoke") : null,
+      (!text && Settings.gum() && gumTablesForNode(cat.id).length) ? el("button", {
+        class: "btn small",
+        "aria-label": `Roll slot ${lo}-${hi} from GUM`,
+        onclick: () => gumSuggest({
+          title: cat.name,
+          tableIds: gumTablesForNode(cat.id),
+          onPick: (v) => { store.setNode(cat.id, i, v); render(); },
+        }),
+      }, "GUM") : null
     ));
   }
   add(card, listEl);

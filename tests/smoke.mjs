@@ -16,6 +16,7 @@ const FIXTURES = {
 
 const ROUTES = [
   ["play", "track"], ["play", "nodes"], ["play", "cast"],
+  ["forge", "seed"], ["forge", "world"], ["forge", "character"], ["forge", "grand"],
   ["oracles", "yesno"], ["oracles", "descriptive"], ["oracles", "story"],
   ["oracles", "granular"], ["oracles", "quantifiers"],
   ["scene", "arc"], ["scene", "explore"], ["scene", "battle"],

@@ -4,7 +4,7 @@
 import { die, d10, d100 } from "./core.js";
 import {
   rangeLookup, yesNoAnswer, granularLookup, oracle, oracleFamily, enrichmentFor,
-  pairedLookup, proposalAt, promptAt, abcd, plotSheet, sumTable,
+  pairedLookup, proposalAt, promptAt, abcd, plotSheet, sumTable, gumTable, gumRow,
 } from "./rules.js";
 import { nodeDie, nodeList, slotForRoll, slotRange, nodeSlots } from "./derived.js";
 import { Settings } from "./settings.js";
@@ -90,6 +90,30 @@ export function rollSum({ tableId, bias = "none" } = {}) {
     rolls, kept,
     answer: rangeLookup(table.rows, kept),
     dice: rolls.map((r, i) => D(`d${size}${rolls.length > 1 ? " #" + (i + 1) : ""}`, r, size, r === kept && rolls.indexOf(kept) === i)),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// GUM — prep-time generators. Plain 1..N lists, no bias rule of their own; the
+// book's method is to roll several and read them together (GUM p.3).
+// ---------------------------------------------------------------------------
+export function rollGum({ tableId } = {}) {
+  const table = gumTable(tableId);
+  if (!table) throw new Error("Unknown GUM table " + tableId);
+  const roll = die(table.die);
+  return {
+    kind: "gum", tableId, table, roll,
+    answer: gumRow(table, roll),
+    dice: [D(`d${table.die}`, roll, table.die)],
+  };
+}
+
+// Several tables read together as one result — the book's core technique.
+export function rollGumSet(tableIds) {
+  const parts = tableIds.map((id) => rollGum({ tableId: id }));
+  return {
+    kind: "gum-set", parts,
+    dice: parts.flatMap((p) => p.dice),
   };
 }
 

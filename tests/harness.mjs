@@ -65,6 +65,7 @@ const plot = await import("../data-pum-plot.js");
 const sum = await import("../data-sum.js");
 const lib = await import("../data-rules-library.js");
 const guidance = await import("../data-guidance.js");
+const gum = await import("../data-gum.js");
 
 // crypto is needed by core.js/roller.js under Node (globalThis.crypto is
 // already present and read-only from Node 20).
@@ -216,6 +217,67 @@ ok("scene closure 1 is fortunate", rules.rangeLookup(rules.sumTable("scene-closu
 ok("scene closure 20 is not", rules.rangeLookup(rules.sumTable("scene-closure").rows, 20).startsWith("That was a bad move"));
 ok("intervention 1 is peaceful", rules.rangeLookup(rules.sumTable("intervention").rows, 1).includes("peaceful"));
 ok("intervention 100 is conflict", rules.rangeLookup(rules.sumTable("intervention").rows, 100).includes("Active opposition"));
+
+// --- GUM (v2.2) ------------------------------------------------------------
+eq("forty-three GUM tables", gum.GUM_TABLES.length, 43);
+eq("four GUM sections", gum.GUM_SECTIONS.length, 4);
+{
+  let rows = 0;
+  const ids = new Set();
+  for (const t of gum.GUM_TABLES) {
+    ids.add(t.id);
+    rows += t.rows.length;
+    ok(`GUM ${t.id} names a real section`, gum.GUM_SECTIONS.some((s) => s.id === t.section));
+    ok(`GUM ${t.id} is d20 or d100`, t.die === 20 || t.die === 100);
+    eq(`GUM ${t.id} row count matches its die`, t.rows.length, t.die);
+    ok(`GUM ${t.id} rows are all non-empty strings`,
+      t.rows.every((r) => typeof r === "string" && r.trim().length > 3));
+    // The book prints one genuine duplicate (GUM_ERRATA G1); everything else is unique.
+    const dupAllowed = gum.GUM_ERRATA.filter((e) => e.table === t.id).length;
+    eq(`GUM ${t.id} rows are unique except for recorded errata`,
+      t.rows.length - new Set(t.rows).size, dupAllowed);
+    ok(`GUM ${t.id} every roll returns a row`,
+      Array.from({ length: t.die }, (_, i) => rules.gumRow(t, i + 1)).every(Boolean));
+    ok(`GUM ${t.id} carries a blurb and a page`, !!t.blurb && !!t.page);
+    // A parse artifact would show up as a stray list number inside the text.
+    ok(`GUM ${t.id} rows carry no embedded list numbers`,
+      !t.rows.some((r) => /\s\d{1,3}\.\s/.test(r)));
+  }
+  eq("GUM table ids are unique", ids.size, 43);
+  eq("1,580 GUM rows", rows, 1580);
+  eq("thirty-four d20 tables", gum.GUM_TABLES.filter((t) => t.die === 20).length, 34);
+  eq("nine d100 tables", gum.GUM_TABLES.filter((t) => t.die === 100).length, 9);
+}
+// the recorded erratum is exactly what we think it is
+{
+  const ev = rules.gumTable("evil-deeds");
+  eq("GUM erratum G1 is recorded", gum.GUM_ERRATA.length, 1);
+  eq("the duplicate sits at 17", rules.gumRow(ev, 17), "Vandalism and destruction");
+  eq("and again at 22", rules.gumRow(ev, 22), "Vandalism and destruction");
+  ok("the duplicate is kept as printed rather than corrected",
+    rules.gumRow(ev, 17) === rules.gumRow(ev, 22));
+}
+
+// values read straight off the printed pages
+eq("GUM location archetype 1", rules.gumRow(rules.gumTable("location-archetype"), 1),
+  "Humid: Wilderness, jungle, raining, rivers, marshes, falls");
+eq("GUM mission 20", rules.gumRow(rules.gumTable("mission"), 20),
+  "Fulfill a prophecy, or a backstory goal");
+eq("GUM archetypes-1 57", rules.gumRow(rules.gumTable("archetypes-1"), 57),
+  "Everyman: Regular person to represent masses");
+eq("GUM archetypes-2 100", rules.gumRow(rules.gumTable("archetypes-2"), 100),
+  "Workaholic: Obsessed with work; has to be");
+eq("GUM grand action 51", rules.gumRow(rules.gumTable("grand-action"), 51),
+  "Slow down, delay, hinder, postpone, hold back");
+// the book's own combinations
+eq("the plot seed is six tables", gum.GUM_PLOT_SEED.length, 6);
+ok("every plot-seed table exists", gum.GUM_PLOT_SEED.every((id) => rules.gumTable(id)));
+eq("the grand oracle is three tables", gum.GUM_GRAND.length, 3);
+ok("every grand-oracle table exists", gum.GUM_GRAND.every((id) => rules.gumTable(id)));
+ok("every plot-node category has GUM tables offered for it",
+  derived.NODE_IDS.every((id) => (gum.GUM_FOR_NODES[id] || []).length > 0));
+ok("every GUM_FOR_NODES id is a real table",
+  Object.values(gum.GUM_FOR_NODES).flat().every((id) => rules.gumTable(id)));
 
 // --- 21-24. Guidance and library --------------------------------------------
 eq("three play states", guidance.PLAY_STATES.length, 3);

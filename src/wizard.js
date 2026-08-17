@@ -8,6 +8,9 @@ import { plotSheet, trackTotal } from "./rules.js";
 import { go, render } from "./router.js";
 import { PLOT_SHEETS, NODE_CATEGORIES } from "../data-pum-plot.js";
 import { registerClearer } from "./viewstate.js";
+import { gumSuggest, gumTablesForNode } from "./forge.js";
+import { Settings } from "./settings.js";
+import { GUM_PLOT_SEED } from "../data-gum.js";
 
 let step = 0;
 let draft = null;
@@ -146,6 +149,20 @@ function stepScope(host) {
     placeholder: "Where does this open, and what is introduced there?",
     hint: "Optional now, and the home screen will keep asking until it's written. Consider starting in medias res.",
   }));
+  if (Settings.gum()) {
+    add(card, el("button", {
+      class: "btn wide",
+      onclick: () => gumSuggest({
+        title: "A plot seed",
+        tableIds: GUM_PLOT_SEED,
+        onPick: (text) => {
+          draft.mission = draft.mission ? draft.mission + "\n" + text : text;
+          render();
+        },
+      }),
+    }, "Seed this from GUM"));
+    add(card, el("p", { class: "cite", text: "GUM rolls a hook, a motivation, a mission, a lead, a caveat and the opposition. Keep what you like." }));
+  }
   add(host, card);
 }
 
@@ -248,9 +265,18 @@ function stepNodes(host) {
       const input = el("input", { type: "text", placeholder: "Add new, choose, or reroll" });
       input.value = list[i] || "";
       input.addEventListener("input", () => { list[i] = input.value; });
+      const gumTables = gumTablesForNode(cat.id);
       add(card, el("div", { class: "node-row" },
         el("span", { class: "node-idx", text: fmtRange(i * 2 + 1, i * 2 + 2) }),
-        input
+        input,
+        (Settings.gum() && gumTables.length) ? el("button", {
+          class: "btn small",
+          "aria-label": `Roll ${cat.name} slot ${i + 1} from GUM`,
+          onclick: () => gumSuggest({
+            title: cat.name, tableIds: gumTables,
+            onPick: (v) => { list[i] = v; render(); },
+          }),
+        }, "GUM") : null
       ));
     }
     add(host, card);

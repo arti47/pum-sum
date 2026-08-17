@@ -1,7 +1,8 @@
 # Unfolding Machines — project spec (canonical)
 
-A solo-storytelling play aid for the **Plot Unfolding Machine (PUM) v9.0** and the
-**Scene Unfolding Machine (SUM) v8.0 Rev2** by JeansenVaars. Built to the
+A solo-storytelling play aid for the **Plot Unfolding Machine (PUM) v9.0**, the
+**Scene Unfolding Machine (SUM) v8.0 Rev2** and the **Game Unfolding Machine (GUM) v2.2**
+by JeansenVaars. Built to the
 *RPG Player-Character App — Autonomous Build Instructions (v3)* template. This file is the
 project's living spec: **every code change updates it in the same change.**
 
@@ -11,10 +12,10 @@ project's living spec: **every code change updates it in the same change.**
 
 | | |
 |---|---|
-| **System** | PUM v9.0 (30pp) + SUM v8.0 Rev2 (12pp) — core rules only, no setting content |
+| **System** | PUM v9.0 (30pp) + SUM v8.0 Rev2 (12pp) + GUM v2.2 (26pp) — core rules only, no setting content |
 | **Audience** | The solo player, who is simultaneously author, protagonist and referee |
 | **Platforms** | Phone, browser, desktop — one installable PWA, no build step |
-| **Core job** | Game-setup wizard + live plot sheet + oracle console + scene engine + journal |
+| **Core job** | Game-setup wizard + live plot sheet + oracle console + scene engine + generators + journal |
 | **Backend** | `localStorage` only. No Firebase (§1.1) |
 | **Theme** | Printed play-sheet: warm paper, ink type, one machine-orange accent. Light + dark, follows system |
 
@@ -41,6 +42,7 @@ the subsystems this game actually has:
 | Solo mode (§3.20, CONDITIONAL) | *Not* a mode. Solo is the default and only mode |
 | GM screen | *(omitted)* — there is no GM to screen anything from |
 | Multiplayer party sync | *(omitted per §1.1)* — PUM's group mode is one device passed around |
+| Expansion content (§2, CONDITIONAL) | **GUM**: its own `data-gum.js` and its own tab, behind a toggle — the template's expansion pattern, used as written |
 
 **What this game is dense in** — see the shape census (§3.0) — is **Lookup** and
 **Permission**. Per the template's §15 field guide, that puts it in the *narrative* family:
@@ -55,7 +57,7 @@ follows from that sentence.
 | Usage mode | **Single-device, local-first only.** No Firebase, no sync phase, no campaign join codes |
 | User's seat | Solo player (no GM screen) |
 | Dice input | **App rolls**, cryptographic RNG, every die face shown, both dice shown on a bias roll |
-| Expansions | None supplied. SUM is not an expansion — it is a committed co-equal half of the app |
+| Expansions | **GUM v2.2, committed tier.** SUM is not an expansion — it is a co-equal half of the app. GUM is a genuine third book and sits behind a content toggle (§8) that **defaults ON**, a recorded deviation: the book was supplied, so the fiction is that this player owns it, and a default-off switch would leave 1,580 extracted rows invisible (D-18). A fork without the book turns it off and the tab disappears |
 | Table device | Phone-first |
 | Theme default | Follow system, with an in-app override |
 | One campaign or many | **Many.** A library of games; each game holds many plot sheets (plot scopes) |
@@ -64,7 +66,7 @@ follows from that sentence.
 
 ## 2. Source and precedence
 
-Sources: the two supplied PDFs. Both are digitally-typeset (not scans), so page images were
+Sources: the three supplied PDFs. All are digitally-typeset (not scans), so page images were
 available throughout and sit at the top of the precedence order.
 
 **Extraction method (recorded because it decides how much to trust the data):**
@@ -82,7 +84,13 @@ available throughout and sit at the top of the precedence order.
    full-height section rules from half-height box dividers. Every track length in
    `data-pum-plot.js` is a measured count, not an estimate.
 
-**No blocked tables.** Every table in both books is fully recovered and cited.
+4. GUM's 43 tables are laid out two-per-row in narrow columns, so a long left-hand entry can
+   end within 12pt of the right-hand entry's number and the two merge. The reconstruction
+   forces a column break before any list number more than 150pt from its run's start, then
+   validates every table's numbering is contiguous 1..N before transcription. 1,580 rows,
+   zero malformed, sixteen values spot-checked against the printed pages.
+
+**No blocked tables.** Every table in all three books is fully recovered and cited.
 
 ### 2.1 Rulings (ambiguities, with ids)
 
@@ -95,6 +103,8 @@ available throughout and sit at the top of the precedence order.
 | **A5** | SUM's Intervention check and PUM's plot beats can both interrupt a scene | Both are offered; neither fires automatically. The disruption die (PUM p.9) is the only automatic interrupter and is off by default, matching the book's "optional rule" framing |
 | **A6** | Neither book names a scene/session boundary procedure beyond SUM's closure | The lifecycle engine owns **scene** boundaries only. There is no session-end bundle to fire, so none is invented; the journal marks sessions for the player's own reference |
 | **A7** | Plot-node lists: *"Roll 1d10 in lists with less than half the entries filled; otherwise roll 1d20"* (PUM p.25) applies to the 10-slot expanded sheet; the in-sheet lists have 5 slots | Die size is derived from the list's own capacity and fill: 5-slot lists always roll 1d10; 10-slot lists roll 1d10 until more than five slots are filled, then 1d20. One function, `derived.nodeDie()` |
+| **A9** | GUM p.21 prints "Vandalism and destruction" twice in one d100 table, at 17 and 22 | Kept as printed, so the app's odds match the book's, and recorded in `GUM_ERRATA` and the rules library. Correcting it would silently change a probability a paper player does not get to change |
+| **A10** | GUM has no bias rule and no ordering convention — unlike SUM, low does not favour the protagonists | Recorded explicitly. GUM tables are rolled straight; no bias control is offered on them, because offering one would invent a mechanic the book does not have |
 | **A8** | Neither book contains safety tools (§3.22) | Recorded as absent. Nothing invented; Settings says so plainly rather than shipping a house-aid X-card as if it were the book's |
 
 ---
@@ -107,7 +117,7 @@ The honest statement of what this app must be good at.
 
 | Shape | Count | Where they are |
 |---|---|---|
-| **Lookup** | **43** | Every oracle and every prompt table. 24 SUM tables, 19 PUM tables |
+| **Lookup** | **86** | Every oracle, prompt and generator table. 19 PUM, 24 SUM, 43 GUM |
 | **Permission** | **11** | Re-roll a result you dislike · ignore or reinterpret any answer · choose *not* to advance the track · advance it voluntarily without a beat · invoke a plot node deliberately instead of rolling · "add new, choose, or reroll" on any node slot · invent a plot node mid-play · re-roll a repeated beat · customise the Random Prompt column · pre-draw or grow a custom track · end a scope when you say it ends |
 | **Modifier** | 2 | SUM Rule of Bias (keep low/high) · PUM bias (roll twice, pick) — different mechanics, ruling A4 |
 | **Escalation** | 1 | The plot track: each confirmed beat advances one box toward resolution |
@@ -235,6 +245,7 @@ text-size control paying back the zoom lock.
 | `data-pum-oracles.js` | Yes/No ×3 · granular ×3 · descriptive ×6 · story ×6 · Description d100 · Focus d100 · quantifiers ×3 |
 | `data-pum-plot.js` | Modified proposals · random-prompt columns · ABCD ×4 · 11 plot sheets · node categories · `PUM_ERRATA` |
 | `data-sum.js` | All 24 SUM tables, grouped by the book's own sections |
+| `data-gum.js` | All 43 GUM tables (1,580 rows) + `GUM_FOR_NODES`, `GUM_PLOT_SEED`, `GUM_GRAND`, `GUM_ERRATA` |
 | `data-guidance.js` | The books' procedural framing: play states, flowchart, beat triggers, advice |
 | `data-rules-library.js` | One entry per automated rule, in the app's own words, page-cited |
 | `src/*.js` | Modules, §4.2 |
@@ -257,6 +268,7 @@ text-size control paying back the zoom lock.
 | `sheet.js` | The plot sheet screen: track, beats, nodes; the persistent plot header |
 | `oracles.js` | The oracle console |
 | `scene.js` | SUM: scene arc lifecycle + exploration/battle/discovery tables |
+| `forge.js` | GUM: the generator tab, the plot seed, the grand oracle, and `gumSuggest()` — the one dialog reused wherever the app asks the player to fill a blank |
 | `cast.js` | Characters & locations roster + SUM character emulation |
 | `journal.js` | The journal: entries, narration, filters, paging, dice distribution |
 | `wizard.js` | The four-step game prep |
@@ -320,6 +332,10 @@ All ticked boxes are extracted, cited and unit-checked for row count and range c
 - [x] **T22** Play states + flowchart (PUM pp.4–5) → `screens.js`, `tutorial.js`
 - [x] **T23** Advice chapter (PUM p.10) → `screens.js`
 - [x] **T24** Rules-library entries, one per automated rule → `screens.js`
+- [x] **T25** GUM game seeding ×8 (pp.4-7) → `forge.js`
+- [x] **T26** GUM world generator ×18 (pp.8-13) → `forge.js`
+- [x] **T27** GUM character builder ×14 (pp.14-21) → `forge.js`
+- [x] **T28** GUM grand oracle ×3 (pp.22-24) → `forge.js`
 
 ### 5.2 Rules Traceability Ledger
 
@@ -349,6 +365,10 @@ All ticked boxes are extracted, cited and unit-checked for row count and range c
 | Custom Random Prompt column | Permission | `scope.customPrompts` | `store.setCustomPrompts` | Track → Customize → Edit the prompt column | `custom column persists and rolls` |
 | Custom track grown in play | Permission | `track.custom` | `store.addTrackSection/addTrackBox/removeTrackSection` | Track → Customize | `boxes persist and cross in order; removing a section clamps` |
 | Every roll is journalled with its dice | Lookup | — | `store.addJournal` | Journal tab | `a roll writes exactly one entry` |
+| GUM table = a plain 1..N roll, no bias | Lookup | `GUM_TABLES` | `roller.rollGum` | Forge → result card | `every GUM roll returns a row; 1,580 rows` |
+| GUM's method is combining several tables | Lookup | `GUM_PLOT_SEED`, `GUM_GRAND` | `roller.rollGumSet` | Forge → "Roll a whole plot seed" | `the plot seed is six tables; the grand oracle three` |
+| GUM fills PUM's plot nodes | Lookup | `GUM_FOR_NODES` | `forge.gumSuggest` | Every empty node slot, the cast, the wizard | `every node category has GUM tables offered` |
+| GUM prints one duplicate row | *erratum* | `GUM_ERRATA` | — | Rules → Errata | `the duplicate is kept as printed` |
 | Books contain no safety tools | *guidance only* | — | — | Settings → About the books | — |
 | Task resolution is your own RPG's job | *guidance only* | — | — | `explain()` on Oracles + rules library | — |
 
@@ -371,6 +391,8 @@ All ticked boxes are extracted, cited and unit-checked for row count and range c
 - [x] **Phase 5 — Multiplayer**: *dropped at Stage B (§1.1).*
 - [x] **Phase 6 — Teaching surfaces**: `explain()` everywhere, rules library, tutorial,
       guidance chapters.
+- [x] **Phase 7 — GUM v2.2**: all 43 generator tables, the Forge tab, and GUM wired into every
+      blank-filling point the app already had.
 - [x] **Hardening**: harnesses, accessibility, layout/stress probes, audit to a clean cycle.
 
 ---
@@ -389,4 +411,5 @@ sentence; every flag has a setter, a reader and a clearer.
 | 2026-08-16 | Instantiated from template v3. Stage A extraction complete (bbox reconstruction + 300 dpi vector measurement); Stage B decisions recorded; full build of Phases 0–4 and 6. | `npm test` 930 assertions green; parse gate clean | v1 |
 | 2026-08-16 | Audit cycle 1: nine findings, all fixed. F-1 proposal notes extracted and never shown (the §0 defect) → `PROPOSAL_KINDS` + `rules.proposalNote`, surfaced on the beat card. F-2 three custom-sheet Permissions with an engine and no control → the Customize dialog. F-3 `updateGame` unreachable → Edit on the Home game card. F-4 SUM section names hardcoded in `src/` → read `SUM_SECTIONS`. F-5 transient view state leaked across scopes → new `src/viewstate.js` clearer registry. F-6 dead exports and unused imports removed. F-7 the dead-data scan's own `\b$\b` bug, which I acted on before verifying. F-8 tap targets raised to 40px. F-9 two primary actions below the fold → Home pinned, Settings reordered by frequency. F-10 `viewstate.js` missing from the service-worker app shell (offline boot failure) → listed, cache bumped to v2, and a harness check added. | `npm test` · `npm run deadcode` · `npm run smoke` (304 checks) · `npm run audit` · layout probe at 320/360/390 under the stress fixture; three data guards and one layout guard each watched failing before restore | v2 |
 | 2026-08-16 | Audit cycle 2, run against the cycle-1 fixes: four findings, three of them regressions the fixes introduced. F-11 the wizard hijacked every More route → it renders on Home only. F-12 illegal wizard steps were enabled and inert → disabled with a reason. F-13 `store.createGame` fired the clearers and nulled the draft mid-`finish()` → local copy taken first. F-14 track boxes 36px at 320px → min-width raised. Re-ran the full cycle afterwards with no new finding. | unit 945 · dead-data clean · smoke 304 · interaction audit 338 controls · layout probe clean at 320/360/390 under stress | v3 |
+| 2026-08-17 | **GUM v2.2 added** as the committed third book: all 43 tables (1,580 rows) parsed by coordinate reconstruction rather than hand-transcribed, every table validated contiguous before transcription; new `data-gum.js`, `src/forge.js` and a sixth tab; GUM wired into every blank-filling point (empty node slots, the cast, the wizard's scope step) through one shared `gumSuggest()` dialog; erratum G1 recorded rather than corrected; rulings A9 and A10 added. Audit cycle 3: three findings — two Forge screens with a mis-classed primary action, and Settings' primary pushed off a small screen by the new toggle. | unit 1312 · dead-data clean · smoke 362 · interaction audit 440 controls · layout probe clean at 320/360/390 under stress | v5 |
 | 2026-08-16 | Cosmetic: the pinned action bar's context line wrapped to two lines on a narrow screen, growing the bar. Truncated with an ellipsis; the buttons no longer flex. Verified in light and dark on a real render. | smoke 304 green; layout probe clean at 320 | v4 |
