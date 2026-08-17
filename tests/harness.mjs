@@ -1,0 +1,548 @@
+// Unit + data harness. Runs in seconds; run it on every change.
+// Starts with the parse gate: a missing paren in a screen module does not throw
+// in the browser — it presents as a screen that never renders.
+
+import { readdirSync, readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+let pass = 0, fail = 0;
+const failures = [];
+
+function ok(name, cond, detail = "") {
+  if (cond) { pass += 1; return; }
+  fail += 1;
+  failures.push(`${name}${detail ? " — " + detail : ""}`);
+}
+
+function eq(name, a, b) {
+  ok(name, a === b, `expected ${JSON.stringify(b)}, got ${JSON.stringify(a)}`);
+}
+
+// --- 0. parse gate ----------------------------------------------------------
+{
+  const files = [
+    ...readdirSync(join(root, "src")).filter((f) => f.endsWith(".js")).map((f) => join("src", f)),
+    ...readdirSync(root).filter((f) => f.startsWith("data-") && f.endsWith(".js")),
+    "service-worker.js",
+  ];
+  for (const f of files) {
+    try {
+      execFileSync(process.execPath, ["--check", join(root, f)], { stdio: "pipe" });
+      pass += 1;
+    } catch (err) {
+      fail += 1;
+      failures.push(`parse: ${f} — ${String(err.stderr || err).split("\n")[0]}`);
+    }
+  }
+}
+
+// --- 0a. the service-worker app shell lists every shipped file --------------
+// A module added without its app-shell entry 404s offline and the app never boots.
+{
+  const sw = readFileSync(join(root, "service-worker.js"), "utf8");
+  const listed = new Set(
+    [...sw.matchAll(/"\.\/([^"]+)"/g)].map((m) => m[1])
+      .filter((f) => /\.(js|css|html|svg|json)$/.test(f))
+  );
+  const shipped = [
+    ...readdirSync(join(root, "src")).map((f) => "src/" + f),
+    ...readdirSync(root).filter((f) =>
+      /^(data-.*\.js|styles\.css|index\.html|icon\.svg|manifest\.json)$/.test(f)),
+  ];
+  const missing = shipped.filter((f) => !listed.has(f));
+  ok("every shipped file is in the service-worker app shell", missing.length === 0, missing.join(", "));
+  const stale = [...listed].filter((f) => f && !shipped.includes(f));
+  ok("the app shell lists no file that does not exist", stale.length === 0, stale.join(", "));
+}
+
+// --- imports ---------------------------------------------------------------
+const oracles = await import("../data-pum-oracles.js");
+const plot = await import("../data-pum-plot.js");
+const sum = await import("../data-sum.js");
+const lib = await import("../data-rules-library.js");
+const guidance = await import("../data-guidance.js");
+
+// crypto is needed by core.js/roller.js under Node (globalThis.crypto is
+// already present and read-only from Node 20).
+if (!globalThis.crypto) {
+  Object.defineProperty(globalThis, "crypto", {
+    value: (await import("node:crypto")).webcrypto, configurable: true,
+  });
+}
+
+const rules = await import("../src/rules.js");
+const derived = await import("../src/derived.js");
+
+// --- 1. Yes/No --------------------------------------------------------------
+for (const [id, reg] of Object.entries(oracles.YES_NO)) {
+  eq(`YES_NO ${id} has 10 rows`, reg.rows.length, 10);
+  ok(`YES_NO ${id} every d10 row is reachable`,
+    Array.from({ length: 10 }, (_, i) => rules.yesNoAnswer(id, i + 1)).every(Boolean));
+  ok(`YES_NO ${id} rows are non-empty`, reg.rows.every((r) => r && r.trim().length));
+}
+eq("Deterministic 1 is a strong no", oracles.YES_NO.deterministic.rows[0], "Strong no");
+eq("Subjective 5 admits ignorance", oracles.YES_NO.subjective.rows[4], "Don't know, can't tell");
+eq("Conversation 10 is warm", oracles.YES_NO.conversation.rows[9], "Yes, of course");
+
+// --- 2. Granular: every band column tiles 1-100 with no gap and no overlap ---
+for (const [id, table] of Object.entries(oracles.GRANULAR)) {
+  for (const band of oracles.GRANULAR_BANDS) {
+    const col = rules.granularColumn(id, band);
+    const sorted = [...col].sort((a, b) => a[0] - b[0]);
+    let cursor = 1, tiled = true, why = "";
+    for (const [min, max] of sorted) {
+      if (min !== cursor) { tiled = false; why = `gap or overlap at ${min}, expected ${cursor}`; break; }
+      if (max < min) { tiled = false; why = `inverted range ${min}-${max}`; break; }
+      cursor = max + 1;
+    }
+    if (tiled && cursor !== 101) { tiled = false; why = `ends at ${cursor - 1}, not 100`; }
+    ok(`GRANULAR ${id}/${band} tiles 1-100`, tiled, why);
+    // and every roll in range returns a row
+    ok(`GRANULAR ${id}/${band} every roll resolves`,
+      Array.from({ length: 100 }, (_, i) => rules.granularLookup(id, band, i + 1)).every(Boolean));
+  }
+  ok(`GRANULAR ${id} answers match the d10 table's vocabulary`, table.rows.length >= 6);
+}
+eq("granular deterministic neutral 1 is a strong no",
+  rules.granularLookup("deterministic", "neutral", 1), "Strong no");
+eq("granular deterministic no-way 100 is still a strong yes",
+  rules.granularLookup("deterministic", "no way", 100), "Strong yes");
+
+// --- 3/5. Descriptive and story oracles -------------------------------------
+for (const o of [...oracles.DESCRIPTIVE, ...oracles.STORY, ...oracles.QUANTIFIERS]) {
+  eq(`oracle ${o.id} has 10 rows`, o.rows.length, 10);
+  ok(`oracle ${o.id} rows are non-empty`, o.rows.every((r) => r && r.trim().length));
+}
+eq("six descriptive oracles", oracles.DESCRIPTIVE.length, 6);
+eq("six story oracles", oracles.STORY.length, 6);
+eq("three quantifiers", oracles.QUANTIFIERS.length, 3);
+// Four of ten quantifier faces are "as expected" — most of the time the world is unremarkable.
+for (const q of oracles.QUANTIFIERS) {
+  eq(`quantifier ${q.id} has four "as expected" faces`,
+    q.rows.filter((r) => r === "As expected").length, 4);
+}
+
+// --- 4/6. d100 enrichment tables --------------------------------------------
+for (const t of [oracles.DESCRIPTION, oracles.FOCUS]) {
+  eq(`${t.name} has 50 paired rows`, t.rows.length, 50);
+  ok(`${t.name} covers 1-100`,
+    Array.from({ length: 100 }, (_, i) => rules.pairedLookup(t, i + 1)).every(Boolean));
+  ok(`${t.name} rows are unique`, new Set(t.rows).size === t.rows.length);
+}
+eq("Description 1 is ancient/old", rules.pairedLookup(oracles.DESCRIPTION, 1), "ancient / old");
+eq("Description 100 is windy/moving", rules.pairedLookup(oracles.DESCRIPTION, 100), "windy / moving");
+eq("Focus 81 is Rebels/Traitor", rules.pairedLookup(oracles.FOCUS, 81), "Rebels / Traitor");
+eq("Focus 40 is Global/Universe", rules.pairedLookup(oracles.FOCUS, 40), "Global / Universe");
+
+// --- 8/9/10. Plot beats -----------------------------------------------------
+eq("ten modified proposals", plot.MODIFIED_PROPOSALS.length, 10);
+ok("modified proposals are unique", new Set(plot.MODIFIED_PROPOSALS).size === 10);
+// The worked examples on PUM p.11 pin four of these; they must still hold.
+eq("proposal 2 (p.11 example)", rules.proposalAt(2), "Bring someone quite inconvenient");
+eq("proposal 5 (p.11 example)", rules.proposalAt(5), "Cause frustration, stress, or worry");
+eq("proposal 6 (p.11 example)", rules.proposalAt(6), "Cause confusion, doubts, disarray");
+eq("proposal 7 (p.11 example)", rules.proposalAt(7), "Make the location more favorable");
+
+for (const [letter, t] of Object.entries(plot.ABCD)) {
+  eq(`ABCD ${letter} has 10 rows`, t.rows.length, 10);
+  ok(`ABCD ${letter} rows are unique`, new Set(t.rows).size === 10);
+}
+
+for (const sheet of plot.PLOT_SHEETS) {
+  eq(`${sheet.id} prompt column has 10 rows`, sheet.prompts.length, 10);
+  ok(`${sheet.id} prompts all resolve to an event or a node`,
+    sheet.prompts.every((p) => p && p.label && (p.event || p.node)));
+  ok(`${sheet.id} node prompts name a real category`,
+    sheet.prompts.every((p) => !p.node || plot.NODE_CATEGORIES.some((c) => c.id === p.node)));
+  ok(`${sheet.id} event prompts name a real ABCD table`,
+    sheet.prompts.every((p) => !p.event || plot.ABCD[p.event]));
+}
+eq("standard prompt 5 is the notable character", rules.promptAt(rules.plotSheet("standard"), 5).node, "characters");
+eq("standard prompt 7 is the world element", rules.promptAt(rules.plotSheet("standard"), 7).node, "world");
+eq("story-focus reaches only plot nodes",
+  rules.plotSheet("story-focus").prompts.filter((p) => p.event).length, 0);
+eq("improvised reaches only random events",
+  rules.plotSheet("improvised").prompts.filter((p) => p.node).length, 0);
+
+// --- 11. Plot sheets: measured track lengths --------------------------------
+const EXPECTED_TRACK = {
+  standard: 11, journey: 20, "story-focus": 20, scenes: 10, dungeon: 7,
+  exploration: 11, "story-parts": 5, improvised: 0, sandbox: 0, customized: 0,
+};
+eq("eleven plot sheets are… ten sheets plus the custom one", plot.PLOT_SHEETS.length, 10);
+for (const sheet of plot.PLOT_SHEETS) {
+  eq(`${sheet.id} track box count`, rules.trackTotal(sheet.track), EXPECTED_TRACK[sheet.id]);
+}
+eq("standard is 3/5/3", rules.plotSheet("standard").track.map((s) => s.boxes).join("/"), "3/5/3");
+eq("journey is 3/7/4/3/3", rules.plotSheet("journey").track.map((s) => s.boxes).join("/"), "3/7/4/3/3");
+eq("exploration triples each area", rules.plotSheet("exploration").track.map((s) => s.boxes).join("/"), "1/3/3/3/1");
+
+// --- 12. Node categories ----------------------------------------------------
+eq("six node categories", plot.NODE_CATEGORIES.length, 6);
+eq("four base categories", plot.NODE_CATEGORIES.filter((c) => !c.expanded).length, 4);
+ok("every category has a definition and examples",
+  plot.NODE_CATEGORIES.every((c) => c.definition && c.examples));
+ok("every node-invoking prompt has a play note",
+  Object.keys(plot.PROMPT_NOTES).length === plot.NODE_CATEGORIES.length);
+
+// --- 13-20. SUM tables ------------------------------------------------------
+eq("twenty-four SUM tables", sum.SUM_TABLES.length, 24);
+eq("eight SUM sections", sum.SUM_SECTIONS.length, 8);
+for (const t of sum.SUM_TABLES) {
+  ok(`${t.id} names a real section`, sum.SUM_SECTIONS.some((s) => s.id === t.section));
+  ok(`${t.id} is d20 or d100`, t.die === 20 || t.die === 100);
+  // Every range table covers its range, exactly once.
+  let cursor = 1, tiled = true, why = "";
+  for (const [min, max] of t.rows) {
+    if (min !== cursor) { tiled = false; why = `gap or overlap at ${min}, expected ${cursor}`; break; }
+    if (max < min) { tiled = false; why = `inverted ${min}-${max}`; break; }
+    cursor = max + 1;
+  }
+  if (tiled && cursor !== t.die + 1) { tiled = false; why = `ends at ${cursor - 1}, not ${t.die}`; }
+  ok(`SUM ${t.id} tiles 1-${t.die}`, tiled, why);
+  ok(`SUM ${t.id} every roll returns a row`,
+    Array.from({ length: t.die }, (_, i) => rules.rangeLookup(t.rows, i + 1)).every(Boolean));
+  ok(`SUM ${t.id} rows are unique`, new Set(t.rows.map((r) => r[2])).size === t.rows.length);
+  ok(`SUM ${t.id} carries its bias note`, !!t.bias && !!t.blurb && !!t.lead);
+}
+eq("twelve character-emulation tables offered on a cast entry", sum.CHARACTER_TABLE_IDS.length, 12);
+ok("every character table id exists", sum.CHARACTER_TABLE_IDS.every((id) => rules.sumTable(id)));
+// Lower rolls favour the protagonists: the low end of the closure table is the good end.
+ok("scene closure 1 is fortunate", rules.rangeLookup(rules.sumTable("scene-closure").rows, 1).startsWith("That is, in fact, good"));
+ok("scene closure 20 is not", rules.rangeLookup(rules.sumTable("scene-closure").rows, 20).startsWith("That was a bad move"));
+ok("intervention 1 is peaceful", rules.rangeLookup(rules.sumTable("intervention").rows, 1).includes("peaceful"));
+ok("intervention 100 is conflict", rules.rangeLookup(rules.sumTable("intervention").rows, 100).includes("Active opposition"));
+
+// --- 21-24. Guidance and library --------------------------------------------
+eq("three play states", guidance.PLAY_STATES.length, 3);
+eq("four flowchart decisions", guidance.FLOWCHART.length, 4);
+eq("six proposal triggers plus the disruption note", guidance.BEAT_TRIGGERS.proposal.items.length, 7);
+eq("six prompt triggers plus the disruption note", guidance.BEAT_TRIGGERS.prompt.items.length, 7);
+ok("advice chapter is present", guidance.ADVICE.length >= 7);
+ok("advanced mechanics are present", guidance.ADVANCED.length >= 7);
+const libIds = lib.RULES_LIBRARY.flatMap((g) => g.entries.map((e) => e.id));
+ok("rules-library ids are unique", new Set(libIds).size === libIds.length);
+ok("every library entry cites a page", lib.RULES_LIBRARY.every((g) => g.entries.every((e) => e.page)));
+ok("safety tools are recorded as absent",
+  libIds.includes("safety") && lib.RULES_LIBRARY.some((g) =>
+    g.entries.some((e) => e.id === "safety" && e.automated === false)));
+eq("two errata recorded", plot.PUM_ERRATA.length, 2);
+
+// --- derived: the node die rule (A7 / PUM p.25) ----------------------------
+{
+  const mk = (sheetId, fill) => derived.normalizeScope({
+    sheetId, nodes: { world: Array.from({ length: fill }, (_, i) => "node " + i) },
+  });
+  eq("5-slot list always rolls d10 when empty", derived.nodeDie(mk("standard", 0), "world"), 10);
+  eq("5-slot list still rolls d10 when full", derived.nodeDie(mk("standard", 5), "world"), 10);
+  eq("10-slot list rolls d10 at 5 filled", derived.nodeDie(mk("journey", 5), "world"), 10);
+  eq("10-slot list rolls d20 past half", derived.nodeDie(mk("journey", 6), "world"), 20);
+  eq("10-slot list rolls d20 when full", derived.nodeDie(mk("journey", 10), "world"), 20);
+}
+
+// --- derived: the track -----------------------------------------------------
+{
+  const scope = derived.normalizeScope({ sheetId: "standard" });
+  eq("a fresh standard track is 11 long", derived.trackLength(scope), 11);
+  eq("nothing crossed yet", derived.crossed(scope), 0);
+  ok("not resolved yet", !derived.isResolved(scope));
+  eq("first section is Exposition", derived.currentSection(scope).name, "Exposition");
+  scope.track.crossed = 3;
+  eq("box 4 sits in Confrontation", derived.currentSection(scope).name, "Confrontation");
+  scope.track.crossed = 10;
+  ok("ten of eleven is not resolved", !derived.isResolved(scope));
+  scope.track.crossed = 11;
+  ok("the predicate flips on the final box", derived.isResolved(scope));
+  eq("last section is Resolution", derived.currentSection(scope).name, "Resolution");
+  // crossing can never run past the end
+  const over = derived.normalizeScope({ sheetId: "standard", track: { crossed: 99 } });
+  eq("normalization clamps an over-long track", derived.crossed(over), 11);
+  const trackless = derived.normalizeScope({ sheetId: "sandbox", track: { crossed: 4 } });
+  eq("a trackless sheet cannot carry crossings", derived.crossed(trackless), 0);
+  ok("a trackless sheet never reports resolved", !derived.isResolved(trackless));
+}
+
+// --- derived: normalization + migration fixtures ---------------------------
+{
+  const old = {
+    games: [{
+      title: "Old save",
+      scopes: [{ name: "s", sheetId: "nonexistent-sheet", nodes: { world: ["a", null, 7] } }],
+      journal: [{ kind: "beat" }],
+    }],
+  };
+  const n = derived.normalize(old);
+  eq("an unknown sheet id falls back to standard", n.games[0].scopes[0].sheetId, "standard");
+  ok("non-string nodes are dropped to empty strings",
+    n.games[0].scopes[0].nodes.world.every((x) => typeof x === "string"));
+  ok("every node category exists after migration",
+    derived.NODE_IDS.every((id) => Array.isArray(n.games[0].scopes[0].nodes[id])));
+  ok("an active game is selected", n.activeGameId === n.games[0].id);
+  ok("journal entries get ids and timestamps", !!n.games[0].journal[0].id && !!n.games[0].journal[0].ts);
+  const empty = derived.normalize({});
+  eq("an empty state has no games", empty.games.length, 0);
+  eq("an empty state has no active game", empty.activeGameId, null);
+  eq("theme defaults to system", empty.theme, "system");
+  eq("disruption die defaults off", empty.settings.disruptionDie, false);
+  eq("enrichment defaults on", empty.settings.autoEnrich, true);
+  const scaleJunk = derived.normalize({ textScale: 99 });
+  eq("an out-of-range text scale is clamped back to 1", scaleJunk.textScale, 1);
+}
+
+// --- the engine -------------------------------------------------------------
+// A DOM-free stub so the roller's store/journal calls do not need a browser.
+globalThis.localStorage = {
+  _v: {},
+  getItem(k) { return this._v[k] || null; },
+  setItem(k, v) { this._v[k] = String(v); },
+  removeItem(k) { delete this._v[k]; },
+};
+const store = await import("../src/store.js");
+const roller = await import("../src/roller.js");
+const core = await import("../src/core.js");
+
+// dice: every face reachable, none out of range
+{
+  for (const size of [10, 20, 100]) {
+    const seen = new Set();
+    for (let i = 0; i < size * 60; i++) {
+      const v = core.die(size);
+      if (v < 1 || v > size) { ok(`d${size} stays in range`, false, `rolled ${v}`); break; }
+      seen.add(v);
+    }
+    eq(`d${size} reaches every face`, seen.size, size);
+  }
+  let threw = false;
+  try { core.die(1); } catch { threw = true; }
+  ok("a nonsense die size throws rather than lying", threw);
+}
+
+// PUM bias returns both and commits neither (ruling A4)
+{
+  const r = roller.rollYesNo({ register: "subjective", bias: true });
+  eq("bias rolls twice", r.options.length, 2);
+  ok("bias needs the player's choice", r.needsChoice === true);
+  ok("both answers are real rows", r.options.every((o) => o.answer));
+  const plain = roller.rollYesNo({ register: "subjective" });
+  eq("no bias rolls once", plain.options.length, 1);
+  ok("no bias needs no choice", plain.needsChoice === false);
+}
+
+// SUM bias is mechanical: keep low / keep high (ruling A4)
+{
+  let lowOk = true, highOk = true, both = true;
+  for (let i = 0; i < 300; i++) {
+    const lo = roller.rollSum({ tableId: "meet-reaction", bias: "low" });
+    const hi = roller.rollSum({ tableId: "meet-reaction", bias: "high" });
+    if (lo.kept !== Math.min(...lo.rolls)) lowOk = false;
+    if (hi.kept !== Math.max(...hi.rolls)) highOk = false;
+    if (lo.rolls.length !== 2 || hi.rolls.length !== 2) both = false;
+  }
+  ok("keep-low returns the minimum", lowOk);
+  ok("keep-high returns the maximum", highOk);
+  ok("a bias roll shows both dice", both);
+  const neutral = roller.rollSum({ tableId: "meet-reaction", bias: "none" });
+  eq("neutral rolls once", neutral.rolls.length, 1);
+  ok("every SUM roll resolves to an answer", !!neutral.answer);
+}
+
+// enrichment
+{
+  const r = roller.rollOracle({ oracleId: "someone", enrich: true });
+  ok("a descriptive oracle enriches with a Description word", r.enrichment && r.enrichment.name === "Description");
+  const s = roller.rollOracle({ oracleId: "reason", enrich: true });
+  ok("a story oracle enriches with a Focus word", s.enrichment && s.enrichment.name === "Focus");
+  const q = roller.rollOracle({ oracleId: "many", enrich: true });
+  ok("a quantifier is never enriched", q.enrichment === null);
+  ok("a quantifier never carries a disruption die", q.disruption === null);
+  const off = roller.rollOracle({ oracleId: "someone", enrich: false });
+  ok("enrichment can be switched off", off.enrichment === null);
+  eq("an unenriched oracle shows one die", off.dice.length, 1);
+  eq("an enriched oracle shows two", r.dice.length, 2);
+}
+
+// plot beats, node invocation, and the compulsion
+{
+  const game = store.createGame({
+    title: "Harness game", scopeName: "Scope", sheetId: "standard",
+    protagonists: [{ id: "p1", name: "PC" }],
+    nodes: { world: ["a storm", "", "", "", ""] },
+  });
+  const scope = store.currentScope();
+
+  const beat = roller.rollProposal();
+  ok("a proposal names a real row", plot.MODIFIED_PROPOSALS.includes(beat.text));
+  eq("a proposal shows one die", beat.dice.length, 1);
+
+  let sawEvent = false, sawNode = false;
+  for (let i = 0; i < 200; i++) {
+    const p = roller.rollPrompt(scope);
+    ok("every prompt resolves", !!p.text);
+    if (p.event) { sawEvent = true; ok("an ABCD event rolls its own die", p.dice.length === 2); }
+    if (p.node) { sawNode = true; }
+  }
+  ok("the standard column reaches ABCD events", sawEvent);
+  ok("the standard column reaches plot nodes", sawNode);
+
+  // an empty slot offers add / choose / reroll — the engine reports it as empty
+  let sawEmpty = false, sawFilled = false;
+  for (let i = 0; i < 200; i++) {
+    const n = roller.invokeNode(scope, "world");
+    if (n.empty) sawEmpty = true; else sawFilled = true;
+    eq("a 5-slot list rolls d10", n.die, 10);
+  }
+  ok("an empty slot is reported as empty", sawEmpty);
+  ok("a written slot comes up too", sawFilled);
+
+  // the compulsion: force never returns an empty slot when the list has an entry
+  let forcedEmpty = false;
+  for (let i = 0; i < 200; i++) {
+    const n = roller.invokeNode(scope, "world", { force: true });
+    if (n.empty) forcedEmpty = true;
+  }
+  ok("force never returns an empty slot", !forcedEmpty);
+
+  // the compulsion terminates even against an all-empty list
+  const blank = roller.invokeNode(scope, "problems", { force: true });
+  ok("force on an empty list terminates rather than hanging", blank.empty === true);
+
+  // deliberate invocation bypasses the die
+  const chosen = roller.invokeNode(scope, "world", { chosen: 0 });
+  eq("a chosen node bypasses the die", chosen.dice.length, 0);
+  eq("a chosen node returns its text", chosen.text, "a storm");
+
+  // a sheet with no nodes reports unavailable rather than guessing
+  store.addScope({ name: "Improv", sheetId: "improvised" });
+  const impro = store.currentScope();
+  const none = roller.invokeNode(impro, "world");
+  ok("a nodeless sheet reports the list unavailable", none.unavailable === true);
+  store.setActiveScope(scope.id);
+}
+
+// the gate, the escalation and the threshold
+{
+  const before = derived.crossed(store.currentScope());
+  const out = store.confirmBeat({ label: "test" });
+  eq("confirming crosses exactly one box", out.crossed, before + 1);
+  store.uncrossBox();
+  eq("an unconfirmed beat leaves the track where it was", derived.crossed(store.currentScope()), before);
+
+  for (let i = 0; i < 40; i++) store.confirmBeat({});
+  const sc = store.currentScope();
+  eq("crossing stops at the last box", derived.crossed(sc), derived.trackLength(sc));
+  ok("the threshold has flipped", derived.isResolved(sc));
+  const past = store.confirmBeat({});
+  ok("confirming a full track reports resolved without overrunning", past.resolved && past.crossed === derived.trackLength(sc));
+}
+
+// timed beats fire exactly once
+{
+  store.addScope({ name: "Timed", sheetId: "standard" });
+  store.setMark(2, "The horde arrives");
+  store.confirmBeat({}); store.confirmBeat({});
+  const third = store.confirmBeat({});
+  eq("arriving at a marked box fires it", third.mark, "The horde arrives");
+  store.uncrossBox();
+  const again = store.confirmBeat({});
+  ok("a fired mark does not fire twice", !again.mark);
+}
+
+// voluntary advance is journalled as such, and every roll writes exactly one entry
+{
+  const g0 = store.activeGame().journal.length;
+  roller.journalRoll(roller.rollProposal(), { title: "one entry" });
+  eq("a roll writes exactly one journal entry", store.activeGame().journal.length, g0 + 1);
+}
+
+// custom track and custom prompt column persist and roll
+{
+  store.addScope({ name: "Custom", sheetId: "customized" });
+  eq("a customized sheet starts with no track", derived.trackLength(store.currentScope()), 0);
+  store.addTrackSection("Act one", 3);
+  eq("a grown section counts", derived.trackLength(store.currentScope()), 3);
+  store.addTrackBox(0);
+  eq("boxes can be added to a section", derived.trackLength(store.currentScope()), 4);
+  store.confirmBeat({});
+  eq("a custom box crosses", derived.crossed(store.currentScope()), 1);
+  store.removeTrackSection(0);
+  eq("removing a section clamps the crossing", derived.crossed(store.currentScope()), 0);
+
+  const column = Array.from({ length: 10 }, () => ({ label: "Meet someone", node: "characters" }));
+  store.setCustomPrompts(column);
+  const sc = store.currentScope();
+  eq("a custom column persists", sc.customPrompts.length, 10);
+  const p = roller.rollPrompt(sc);
+  eq("a custom column is what gets rolled", p.text, "Meet someone");
+  store.setCustomPrompts(null);
+  ok("a custom column can be cleared", store.currentScope().customPrompts === null);
+}
+
+// undo
+{
+  const title = store.activeGame().title;
+  store.updateGame({ title: "Renamed" });
+  eq("a mutation applies", store.activeGame().title, "Renamed");
+  store.undo();
+  eq("undo restores the previous state", store.activeGame().title, title);
+}
+
+// export round-trips
+{
+  const json = store.exportJSON();
+  const count = store.games().length;
+  const n = store.importJSON(json);
+  eq("an export re-imports the same number of games", n, count);
+  ok("the export is human-readable JSON", json.includes('"app": "unfolding-machines"'));
+}
+
+// the scene arc
+{
+  store.openScene("Describe the current location");
+  ok("a scene is open", !!store.currentScope().openScene);
+  store.addIntervention("Something breaks");
+  eq("interventions accumulate on the open scene", store.currentScope().openScene.interventions.length, 1);
+  const closed = store.closeScene();
+  ok("closing returns the scene that was open", !!closed);
+  ok("closing a scene leaves none open", store.currentScope().openScene === null);
+  eq("closing when none is open returns nothing", store.closeScene(), null);
+}
+
+// the disruption cascade widens correctly
+{
+  const settings = await import("../src/settings.js");
+  settings.Settings.setDisruptionDie(true);
+  settings.Settings.setDisruptionVolatile(false);
+  const faces = new Map();
+  for (let i = 0; i < 4000; i++) {
+    const r = roller.rollOracle({ oracleId: "someone" });
+    if (r.disruption) faces.set(r.disruption.roll, r.disruption.fires);
+  }
+  eq("a 1 always fires a random prompt", faces.get(1), "prompt");
+  eq("a 2 fires a modified proposal", faces.get(2), "proposal");
+  eq("a 3 fires nothing by default", faces.get(3), null);
+  settings.Settings.setDisruptionVolatile(true);
+  const wide = new Map();
+  for (let i = 0; i < 4000; i++) {
+    const r = roller.rollOracle({ oracleId: "someone" });
+    if (r.disruption) wide.set(r.disruption.roll, r.disruption.fires);
+  }
+  eq("volatile widens the proposal range to 5", wide.get(5), "proposal");
+  eq("volatile leaves 6 alone", wide.get(6), null);
+  eq("1 stays the sole face for a random prompt", wide.get(1), "prompt");
+  settings.Settings.setDisruptionDie(false);
+  const off = roller.rollOracle({ oracleId: "someone" });
+  ok("the disruption die is silent when off", off.disruption === null);
+}
+
+// --- report -----------------------------------------------------------------
+console.log(`\n${pass} passed, ${fail} failed`);
+if (failures.length) {
+  console.log("\nFailures:");
+  for (const f of failures) console.log("  ✗ " + f);
+  process.exit(1);
+}
+console.log("All green.\n");

@@ -1,0 +1,17 @@
+{
+  "name": "unfolding-machines",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dev-only harnesses for the Unfolding Machines play aid. The app itself has no build step and no runtime dependencies.",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/harness.mjs",
+    "smoke": "node tests/smoke.mjs",
+    "audit": "node tests/interaction.mjs",
+    "probe": "node tests/probe-layout.mjs",
+    "deadcode": "node tests/deadcode.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.62.1"
+  }
+}

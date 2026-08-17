@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "theme": "system",
+  "textScale": 1,
+  "settings": {
+    "disruptionDie": false,
+    "disruptionVolatile": false,
+    "autoEnrich": true,
+    "seenTutorial": false
+  },
+  "activeGameId": null,
+  "games": []
+}

@@ -1,2 +1,70 @@
-# pum-sum
-PUM SUM
+# Unfolding Machines
+
+A solo-storytelling play aid for **PUM — Plot Unfolding Machine v9.0** and **SUM — Scene
+Unfolding Machine v8.0 Rev2** by JeansenVaars.
+
+An installable PWA with no build step: clone it, serve the folder, and it runs. Everything is
+stored in your browser's `localStorage`; nothing is sent anywhere.
+
+## What it does
+
+| | |
+|---|---|
+| **Game prep** | PUM's four steps — universe → plot scope → protagonists → plot sheet → plot nodes — plus the starting point |
+| **The plot sheet** | All eleven plot tracks with their measured box counts, plot nodes, beat controls, timed beats |
+| **Plot beats** | Modified proposals and random prompts, the ABCD random events, node invocation with add/choose/reroll, the disruption die |
+| **Oracles** | Yes/No in three registers, the granular d100 variant, six descriptive and six story oracles with d100 enrichment, quantifiers |
+| **Scenes** | SUM's whole arc — opener, intervention check, closure — plus exploration, battle and discovery tables |
+| **Characters** | SUM's four depths of acquaintance, rolled from a cast entry and stored with that person |
+| **Journal** | Every roll with its dice, your own notes, filters, paging, and a per-face distribution view |
+| **Teaching** | A "what this does" note on every screen, a searchable rules library citing the books' pages, and a first-session walkthrough |
+
+## What it deliberately does not do
+
+- **It never resolves a task.** PUM is system-agnostic: bring your own RPG's rules, or
+  narrate the outcome. The app says what the world offers, never whether you succeeded.
+- **No safety tools.** Neither book ships any, so none is invented and presented as theirs.
+  Settings says so plainly.
+- **No multiplayer.** PUM's group mode is one device passed around a table; there is no sync
+  phase and no account.
+- **No setting content.** Core rules only. Effect text is paraphrased, never reproduced.
+
+## Running it
+
+```sh
+python3 -m http.server 8000     # or any static server
+# open http://localhost:8000
+```
+
+Service workers and installation need `http(s)://`, not `file://`.
+
+## Development
+
+No runtime dependencies. The harnesses are dev-only.
+
+```sh
+npm test              # parse gate + data and engine invariants (seconds)
+npm run deadcode      # the dead-data scan: rules extracted and never called
+npm run smoke         # browser smoke: every route, three widths, the end-to-end walk
+npm run audit         # interaction audit: clicks every control in isolation
+npm run probe         # measured layout table (a probe prints; it does not assert)
+node tests/make-fixtures.mjs   # regenerate the seed fixtures after a schema change
+```
+
+`CLAUDE.md` is the project's canonical spec — the completed System Profile, the extraction
+and traceability ledgers, and the rulings taken where the books were ambiguous. Change code,
+change that file in the same commit. Any change to a shipped file bumps `CACHE_VERSION` in
+`service-worker.js`.
+
+`docs/rules/` holds the distilled per-subsystem reference the audit reads against the engine;
+`docs/AUDIT.md` records numbered findings pass by pass.
+
+## Licensing
+
+PUM and SUM are © JeansenVaars, licensed **CC BY-NC-SA 4.0**, sold on
+[itch.io](https://jeansenvaars.itch.io) and DriveThruRPG. Support the author — this app is not
+a substitute for the books, and it assumes you own them.
+
+This repository is a **personal play aid** built from those books. It carries numbers and
+mechanics with page citations, paraphrased in its own words, and no setting, adventure or art
+content. If you publish or distribute it, the licensing is your responsibility.

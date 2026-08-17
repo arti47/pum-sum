@@ -1,0 +1,14 @@
+{
+  "name": "Unfolding Machines — PUM + SUM play aid",
+  "short_name": "Unfolding",
+  "description": "A solo play aid for the Plot Unfolding Machine v9 and Scene Unfolding Machine v8.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f1e3",
+  "theme_color": "#f7f1e3",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
