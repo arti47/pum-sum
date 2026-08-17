@@ -404,6 +404,25 @@ same change; all rules values live in `data-*.js` and are never hardcoded in `sr
 shipped-file change bumps `CACHE_VERSION`; a permission the books grant is a control, never a
 sentence; every flag has a setter, a reader and a clearer.
 
+### 7.1 Git workflow — standing instruction
+
+**Work lands on `main`.** Develop on a branch if it helps, but every finished change is merged
+into `main` and pushed — do not leave completed work parked on a feature branch waiting for a
+pull request. No permission is needed for this: it is the standing instruction recorded here.
+
+**`CLAUDE.md` is updated in the same change, every time.** This is the template's §10.1 rule
+and it is not optional: a code change with a stale spec is an incomplete change. In practice
+that means, for any change worth committing:
+
+- the file tables (§4.1, §4.2) if a file was added, moved or removed;
+- the data model (§4.3) if a stored field changed, together with its normalization path;
+- the extraction ledger (§5.1) and the traceability ledger (§5.2) for any new rule or table;
+- the roadmap (§6) and a dated changelog row (§8) recording what, why, how it was verified,
+  and the cache version.
+
+**Merge only green work.** Before merging to `main`: `npm test`, `npm run deadcode`, and
+`npm run smoke` at minimum; the full cycle (§11 of the template) at the end of a phase.
+
 ## 8. Changelog
 
 | Date | Change | Verification | Cache |
