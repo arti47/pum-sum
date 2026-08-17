@@ -116,6 +116,18 @@ export function renderTutorial(host) {
     add(host, card);
   }
 
+  // The same content lives as a page and as docs/TUTORIAL.md in the repo. The
+  // app works offline without either; this is for reading on a second screen.
+  if (TUTORIAL_META.page) {
+    const card = el("div", { class: "card" });
+    add(card, el("h3", { text: "Read it on a bigger screen" }));
+    add(card, el("p", { class: "muted", text: TUTORIAL_META.pageNote }));
+    add(card, el("a", {
+      class: "btn wide", href: TUTORIAL_META.page, target: "_blank", rel: "noopener",
+    }, "Open the guide as a page →"));
+    add(host, card);
+  }
+
   add(host, el("div", { class: "card" },
     el("h3", { text: "The books" }),
     el("p", { class: "muted", text: TUTORIAL_META.licence })

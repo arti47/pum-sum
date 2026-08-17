@@ -4,6 +4,8 @@
 
 *Generated from `data-tutorial.js` by `tests/tools/gen-tutorial.mjs`. Edit the data, not this file.*
 
+The same guide is inside the app at **More → Tutorial**, where it also reproduces the tables in full. It is published as a page at <https://claude.ai/code/artifact/9dceec5c-346c-4e54-95a3-7cdfbdd7fcff>.
+
 ---
 
 ## Your first session in ten minutes
@@ -730,7 +732,7 @@ Each of these opens over the screen, traps focus, closes on Escape, and returns 
 - This game · Plot sheet — the two edit dialogs on Home.
 - Export / Readable export — Copy, Download, Close. Import. Data check. Erase everything?
 - Rules → “Clear the search” when a search matches nothing. Journal → “Go to the oracles” and “Go to the plot sheet” when it is empty. Plot nodes → “Back to the track” on a sheet with no nodes.
-- Tutorial → “Mark as read”, which stops the quick start offering it again.
+- Tutorial → “Mark as read”, which stops the quick start offering it again, and “Open the guide as a page →”, which opens this same guide as a web page for a second screen.
 
 ### What the journal calls things
 

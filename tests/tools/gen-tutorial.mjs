@@ -21,6 +21,9 @@ w(`> ${TUTORIAL_META.blurb}`);
 w();
 w("*Generated from `data-tutorial.js` by `tests/tools/gen-tutorial.mjs`. Edit the data, not this file.*");
 w();
+w("The same guide is inside the app at **More → Tutorial**, where it also reproduces the tables in full."
+  + (TUTORIAL_META.page ? ` It is published as a page at <${TUTORIAL_META.page}>.` : ""));
+w();
 w("---");
 w();
 w("## Your first session in ten minutes");
@@ -254,7 +257,7 @@ a{color:var(--accent-text)}
 
   <footer>
     <p>${esc(TUTORIAL_META.licence)}</p>
-    <p class="cite">Generated from data-tutorial.js — the same content the app renders.</p>
+    <p class="cite">Generated from data-tutorial.js — the same content the app renders at More → Tutorial, where the tables appear in full.</p>
   </footer>
 </div>
 

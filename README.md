@@ -62,6 +62,19 @@ change that file in the same commit. Any change to a shipped file bumps `CACHE_V
 `docs/rules/` holds the distilled per-subsystem reference the audit reads against the engine;
 `docs/AUDIT.md` records numbered findings pass by pass.
 
+## Documentation
+
+**[docs/TUTORIAL.md](docs/TUTORIAL.md)** is the complete guide — every function of the app,
+four worked scenarios on four structurally different plot sheets, and a screen-by-screen
+reference. It is *generated* from `data-tutorial.js` by `npm run tutorial`; edit the data, not
+the markdown, and the harness will tell you if the two drift apart.
+
+The same guide is inside the app at **More → Tutorial**, where it opens with an eleven-step
+quick start and reproduces the referenced tables in full. A third rendering is published as a
+web page for reading on a second screen while you play on the first.
+
+`CLAUDE.md` is the canonical spec and is updated in the same change as the code it describes.
+
 ## Licensing
 
 PUM, SUM and GUM are © JeansenVaars, licensed **CC BY-NC-SA 4.0**, sold on
