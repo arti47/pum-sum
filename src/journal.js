@@ -95,7 +95,7 @@ function renderEntries(host, game) {
         multiline: true,
         onSubmit: (v) => {
           store.addJournal({ kind: "session", title: "— session break —", detail: v });
-          toast("Marked.");
+          toast("Marked.", { undo: true });
           render();
         },
       }),
@@ -124,7 +124,10 @@ function entryEl(e) {
   }
   if (e.linkedTo) add(wrap, el("div", { class: "cite", text: "↳ follows an earlier roll" }));
   if (e.note) add(wrap, el("div", { class: "entry-note", text: e.note }));
-  const tools = el("div", { class: "btn-row", style: "margin-top:.35rem" });
+  // Two permanent buttons per entry meant 40 controls of furniture around 20
+  // entries — the second-densest screen in the app, most of it not content.
+  // They live behind the entry's own disclosure now.
+  const tools = el("div", { class: "btn-row" });
   add(tools, el("button", {
     class: "btn small ghost",
     onclick: () => promptModal({
@@ -142,7 +145,10 @@ function entryEl(e) {
       onConfirm: () => { store.removeJournal(e.id); render(); },
     }),
   }, "Delete"));
-  add(wrap, tools);
+  add(wrap, el("details", { class: "entry-tools" },
+    el("summary", null, "Edit"),
+    tools
+  ));
   return wrap;
 }
 
@@ -206,7 +212,7 @@ function renderDice(host, game) {
       title: "Clear the journal?",
       message: `All ${game.journal.length} entries in this game are deleted — every roll, note and scene record. Export first if you want to keep them. This can be undone once from Settings.`,
       confirmLabel: "Clear the journal", danger: true,
-      onConfirm: () => { store.clearJournal(); shown = PAGE; toast("Journal cleared."); render(); },
+      onConfirm: () => { store.clearJournal(); shown = PAGE; toast("Journal cleared.", { undo: true }); render(); },
     }),
   }, "Clear the journal"));
 }

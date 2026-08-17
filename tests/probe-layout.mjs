@@ -17,7 +17,7 @@ const state = JSON.parse(readFileSync(join(root, `tests/fixtures/${file}.json`),
 
 const ROUTES = [
   ["play", "track"], ["play", "nodes"], ["play", "cast"],
-  ["forge", "seed"], ["forge", "world"], ["forge", "character"], ["forge", "grand"],
+  ["more", "forge"],
   ["oracles", "yesno"], ["oracles", "descriptive"], ["oracles", "story"],
   ["oracles", "granular"], ["oracles", "quantifiers"],
   ["scene", "arc"], ["scene", "explore"], ["scene", "battle"],

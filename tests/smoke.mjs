@@ -16,7 +16,7 @@ const FIXTURES = {
 
 const ROUTES = [
   ["play", "track"], ["play", "nodes"], ["play", "cast"],
-  ["forge", "seed"], ["forge", "world"], ["forge", "character"], ["forge", "grand"],
+  ["more", "forge"],
   ["oracles", "yesno"], ["oracles", "descriptive"], ["oracles", "story"],
   ["oracles", "granular"], ["oracles", "quantifiers"],
   ["scene", "arc"], ["scene", "explore"], ["scene", "battle"],
@@ -184,7 +184,7 @@ for (const width of WIDTHS) {
   const { ctx, page } = await newPage(FIXTURES.mid);
   const tabs = await page.evaluate(async () => {
     const r = await import("./src/router.js");
-    return r.TABS.map((t) => ({ id: t.id, sections: t.sections }));
+    return r.TABS.map((t) => ({ id: t.id, sections: r.liveSections(t) }));
   });
   for (const t of tabs) {
     for (const s of t.sections) {
@@ -199,6 +199,68 @@ for (const width of WIDTHS) {
       ok(`${t.id}/${s} section nav reaches every sibling`, nav.n >= t.sections.length,
         `${nav.n} of ${t.sections.length}`);
     }
+  }
+  await ctx.close();
+}
+
+// --- 5b. the Forge's own second-level nav ----------------------------------
+// The Forge is a section of More now, so the route walk reaches only its first
+// screen. Its four sub-screens are driven the way a player drives them.
+{
+  const { ctx, page, errors } = await newPage(FIXTURES.mid, 320);
+  await goto(page, "more", "forge");
+  const pills = await page.locator("#screen .section-nav").nth(1).locator("button").allTextContents();
+  ok("the Forge carries its own nav", pills.length === 4, pills.join("|"));
+  for (let i = 0; i < pills.length; i++) {
+    await page.evaluate((idx) => {
+      document.querySelectorAll("#screen .section-nav")[1].querySelectorAll("button")[idx].click();
+    }, i);
+    await page.waitForTimeout(80);
+    const h = await page.locator("#screen h1").first().textContent().catch(() => null);
+    ok(`Forge/${pills[i]} renders a heading`, !!h && h.trim().length > 0);
+    const over = await page.evaluate(() =>
+      document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    ok(`Forge/${pills[i]} no horizontal overflow at 320px`, over <= 1, `${over}px`);
+    const cur = await page.evaluate(() =>
+      document.querySelectorAll("#screen .section-nav")[1].querySelectorAll('[aria-current="true"]').length);
+    ok(`Forge/${pills[i]} marks itself current`, cur === 1, `${cur} marked`);
+  }
+  ok("the Forge sub-nav produced no console errors", errors.length === 0, errors.slice(0, 2).join(" | "));
+  await ctx.close();
+}
+
+// --- 5c. five tabs, and the Forge reachable from More ----------------------
+{
+  const { ctx, page } = await newPage(FIXTURES.mid, 320);
+  const tabs = await page.evaluate(() =>
+    [...document.querySelectorAll(".tab-bar button")].map((b) => ({
+      label: b.textContent, w: Math.round(b.getBoundingClientRect().width),
+    })));
+  ok("five tabs, not six", tabs.length === 5, tabs.map((t) => t.label).join("|"));
+  ok("each tab is at least 60px wide at 320px", Math.min(...tabs.map((t) => t.w)) >= 60,
+    `narrowest ${Math.min(...tabs.map((t) => t.w))}px`);
+  await ctx.close();
+}
+
+// --- 5d. undo is reachable from the toast that raised it -------------------
+{
+  const { ctx, page } = await newPage(FIXTURES.mid);
+  await goto(page, "play", "track");
+  const before = await page.locator("#plot-header .ph-count").textContent();
+  await page.getByRole("button", { name: "Advance without a beat" }).click();
+  await page.waitForTimeout(120);
+  await page.getByRole("button", { name: "Cross the next box" }).click();
+  await page.waitForTimeout(300);
+  // dismiss a timed-beat / resolved dialog if one fired
+  const anyBtn = page.locator(".modal-actions .btn").first();
+  if (await anyBtn.count()) { await anyBtn.click(); await page.waitForTimeout(120); }
+  const undo = page.locator(".toast .toast-undo");
+  ok("a track advance offers Undo in its toast", await undo.count() > 0);
+  if (await undo.count()) {
+    await undo.first().click();
+    await page.waitForTimeout(200);
+    const after = await page.locator("#plot-header .ph-count").textContent();
+    ok("and tapping it puts the box back", after.trim() === before.trim(), `${before} → ${after}`);
   }
   await ctx.close();
 }

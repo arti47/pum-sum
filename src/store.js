@@ -50,9 +50,23 @@ function emit() {
 
 // --- undo -------------------------------------------------------------------
 // Every mutating action pushes a snapshot. Reversibility is inventoried (§10.18).
+// Inside a transaction the group's own snapshot already covers what follows, so
+// intermediate ones are suppressed: one player action must be one undo, or the
+// Undo button beside it takes back only the journal entry and leaves the box
+// crossed.
+let groupDepth = 0;
+
 function snapshot(label) {
+  if (groupDepth > 0) return;
   undoStack.push({ label, json: JSON.stringify(state), ts: Date.now() });
   if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+}
+
+// One snapshot for the whole of `fn`, however many mutations it performs.
+export function transact(label, fn) {
+  snapshot(label);
+  groupDepth += 1;
+  try { return fn(); } finally { groupDepth -= 1; }
 }
 
 export function canUndo() { return undoStack.length > 0; }

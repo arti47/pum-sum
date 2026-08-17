@@ -12,7 +12,8 @@ import {
 import { sectionNav, go, render } from "./router.js";
 import { startWizard, inWizard, renderWizard, addScopeDialog } from "./wizard.js";
 import { renderTutorial } from "./tutorial.js";
-import { RULES_LIBRARY } from "../data-rules-library.js";
+import { renderForge } from "./forge.js";
+import { RULES_LIBRARY, GLOSSARY } from "../data-rules-library.js";
 import { PLAY_STATES, FLOWCHART, ADVICE, ADVANCED, MACHINES } from "../data-guidance.js";
 import { PUM_ERRATA, NODE_CATEGORIES } from "../data-pum-plot.js";
 import { GUM_ERRATA, INSPIRE_ABSENT } from "../data-gum.js";
@@ -33,6 +34,7 @@ export function renderMore(host, section) {
         "Back to preparing it")
     ));
   }
+  if (section === "forge") return renderForge(host);
   if (section === "library") return renderLibrary(host);
   if (section === "tutorial") return renderTutorial(host);
   if (section === "settings") return renderSettings(host);
@@ -309,12 +311,23 @@ function renderLibrary(host) {
 
   const q = ruleSearch.trim().toLowerCase();
   let hits = 0;
+  add(host, glossaryCard(q));
   for (const group of RULES_LIBRARY) {
     const entries = group.entries.filter((e) =>
       !q || e.title.toLowerCase().includes(q) || e.body.toLowerCase().includes(q));
     if (!entries.length) continue;
+    // Forty collapsed entries still made a 4.7-screen wall. The groups fold too,
+    // and a search opens whatever it matched.
     const card = el("div", { class: "card" });
-    add(card, el("h3", { text: group.group }));
+    const groupBody = el("div");
+    const groupFold = el("details", { class: "acc group" , open: (!!q) || undefined },
+      el("summary", null,
+        group.group,
+        el("span", { class: "pill", text: String(entries.length) })
+      ),
+      groupBody
+    );
+    add(card, groupFold);
     for (const e of entries) {
       hits += 1;
       const open = (!!q) || pendingRuleId === e.id;
@@ -328,8 +341,8 @@ function renderLibrary(host) {
           el("p", { class: "cite", text: e.page })
         )
       );
-      if (pendingRuleId === e.id) d.classList.add("flash");
-      add(card, d);
+      if (pendingRuleId === e.id) { d.classList.add("flash"); groupFold.open = true; }
+      add(groupBody, d);
     }
     add(host, card);
   }
@@ -351,6 +364,30 @@ function renderLibrary(host) {
       if (node) node.scrollIntoView({ block: "center" });
     });
   }
+}
+
+// "What is a plot scope?" has no answer in a library organised rule by rule.
+function glossaryCard(q) {
+  const terms = GLOSSARY.filter((g) => !q
+    || g.term.toLowerCase().includes(q) || g.body.toLowerCase().includes(q));
+  if (!terms.length) return null;
+  const card = el("div", { class: "card" });
+  const body = el("div");
+  const fold = el("details", { class: "acc group", open: (!!q) || undefined },
+    el("summary", null, "Glossary", el("span", { class: "pill", text: String(terms.length) })),
+    body
+  );
+  for (const g of terms) {
+    add(body, el("div", { class: "defrow" },
+      el("span", { class: "k", text: g.term }),
+      el("span", { class: "v" },
+        g.body,
+        el("span", { class: "cite", text: " " + g.page })
+      )
+    ));
+  }
+  add(card, fold);
+  return card;
 }
 
 function guidanceCard() {
@@ -557,7 +594,7 @@ function renderSettings(host) {
         title: `Delete "${game.title}"?`,
         message: `Its ${game.scopes.length} plot sheet(s), ${game.cast.length} cast entries and ${game.journal.length} journal entries are deleted. Export first if you want to keep them.`,
         confirmLabel: "Delete this game", danger: true,
-        onConfirm: () => { store.deleteGame(game.id); toast("Game deleted."); go("more", "home"); },
+        onConfirm: () => { store.deleteGame(game.id); toast("Game deleted.", { undo: true }); go("more", "home"); },
       }),
     }, "Delete the current game"));
   }
@@ -567,7 +604,7 @@ function renderSettings(host) {
       title: "Erase everything?",
       message: `All ${store.games().length} game(s), every plot sheet, every journal entry and every setting on this device are erased. Export first if you want to keep them.`,
       confirmLabel: "Erase everything", danger: true,
-      onConfirm: () => { store.resetAll(); applyTheme(); toast("Erased."); go("more", "home"); },
+      onConfirm: () => { store.resetAll(); applyTheme(); toast("Erased.", { undo: true }); go("more", "home"); },
     }),
   }, "Erase everything"));
   add(host, danger);

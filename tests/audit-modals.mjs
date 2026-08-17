@@ -15,7 +15,7 @@ const ROUTES = [
   ["play", "track"], ["play", "nodes"], ["play", "cast"],
   ["scene", "arc"], ["scene", "explore"], ["scene", "people"],
   ["oracles", "yesno"], ["oracles", "granular"],
-  ["forge", "seed"], ["forge", "world"], ["forge", "grand"],
+  ["more", "forge"],
   ["journal", "entries"], ["journal", "dice"],
   ["more", "home"], ["more", "library"], ["more", "settings"],
 ];

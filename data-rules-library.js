@@ -1,6 +1,24 @@
 // One entry per automated rule, in the app's own words, with the page cited.
 // Every automated surface links here by id (template §6.6 layer 2).
 
+// The rules library is organised rule by rule, which answers "how does this
+// work" and not "what is this word". Twelve terms, plainly, for the reader who
+// has just met them in the wizard.
+export const GLOSSARY = [
+  { term: "Plot scope", page: "PUM p.3", body: "One defined mission, task or goal — the thread this plot sheet is about. A long game is several scopes, one after another." },
+  { term: "Plot sheet", page: "PUM pp.14-23", body: "The pacing choice for a scope: how long the track is, how it is sectioned, and what the ten prompt faces reach for. Ten of them are printed; you pick one per scope." },
+  { term: "Plot track", page: "PUM p.7", body: "The row of boxes. Each confirmed beat crosses the next one, and a full track means the scope has resolved. It is a compass against wandering, not a clock." },
+  { term: "Plot beat", page: "PUM p.4", body: "The moment you hand the story to the machine. Two kinds: a modified proposal and a random prompt." },
+  { term: "Modified proposal", page: "PUM p.14", body: "You have an idea what happens next; 1d10 twists it — the location, the mood, someone arriving, the intensity." },
+  { term: "Random prompt", page: "PUM p.14", body: "You do not have an idea; 1d10 on your sheet's own column tells you what the story reaches for — a random event, or one of your plot nodes." },
+  { term: "Plot node", page: "PUM p.28", body: "Your game's own content, written in lists: world elements, potential problems, useful findings, pending questions, and on the extension sheet notable characters and interesting locations. A prompt rolls on one of these lists." },
+  { term: "Confirming a beat", page: "PUM p.7", body: "Deciding, after you have played the beat out, that it mattered enough to cross a box. Calling a beat permits this; it never requires it." },
+  { term: "Oracle", page: "PUM p.8", body: "A table you ask when you genuinely do not know, or would rather not decide. Yes/No, descriptive, story, quantifier and the granular variant." },
+  { term: "Register", page: "PUM p.12", body: "Who is answering a Yes/No question: the universe (Deterministic), a character's own view (Subjective), or someone talking to you (Conversation)." },
+  { term: "Rule of Bias", page: "SUM p.3", body: "SUM's rule: roll twice and keep the lowest if you expect things to favour the PCs, the highest if you expect trouble. Distinct from PUM's bias, where you roll twice and choose." },
+  { term: "Scene arc", page: "SUM p.4", body: "SUM's three boundary rolls: an opener when you do not know how a scene begins, an intervention check when it stalls, and a closure to see how the world responds." },
+];
+
 export const RULES_LIBRARY = [
   {
     group: "Playing the game",

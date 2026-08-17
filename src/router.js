@@ -11,13 +11,16 @@ export const TABS = [
   { id: "play",    icon: "▤", label: "Play",    sections: ["track", "nodes", "cast"] },
   { id: "scene",   icon: "◗", label: "Scene",   sections: ["arc", "explore", "battle", "discovery", "people"] },
   { id: "oracles", icon: "◇", label: "Oracles", sections: ["yesno", "descriptive", "story", "granular", "quantifiers"] },
-  { id: "forge",   icon: "✦", label: "Forge",   sections: ["seed", "world", "character", "grand"], gated: "gum" },
   { id: "journal", icon: "✎", label: "Journal", sections: ["entries", "dice"] },
-  { id: "more",    icon: "≡", label: "More",    sections: ["home", "library", "tutorial", "settings"] },
+  // The Forge is prep, not play: it lives under More so the tab bar stays five
+  // wide. At 320px six tabs are 53px each; five are 64px, and the tab bar is the
+  // most-used control in the app.
+  { id: "more",    icon: "≡", label: "More",    sections: ["home", "forge", "library", "tutorial", "settings"], gatedSections: { forge: "gum" } },
 ];
 
 const SECTION_LABELS = {
   track: "Plot track", nodes: "Plot nodes", cast: "Cast",
+  forge: "Forge",
   seed: "Plot seed", world: "World", character: "Characters", grand: "Grand oracle",
   yesno: "Yes or No", descriptive: "Descriptive", story: "Story",
   granular: "Granular", quantifiers: "Quantifiers",
@@ -32,12 +35,19 @@ const renderers = new Map();
 
 export function registerScreen(tab, fn) { renderers.set(tab, fn); }
 
+// A tab's live sections: a gated one disappears with its toggle (§8).
+export function liveSections(t) {
+  if (!t.gatedSections) return t.sections;
+  return t.sections.filter((s) => !t.gatedSections[s] || Settings[t.gatedSections[s]]());
+}
+
 export function go(tab, section = null) {
   const t = TABS.find((x) => x.id === tab) || TABS[0];
   // A gated route reached directly explains itself rather than silently
   // redirecting (§8) — the screen renders and offers to switch the toggle on.
   current.tab = t.id;
-  current.section = section && t.sections.includes(section) ? section : t.sections[0];
+  const live = liveSections(t);
+  current.section = section && live.includes(section) ? section : live[0];
   render();
   const screen = $("#screen");
   if (screen) { screen.scrollTop = 0; window.scrollTo(0, 0); }
@@ -58,16 +68,11 @@ function liveState() {
   };
 }
 
-// A gated tab is hidden by the router when its toggle is off (§8).
-function visibleTabs() {
-  return TABS.filter((t) => !t.gated || Settings[t.gated]());
-}
-
 export function renderTabs() {
   const bar = $("#tab-bar");
   clear(bar);
   const live = liveState();
-  for (const t of visibleTabs()) {
+  for (const t of TABS) {
     const btn = el("button", {
       onclick: () => go(t.id),
       "aria-current": current.tab === t.id ? "page" : null,
@@ -87,7 +92,7 @@ export function sectionNav(tabId, activeSection, badges = {}) {
   const t = TABS.find((x) => x.id === tabId);
   if (!t || t.sections.length < 2) return null;
   const nav = el("nav", { class: "section-nav", "aria-label": t.label + " sections" });
-  for (const s of t.sections) {
+  for (const s of liveSections(t)) {
     const btn = el("button", {
       onclick: () => goSection(s),
       "aria-current": s === activeSection ? "true" : "false",

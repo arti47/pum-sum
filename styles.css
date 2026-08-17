@@ -562,3 +562,39 @@ details.inspire .body {
 details.inspire .btn-row {
   margin-top: .3rem;
 }
+
+/* --- undo inside the toast -------------------------------------------------
+   The safety net has to be within reach of the thing it undoes, not four moves
+   away in Settings. */
+.toast-undo {
+  pointer-events: auto;   /* the pill stays inert; only this button is live */
+  margin-left: .6rem;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  border-radius: var(--r-sm, 6px);
+  padding: .15rem .55rem;
+  font: inherit;
+  font-weight: 600;
+  min-height: 32px;
+  cursor: pointer;
+}
+
+/* --- journal entry tools, folded away -------------------------------------- */
+details.entry-tools > summary {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  font-size: .78rem;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+details.entry-tools[open] > summary { margin-bottom: .2rem; }
+
+/* --- a collapsible group in the rules library ------------------------------ */
+details.acc.group > summary {
+  font-weight: 600;
+}
+details.acc.group > summary .pill {
+  margin-left: auto;
+}

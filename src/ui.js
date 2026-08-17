@@ -64,10 +64,29 @@ export function closeModal() {
   if (prevFocus && prevFocus.focus) prevFocus.focus();
 }
 
-export function toast(text, ms = 2600) {
+// Undo lives in one stack in the store, but ui.js is the primitive layer, so the
+// boot registers the two functions it needs rather than ui.js importing them.
+let undoProvider = null;
+
+export function registerUndo(fn) { undoProvider = fn; }
+
+// `undo: true` puts an Undo button in the toast. Before this, the only way back
+// from a mis-tap was More → Settings → scroll → Undo, four moves away from the
+// thing you were doing — which is not a safety net anyone reaches in play.
+export function toast(text, { ms = 2600, undo = false } = {}) {
   const mount = $("#toast-mount");
   if (!mount) return;
-  const t = el("div", { class: "toast", text });
+  const t = el("div", { class: "toast" }, text);
+  if (undo && undoProvider && undoProvider.can()) {
+    // Only the button takes pointer events. Making the whole pill clickable
+    // covered the action bar beneath it — the toast sits directly above it —
+    // and the primary control became unclickable for as long as a toast showed.
+    add(t, el("button", {
+      class: "toast-undo",
+      onclick: () => { undoProvider.undo(); t.remove(); },
+    }, "Undo"));
+    ms = Math.max(ms, 5200);   // long enough to notice, read and reach
+  }
   mount.append(t);
   setTimeout(() => t.remove(), ms);
 }

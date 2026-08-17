@@ -13,7 +13,7 @@ import * as store from "./store.js";
 import { rollGum, rollGumSet, journalRoll, diceText } from "./roller.js";
 import { gumTable, gumSection } from "./rules.js";
 import { nodeSlots, categoryName } from "./derived.js";
-import { sectionNav, render, go } from "./router.js";
+import { render, go } from "./router.js";
 import { Settings } from "./settings.js";
 import { openRule } from "./screens.js";
 import { registerClearer } from "./viewstate.js";
@@ -23,11 +23,17 @@ import { NODE_CATEGORIES } from "../data-pum-plot.js";
 
 // The last result, held so a re-render never re-rolls it (§5.1).
 let last = null;
+// The Forge is a section of More rather than a tab of its own, so it carries its
+// own second-level nav — the same shape the Journal uses for its filters.
+let forgeSection = "seed";
+const FORGE_SECTIONS = [
+  ["seed", "Plot seed"], ["world", "World"], ["character", "Characters"], ["grand", "Grand oracle"],
+];
 
 function resetForge() { last = null; }
 registerClearer(resetForge);
 
-export function renderForge(host, section) {
+export function renderForge(host) {
   if (!Settings.gum()) {
     add(host, el("h1", { text: "Forge" }));
     add(host, emptyState(
@@ -38,11 +44,18 @@ export function renderForge(host, section) {
     return;
   }
 
-  add(host, sectionNav("forge", section));
+  const nav = el("nav", { class: "section-nav", "aria-label": "Forge sections" });
+  for (const [id, label] of FORGE_SECTIONS) {
+    add(nav, el("button", {
+      "aria-current": forgeSection === id ? "true" : "false",
+      onclick: () => { forgeSection = id; last = null; render(); },
+    }, label));
+  }
+  add(host, nav);
 
-  if (section === "seed") return renderSeed(host);
-  if (section === "grand") return renderGrand(host);
-  return renderSectionTables(host, section);
+  if (forgeSection === "seed") return renderSeed(host);
+  if (forgeSection === "grand") return renderGrand(host);
+  return renderSectionTables(host, forgeSection);
 }
 
 // --- the plot seed: the book's own combination, in its own order -----------
@@ -268,7 +281,7 @@ function keepDialog(parts, label) {
           const at = store.writeNodeToFirstEmpty(cat.id, text, slots);
           closeModal();
           if (at < 0) toast(`${categoryName(scope, cat.id)} is full — clear a slot first.`);
-          else { toast(`Written into ${cat.name}.`); go("play", "nodes"); }
+          else { toast(`Written into ${cat.name}.`, { undo: true }); go("play", "nodes"); }
         },
       }, `Write into ${categoryName(scope, cat.id)}`));
     }
@@ -284,7 +297,7 @@ function keepDialog(parts, label) {
         onSubmit: (v) => {
           if (!v) return;
           store.addCast("character", v, text);
-          toast("Added to the cast.");
+          toast("Added to the cast.", { undo: true });
           go("play", "cast");
         },
       });
@@ -301,7 +314,7 @@ function keepDialog(parts, label) {
         onSubmit: (v) => {
           if (!v) return;
           store.addCast("location", v, text);
-          toast("Added to the cast.");
+          toast("Added to the cast.", { undo: true });
           go("play", "cast");
         },
       });
@@ -312,7 +325,7 @@ function keepDialog(parts, label) {
     onclick: () => {
       store.addJournal({ kind: "note", title: `Kept from GUM — ${label}`, detail: text });
       closeModal();
-      toast("Kept in the journal.");
+      toast("Kept in the journal.", { undo: true });
     },
   }, "Just keep it in the journal"));
 

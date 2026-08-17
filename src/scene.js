@@ -158,11 +158,8 @@ function renderArc(host, scope) {
 function closeSceneFlow(open) {
   const r = rollSum({ tableId: "scene-closure", bias });
   last = { result: r, tableId: "scene-closure" };
-  const scene = store.closeScene();
+  const scene = store.transact("Close the scene", () => closeAndRecord(r));
   const mins = scene ? Math.max(1, Math.round((Date.now() - scene.openedAt) / 60000)) : 0;
-  store.addJournal({
-    kind: "scene", title: "Scene closed", detail: r.answer, dice: diceOf(r),
-  });
   announce("Scene closed: " + r.answer);
   modal({
     title: "Scene closed",
@@ -183,8 +180,7 @@ function closeSceneFlow(open) {
       {
         label: "Undo",
         onClick: () => {
-          store.undo();  // the closure
-          store.undo();  // the journal write
+          store.undo();   // closing and its journal entry are one transaction
           last = null;
           toast("Scene reopened.");
           render();
@@ -192,6 +188,13 @@ function closeSceneFlow(open) {
       },
     ],
   });
+}
+
+// Closing writes the scene away and records it; both belong to one undo.
+function closeAndRecord(r) {
+  const scene = store.closeScene();
+  store.addJournal({ kind: "scene", title: "Scene closed", detail: r.answer, dice: diceOf(r) });
+  return scene;
 }
 
 function fire(tableId, after) {
@@ -292,6 +295,25 @@ function renderTableGroup(host, section) {
     }, `Roll ${t.name}`));
     add(card, tableDetails(t));
     add(host, card);
+  }
+
+  // Every other screen pins its primary action; these three left it inline at
+  // 365px. The book presents the section's tables in order, so the first is the
+  // one you came for.
+  const firstId = ids[0];
+  const first = sumTable(firstId);
+  if (first) {
+    actionBar({
+      label: `Roll ${first.name}`,
+      context: `d${first.die}${bias !== "none" ? " · bias " + bias : ""}`,
+      onClick: () => {
+        const r = rollSum({ tableId: firstId, bias });
+        last = { result: r, tableId: firstId };
+        journalRoll(r, { kind: "sum", title: `${first.name} — ${r.answer}`, detail: diceText(r.dice) });
+        announce(r.answer);
+        render();
+      },
+    });
   }
 }
 

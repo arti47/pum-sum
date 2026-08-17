@@ -15,7 +15,7 @@ import { plotSheet, nodeCategory, sectionOfBox, proposalNote, abcd } from "./rul
 import { rollProposal, rollPrompt, invokeNode, journalRoll, diceText } from "./roller.js";
 import { sectionNav, go, render } from "./router.js";
 import { openRule } from "./screens.js";
-import { NODE_CATEGORIES, PROMPT_NOTES } from "../data-pum-plot.js";
+import { NODE_CATEGORIES, PROMPT_NOTES, TRACK_SECTION_NOTES } from "../data-pum-plot.js";
 import { BEAT_TRIGGERS } from "../data-guidance.js";
 import { renderCast } from "./cast.js";
 import { registerClearer } from "./viewstate.js";
@@ -219,6 +219,16 @@ function trackCard(scope) {
   }
   add(card, track);
 
+  // The section names teach themselves, the way the beat card explains the kind
+  // of proposal that came up — rather than leaving "Exposition" to be inferred.
+  const here = currentSection(scope);
+  if (here && TRACK_SECTION_NOTES[here.name] && !isEnded(scope)) {
+    add(card, el("p", { class: "muted" },
+      el("strong", { text: here.name + ". " }),
+      TRACK_SECTION_NOTES[here.name]
+    ));
+  }
+
   if (isEnded(scope)) {
     add(card, el("p", { class: "muted" },
       el("strong", { text: isResolved(scope) ? "This scope has resolved. " : "This scope is finished. " }),
@@ -237,7 +247,7 @@ function trackCard(scope) {
   }, "Advance without a beat"));
   add(row, el("button", {
     class: "btn small", disabled: done === 0 || undefined,
-    onclick: () => { store.uncrossBox(); toast("Stepped the track back."); render(); },
+    onclick: () => { store.uncrossBox(); toast("Stepped the track back.", { undo: true }); render(); },
   }, "Step back"));
   if (sheet && sheet.customizable) {
     add(row, el("button", { class: "btn small", onclick: () => customizeDialog(scope) }, "Customize"));
@@ -255,12 +265,12 @@ function endScopeRow(scope) {
   if (scope.closedAt) {
     add(row, el("button", {
       class: "btn small",
-      onclick: () => {
+      onclick: () => store.transact("Reopen the plot scope", () => {
         store.setScopeClosed(false);
         store.addJournal({ kind: "track", title: "Plot scope reopened", detail: scope.name });
-        toast("Reopened — play on.");
+        toast("Reopened — play on.", { undo: true });
         render();
-      },
+      }),
     }, "Reopen this scope"));
     return row;
   }
@@ -272,7 +282,7 @@ function endScopeRow(scope) {
         ? `The track stands at ${crossed(scope)}/${trackLength(scope)}. PUM lets you end a scope whenever you judge the thread told — the empty boxes are not a debt. Nothing is deleted, and you can reopen it.`
         : "This sheet has no track, so this is how it finishes: when you say the story is told. Nothing is deleted, and you can reopen it.",
       confirmLabel: "End the scope",
-      onConfirm: () => {
+      onConfirm: () => store.transact("End the plot scope", () => {
         store.setScopeClosed(true);
         store.addJournal({
           kind: "track", title: "Plot scope ended",
@@ -289,7 +299,7 @@ function endScopeRow(scope) {
             { label: "Stay here", onClick: () => render() },
           ],
         });
-      },
+      }),
     }),
   }, "End this scope"));
   return row;
@@ -384,13 +394,13 @@ function promptColumnDialog(scope) {
             return { label: categoryName(scope, id), node: id };
           });
           store.setCustomPrompts(column);
-          toast("Column saved — that is what the app will roll.");
+          toast("Column saved — that is what the app will roll.", { undo: true });
           render();
         },
       },
       {
         label: "Reset to the standard column",
-        onClick: () => { store.setCustomPrompts(null); toast("Back to the printed column."); render(); },
+        onClick: () => { store.setCustomPrompts(null); toast("Back to the printed column.", { undo: true }); render(); },
       },
       { label: "Cancel" },
     ],
@@ -464,10 +474,10 @@ function voluntaryAdvance() {
     title: "Advance without a beat",
     message: "PUM allows this when an event is exceptionally impactful. It is recommended that such moments be combined with a beat's randomness — but from time to time this is fine.",
     confirmLabel: "Cross the next box",
-    onConfirm: () => {
+    onConfirm: () => store.transact("Advance track (no beat)", () => {
       const out = store.confirmBeat({ voluntary: true });
       reportAdvance(out, "Advanced without a beat");
-    },
+    }),
   });
 }
 
@@ -499,7 +509,7 @@ function reportAdvance(out, title) {
       ],
     });
   } else {
-    toast(`Track ${out.crossed}/${out.total}`);
+    toast(`Track ${out.crossed}/${out.total}`, { undo: true });
   }
   render();
 }
@@ -577,25 +587,25 @@ function beatCard(scope) {
   if (hasTrack(scope) && !isEnded(scope)) {
     actions.push({
       label: "Confirm — cross a box", primary: true,
-      onClick: () => {
+      onClick: () => store.transact("Confirm beat", () => {
         const out = store.confirmBeat({ label: b.text });
         openBeat = null;
         store.setLastBeat({ key: b.key, text: b.text, open: false });
         reportAdvance(out, `Beat confirmed — ${b.text}`);
-      },
+      }),
     });
   }
   actions.push({
     label: hasTrack(scope) ? "Not this time" : "Played it",
-    onClick: () => {
+    onClick: () => store.transact("Beat played, track unchanged", () => {
       openBeat = null;
       store.setLastBeat({ key: b.key, text: b.text, open: false });
       store.addJournal({
         kind: "beat", title: "Beat played, track unchanged", detail: b.text, linkedTo: b.journalId,
       });
-      toast(hasTrack(scope) ? "The track stays where it is." : "Noted in the journal.");
+      toast(hasTrack(scope) ? "The track stays where it is." : "Noted in the journal.", { undo: true });
       render();
-    },
+    }),
   });
   actions.push({
     label: "Re-roll",

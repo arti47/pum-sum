@@ -1,23 +1,27 @@
 // Boot.
 
 import { $ } from "./core.js";
-import { toast } from "./ui.js";
+import { toast, registerUndo } from "./ui.js";
 import * as store from "./store.js";
 import { applyTheme, cycleTheme } from "./settings.js";
-import { registerScreen, go, renderTabs } from "./router.js";
+import { registerScreen, go, renderTabs, render } from "./router.js";
 import { renderPlay } from "./sheet.js";
 import { renderOracles } from "./oracles.js";
 import { renderScene } from "./scene.js";
 import { renderJournal } from "./journal.js";
 import { renderMore } from "./screens.js";
-import { renderForge } from "./forge.js";
 import { clearTransient } from "./viewstate.js";
 
 store.load();
 applyTheme();
 
+// Every mutating action can be taken back from the toast it raised (§14.1.2).
+registerUndo({
+  can: () => store.canUndo(),
+  undo: () => { store.undo(); toast("Undone."); render(); },
+});
+
 registerScreen("play", renderPlay);
-registerScreen("forge", renderForge);
 registerScreen("oracles", renderOracles);
 registerScreen("scene", renderScene);
 registerScreen("journal", renderJournal);

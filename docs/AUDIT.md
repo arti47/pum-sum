@@ -515,3 +515,45 @@ Phase 8 had introduced. `game-title` now rolls only the two word-shaped grand ta
 **The absence is shown, not merely recorded.** Data with no shipped surface is the §0 defect,
 and a player who sees one blank offer three words and the next offer none deserves the reason:
 Rules gains a *Where the app does not roll* card, listing all eight with their explanations.
+
+---
+
+## Phase 9 — friendliness, measured first
+
+Ten routes profiled for height, control count, above-fold controls and jargon density before
+anything changed (D-8: four buried primary actions once survived ten reading passes and fell
+out of one measured table).
+
+**F-25 · Undo was four moves from the thing it undid.** Measured: offered on exactly one
+screen — Settings — at 417px scroll depth, while every mutating action pushes a snapshot.
+*Fix:* thirteen actions raise a toast carrying an Undo button, through a `registerUndo` seam
+that keeps `ui.js` ignorant of the store, matching the `registerInspire` pattern.
+
+**F-26 · One player action was not one undo.** Exposed by F-25's own smoke test: a voluntary
+track advance writes two snapshots — the crossing, then its journal entry — so tapping Undo
+took back the entry and left the box crossed. *Fix:* `store.transact(label, fn)` suppresses
+intermediate snapshots. The scene-close flow's hand-counted `store.undo(); store.undo();`
+collapses into it, which is the same bug it had been working around.
+
+**F-27 · The undo toast covered the action bar.** Making the toast pill clickable so its
+button would work gave the whole pill pointer events; the toast mount sits directly above the
+action bar, so the screen's primary control was unclickable for as long as a toast showed.
+Caught by the interaction audit as *"Proposal" cannot be clicked*. *Fix:* the pill stays
+inert, only the button is live.
+
+**Density.** Journal entry tools fold behind the entry (two permanent buttons per entry, 40
+controls of furniture: 7vh → 6.3vh). Rules groups collapse: 4.7vh → 2.7vh. Prep shows three
+node slots per list with *add another* rather than up to sixty empty boxes.
+
+**Teaching.** The track names what its current section is for, the way the beat card already
+explains a proposal's kind — app voice, uncited, keyed to the section names the printed sheets
+use. A twelve-term glossary answers "what is a plot scope", which a library organised rule by
+rule structurally could not.
+
+**Consistency.** Scene exploration, battle and discovery pin their primary action; they were
+the only screens leaving it inline.
+
+**Six tabs became five.** The Forge is prep, not play, so it is now a section of More carrying
+its own second-level nav — the shape the Journal already uses for its filters. At 320px each
+tab went from 53px to 64px. The gating moved with it: `gatedSections` hides the section when
+GUM is off, where `gated` used to hide the whole tab.

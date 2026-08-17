@@ -726,6 +726,27 @@ const core = await import("../src/core.js");
   store.deleteGame(game.id);
 }
 
+// one player action is one undo, however many mutations it performs
+{
+  const g = store.createGame({
+    title: "Undo grouping", scopeName: "Scope", sheetId: "standard",
+    protagonists: [{ id: "p1", name: "PC" }],
+  });
+  const before = derived.crossed(store.currentScope());
+  const entries = store.activeGame().journal.length;
+  store.transact("Advance track (no beat)", () => {
+    store.confirmBeat({ voluntary: true });
+    store.addJournal({ kind: "track", title: "Advanced without a beat", detail: "x" });
+  });
+  eq("the transaction crossed a box", derived.crossed(store.currentScope()), before + 1);
+  eq("and wrote its journal entry", store.activeGame().journal.length, entries + 1);
+  store.undo();
+  eq("one undo puts the box back", derived.crossed(store.currentScope()), before);
+  eq("and takes the journal entry with it", store.activeGame().journal.length, entries);
+  eq("the label is the action's, not the last mutation's", store.undoLabel(), "Create game");
+  store.deleteGame(g.id);
+}
+
 // timed beats fire exactly once
 {
   store.addScope({ name: "Timed", sheetId: "standard" });

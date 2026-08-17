@@ -299,6 +299,26 @@ export const PLOT_SHEETS = [
   },
 ];
 
+// --- What each track section is for ---------------------------------------
+// The app's own words, not the books': PUM prints these names on the sheets and
+// leaves dramatic structure to the reader. Keyed by the section names the ten
+// printed sheets actually use, so a player learns the shape of the track from
+// the track instead of from a chapter.
+export const TRACK_SECTION_NOTES = {
+  Exposition: "Setting up. Introduce the world, the people and the problem — nothing has gone badly wrong yet.",
+  Confrontation: "The middle. The problem pushes back and the PCs commit to dealing with it.",
+  Rising: "Pressure builds. Complications accumulate faster than they are resolved.",
+  Climax: "The hardest part of the story. What was building arrives.",
+  Falling: "The dust settles. Consequences land and loose threads show themselves.",
+  Resolution: "Bringing it to an end. Answers, costs, and what the PCs are left holding.",
+  Intro: "The opening. Establish where and who before anything is asked of them.",
+  "Wrap-up": "The last beat. Close it out.",
+  Entrance: "The way in, and the first sign of what is inside.",
+  "Way out": "Getting clear — rarely the way you came.",
+  Arrival: "First contact with the place. What it looks like before you know it.",
+  Conclusion: "What the exploration was for.",
+};
+
 // --- Disruption die, optional variant (p.9) --------------------------------
 export const DISRUPTION = {
   page: 9,

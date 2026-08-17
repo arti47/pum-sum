@@ -13,6 +13,10 @@ import { Settings } from "./settings.js";
 let step = 0;
 let draft = null;
 let onDone = null;
+// How many node slots each list is currently showing in prep (§6.5: a long list
+// reveals progressively rather than landing all at once).
+const SLOTS_AT_FIRST = 3;
+let visible = {};
 
 const STEPS = [
   { n: 1, name: "Universe", legend: "Pick a universe and gather inspiration" },
@@ -34,6 +38,7 @@ export function startWizard(after = null) {
     nodes: {},
   };
   for (const c of NODE_CATEGORIES) draft.nodes[c.id] = [];
+  visible = {};
   go("more", "home");
 }
 
@@ -42,7 +47,7 @@ export function inWizard() { return draft !== null; }
 function cancelWizard() { draft = null; step = 0; render(); }
 
 // Switching game mid-prep discards the draft rather than carrying it across.
-registerClearer(() => { draft = null; step = 0; onDone = null; });
+registerClearer(() => { draft = null; step = 0; onDone = null; visible = {}; });
 
 export function renderWizard(host) {
   const s = STEPS[step];
@@ -272,8 +277,13 @@ function stepNodes(host) {
     add(card, el("p", { class: "muted", text: cat.definition }));
     add(card, el("p", { class: "cite", text: "e.g. " + cat.examples }));
     const list = draft.nodes[cat.id] || (draft.nodes[cat.id] = []);
+    // Prep asked for up to sixty empty boxes on a Journey sheet, which reads as
+    // an obligation. The book says nodes grow in play, so show a few and let the
+    // player call for more; the slots all still exist on the plot sheet.
+    const shown = Math.min(sheet.nodeSlots, Math.max(SLOTS_AT_FIRST, visible[cat.id] || 0,
+      list.filter((x) => x && x.trim()).length + 1));
     const inputs = [];
-    for (let i = 0; i < sheet.nodeSlots; i++) {
+    for (let i = 0; i < shown; i++) {
       const input = el("input", { type: "text", placeholder: "Add new, choose, or reroll" });
       input.value = list[i] || "";
       input.addEventListener("input", () => { list[i] = input.value; });
@@ -297,6 +307,12 @@ function stepNodes(host) {
       dispatchEvent() { return true; },
     };
     add(card, inspireBlock(cat.id, target));
+    if (shown < sheet.nodeSlots) {
+      add(card, el("button", {
+        class: "btn small ghost",
+        onclick: () => { visible[cat.id] = shown + 1; render(); },
+      }, `Add another slot — ${sheet.nodeSlots - shown} left`));
+    }
     add(host, card);
   }
 

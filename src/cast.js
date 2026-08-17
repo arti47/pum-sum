@@ -286,7 +286,7 @@ function addToNodes(c) {
         onClick: () => {
           const at = store.writeNodeToFirstEmpty(catId, c.name, slots);
           if (at < 0) toast(`${categoryName(scope, catId)} is full — clear a slot first.`);
-          else { toast(`Added to ${categoryName(scope, catId)}.`); go("play", "nodes"); }
+          else { toast(`Added to ${categoryName(scope, catId)}.`, { undo: true }); go("play", "nodes"); }
         },
       },
       { label: "Cancel" },
