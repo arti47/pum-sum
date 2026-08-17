@@ -253,7 +253,7 @@ function diceRow(dice) {
   return row;
 }
 
-export function resultCard({ kind, answer, second, dice = [], strip = null, actions = [], extra = null }) {
+export function resultCard({ kind, answer, second, question = "", dice = [], strip = null, actions = [], extra = null }) {
   const card = el("div", { class: "result", role: "group", "aria-label": kind });
   const head = el("div", { class: "result-head" },
     el("span", { class: "result-kind", text: kind })
@@ -262,6 +262,9 @@ export function resultCard({ kind, answer, second, dice = [], strip = null, acti
   add(card, head);
 
   const body = el("div", { class: "result-body" });
+  // An answer with no question on it is a word floating free: you ask, roll,
+  // get interrupted, and nothing on screen says what "No" was answering.
+  if (question) add(body, el("div", { class: "result-q", text: "\u201c" + question + "\u201d" }));
   add(body, el("div", { class: "result-answer", text: answer }));
   if (second) add(body, el("div", { class: "result-second" }, second));
   if (extra) add(body, extra);

@@ -598,6 +598,17 @@ const core = await import("../src/core.js");
   eq("an enriched oracle shows two", r.dice.length, 2);
 }
 
+// every oracle roll carries the question it answered, so the card can show it
+{
+  const q = "Does the bridge hold?";
+  eq("a yes/no roll keeps the question", roller.rollYesNo({ question: q }).question, q);
+  eq("a granular roll keeps it too", roller.rollGranular({ question: q }).question, q);
+  eq("and so does an oracle roll", roller.rollOracle({ oracleId: "someone", question: q }).question, q);
+  const src = readFileSync(join(root, "src/oracles.js"), "utf8");
+  ok("the result card is given the question to show",
+    (src.match(/question: result\.question/g) || []).length >= 2);
+}
+
 // plot beats, node invocation, and the compulsion
 {
   const game = store.createGame({

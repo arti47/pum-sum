@@ -557,3 +557,46 @@ the only screens leaving it inline.
 its own second-level nav — the shape the Journal already uses for its filters. At 320px each
 tab went from 53px to 64px. The gating moved with it: `gatedSections` hides the section when
 GUM is off, where `gated` used to hide the whole tab.
+
+---
+
+## Phase 9a — orientation and width
+
+Every harness in this project runs portrait at 320–390px. That is the right default for a
+phone-first play aid and it meant two whole classes of viewport had never been looked at.
+
+**F-28 · Landscape spent half the screen on furniture.** Measured at 740×360 — a phone turned
+sideways — header + action bar + tab bar took **48%** of the viewport on seven of ten routes,
+leaving a 187px window to scroll up to 5.6 screens through. *Fix:* the app header stops being
+sticky, because brand, home and theme are the one piece of chrome carrying nothing you need
+mid-scroll; the tab bar drops to icons with labels kept for assistive tech; the plot header
+compacts and drops its drawn track, whose information is the count printed beside it. The
+plot header itself stays pinned — it is the Threshold, which is the reason it exists. Worst
+case 40%, and 25% where no action bar is pinned.
+
+**F-29 · Desktop was a phone in the middle of a window.** 720px of content in 1440px, under a
+tab bar stretched the full 1440px. *Fix:* cards flow two-up in a 1000px grid with every other
+child spanning both columns, and the tab bar's buttons are padded to the column while its
+background still spans. `play/nodes` 6.1 → 1.1 screens; the journal 6.3 → 2.2.
+
+Both are now permanent smoke passes — a landscape sweep and a wide sweep across every route,
+asserting a chrome budget, two-column flow, no overflow and 40px tab targets.
+
+**F-30 · An oracle answer never said what it answered.** The typed question went into the
+journal's detail and nowhere else, so the card read `Yes or No · deterministic / 2 / No` with
+nothing attached. Ask, roll, get interrupted, come back — and the answer is a bare word. The
+result card carries the question now; the rollers already returned it.
+
+**F-31 · The Forge claimed to keep what it could not.** With no game open, "Keep it →" offered
+*Add to the cast*, `store.addCast` found no active game and did nothing, and the toast said
+"Added to the cast." Found while pinning the first-run primary action. *Fix:* with no game the
+dialog says there is nowhere to keep it yet and offers to prepare one.
+
+**Density and first run.** The Nodes screen reveals what is written plus one empty slot, with
+*Show all N* — 6.1 → 2.3 screens, 104 → 32 controls at 390px, the same disclosure prep got in
+Phase 9. And the first screen a new player sees was the only one in the app not pinning its
+primary action; it pins *Prepare a game*.
+
+**A refactor the fixes required.** Three bar heights were restated as literals inside five
+`calc()` expressions. They are `--hdr-h`, `--tabbar-h` and `--actionbar-h` now, so a media
+query can shrink a bar and every dependent spacer follows.

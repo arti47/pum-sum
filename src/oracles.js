@@ -186,6 +186,7 @@ function renderLast() {
     }
     add(wrap, resultCard({
       kind: "Yes or No · bias",
+      question: result.question,
       answer: "Two answers — you pick",
       second: "PUM's bias rule hands the choice to you, not to the machine.",
       dice: result.dice,
@@ -216,6 +217,7 @@ function renderLast() {
 
   add(wrap, resultCard({
     kind, answer, second,
+    question: result.question,
     dice: result.dice,
     actions: rerollActions(result),
   }));

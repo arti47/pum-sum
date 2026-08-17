@@ -23,8 +23,12 @@ import { registerClearer } from "./viewstate.js";
 // The beat currently on the table, if any. Held in module state so a re-render
 // never re-rolls it (§5.1: roll once, store it, render from the stored value).
 let openBeat = null;
+// Which node lists have been expanded to their full slot count. The Nodes screen
+// was the densest in the app — 6.1 screens and 104 controls on a ten-slot sheet —
+// almost all of it empty slots nobody had asked to see yet.
+let expandedLists = {};
 
-function clearOpenBeat() { openBeat = null; }
+function clearOpenBeat() { openBeat = null; expandedLists = {}; }
 registerClearer(clearOpenBeat);
 
 // The disruption cascade hands a beat over from the Oracles tab (PUM p.9).
@@ -876,6 +880,10 @@ function nodeCard(scope, cat, slots) {
   const list = nodeList(scope, cat.id);
   const fill = nodeFill(scope, cat.id);
   const dieSize = nodeDie(scope, cat.id);
+  // Everything written, plus one empty slot to write in. The rest are one tap
+  // away; the die still rolls across all of them, which the pill already says.
+  const lastWritten = list.reduce((n, t, i) => (t && t.trim() ? i + 1 : n), 0);
+  const shown = expandedLists[cat.id] ? slots : Math.min(slots, lastWritten + 1);
 
   add(card, el("div", { class: "card-head" },
     el("h3", { text: categoryName(scope, cat.id) }),
@@ -926,7 +934,7 @@ function nodeCard(scope, cat, slots) {
   add(card, d);
 
   const listEl = el("div", { class: "node-list" });
-  for (let i = 0; i < slots; i++) {
+  for (let i = 0; i < shown; i++) {
     const [lo, hi] = slotRange(i);
     const text = list[i] || "";
     add(listEl, el("div", { class: "node-row" },
@@ -950,6 +958,12 @@ function nodeCard(scope, cat, slots) {
     ));
   }
   add(card, listEl);
+  if (shown < slots) {
+    add(card, el("button", {
+      class: "btn small ghost",
+      onclick: () => { expandedLists[cat.id] = true; render(); },
+    }, `Show all ${slots} slots`));
+  }
   return card;
 }
 

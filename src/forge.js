@@ -270,6 +270,21 @@ function keepDialog(parts, label) {
   add(body, el("p", { class: "muted", text: "A rolled idea does nothing until it is written down. Put it where the game will reach for it." }));
   add(body, el("div", { class: "card" }, el("p", { text })));
 
+  if (!store.activeGame()) {
+    // Without a game there is no cast, no journal and no node list to write to;
+    // store.addCast would no-op while the toast said "Added to the cast".
+    add(body, el("p", { class: "muted", text: "There is no game open yet, so there is nowhere to keep this. Roll freely for inspiration — then prepare a game and the same tables are one tap from every blank." }));
+    modal({
+      title: "Keep this",
+      body,
+      actions: [
+        { label: "Prepare a game", primary: true, onClick: () => go("more", "home") },
+        { label: "Cancel" },
+      ],
+    });
+    return;
+  }
+
   const actions = [];
   if (scope) {
     for (const cat of NODE_CATEGORIES) {

@@ -69,6 +69,14 @@ function renderHome(host) {
       class: "btn wide", onclick: () => go("more", "tutorial"),
     }, "Read the first-session walkthrough"));
     add(host, machinesCard());
+    // Every other screen pins its primary action; the very first screen a new
+    // player sees was the one that did not.
+    actionBar({
+      label: "Prepare a game",
+      context: "four steps, then play",
+      secondary: { label: "Walkthrough", onClick: () => go("more", "tutorial") },
+      onClick: () => startWizard(),
+    });
     return;
   }
 

@@ -98,6 +98,56 @@ for (const width of WIDTHS) {
   await ctx.close();
 }
 
+// --- 2b. a phone on its side ----------------------------------------------
+// Every other probe runs portrait. Landscape once spent 48% of a 360px-tall
+// viewport on fixed chrome, which no test could see.
+{
+  const { ctx, page, errors } = await newPage(FIXTURES.mid, 740);
+  await page.setViewportSize({ width: 740, height: 360 });
+  for (const [tab, section] of ROUTES) {
+    await goto(page, tab, section);
+    const m = await page.evaluate(() => {
+      const px = (sel) => {
+        const n = document.querySelector(sel);
+        return n && !n.hidden && n.offsetParent !== null ? n.getBoundingClientRect().height : 0;
+      };
+      const chrome = px(".tab-bar") + px("#action-bar .action-bar") + px(".plot-header");
+      return {
+        pct: Math.round((chrome / window.innerHeight) * 100),
+        over: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        tap: Math.min(999, ...[...document.querySelectorAll(".tab-bar button")]
+          .map((b) => b.getBoundingClientRect().height)),
+      };
+    });
+    ok(`landscape ${tab}/${section} keeps fixed chrome under 45%`, m.pct <= 45, `${m.pct}%`);
+    ok(`landscape ${tab}/${section} no horizontal overflow`, m.over <= 1, `${m.over}px`);
+    ok(`landscape ${tab}/${section} tab targets stay 40px`, m.tap >= 40, `${Math.round(m.tap)}px`);
+  }
+  ok("landscape produced no console errors", errors.length === 0, errors.slice(0, 2).join(" | "));
+  await ctx.close();
+}
+
+// --- 2c. a desktop window --------------------------------------------------
+// The app is phone-first, not phone-only: at 1440px it used to be a 720px
+// column with a tab bar stretched the full width beneath it.
+{
+  const { ctx, page, errors } = await newPage(FIXTURES.stress, 1440);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const [tab, section] of ROUTES) {
+    await goto(page, tab, section);
+    const m = await page.evaluate(() => ({
+      cols: getComputedStyle(document.querySelector("#screen")).gridTemplateColumns.split(" ").length,
+      over: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      pad: parseFloat(getComputedStyle(document.querySelector(".tab-bar")).paddingLeft),
+    }));
+    ok(`wide ${tab}/${section} flows in two columns`, m.cols === 2, `${m.cols} column(s)`);
+    ok(`wide ${tab}/${section} no horizontal overflow`, m.over <= 1, `${m.over}px`);
+    ok(`wide ${tab}/${section} holds the tab bar to the column`, m.pad > 0, `${m.pad}px`);
+  }
+  ok("a wide viewport produced no console errors", errors.length === 0, errors.slice(0, 2).join(" | "));
+  await ctx.close();
+}
+
 // --- 3. primary action above the fold, nothing under the tab bar ----------
 {
   const { ctx, page } = await newPage(FIXTURES.mid);
