@@ -23,6 +23,14 @@ export const TUTORIAL_META = {
   // cached with it, so the link works offline and wherever the app is deployed.
   page: "./tutorial.html",
   pageNote: "The same guide is also a page beside the app — easier to read on a laptop while you play on your phone. It is cached with the app, so it works offline too.",
+  // The print rendering. Same content again, paginated: a title page, a
+  // contents page, then one part per page break, so it can be read on a
+  // tablet at the table or printed and kept beside the books.
+  pdf: "./tutorial.pdf",
+  pdfNote: "A PDF of the whole guide, paginated for reading away from the app or for printing.",
+  // Where the app itself is deployed. A printed page cannot follow a relative
+  // link, so the print rendering states the address instead of hiding it.
+  site: "https://arti47.github.io/pum-sum-gum/",
   licence: "Plot Unfolding Machine, Scene Unfolding Machine and Game Unfolding Machine are by JeansenVaars, licensed CC BY-NC-SA 4.0. This guide quotes individual table rows to make its examples checkable against your own copy, and is shared under the same licence.",
 };
 
@@ -711,7 +719,7 @@ const REFERENCE = [
         "This game · Plot sheet — the two edit dialogs on Home.",
         "Export / Readable export — Copy, Download, Close. Import. Data check. Erase everything?",
         "Rules → “Clear the search” when a search matches nothing. Journal → “Go to the oracles” and “Go to the plot sheet” when it is empty. Plot nodes → “Back to the track” on a sheet with no nodes.",
-        "Tutorial → “Mark as read”, which stops the quick start offering it again, and “Open the guide as a page →”, which opens this same guide as a web page for a second screen.",
+        "Tutorial → “Mark as read”, which stops the quick start offering it again; “Open the guide as a page →”, which opens this same guide as a web page for a second screen; and “Download the guide as a PDF”, the same guide paginated — a title page, a numbered contents, bookmarks, one part per page break — for a tablet at the table or for paper. Both ship with the app and are cached with it, so both work offline.",
       ] },
     ],
   },

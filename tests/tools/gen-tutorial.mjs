@@ -22,7 +22,11 @@ w();
 w("*Generated from `data-tutorial.js` by `tests/tools/gen-tutorial.mjs`. Edit the data, not this file.*");
 w();
 w("The same guide is inside the app at **More → Tutorial**, where it also reproduces the tables in full."
-  + (TUTORIAL_META.page ? ` It is published as a page at <${TUTORIAL_META.page}>.` : ""));
+  + (TUTORIAL_META.page ? ` It is published as a page at [\`tutorial.html\`](../${TUTORIAL_META.page.replace(/^\.\//, "")})` : "")
+  + (TUTORIAL_META.pdf ? ` and as a paginated PDF at [\`tutorial.pdf\`](../${TUTORIAL_META.pdf.replace(/^\.\//, "")})` : "")
+  + ".");
+w();
+w(`The app itself is at <${TUTORIAL_META.site}>.`);
 w();
 w("---");
 w();
@@ -241,6 +245,65 @@ a{color:var(--accent-text)}
   footer{grid-column:2}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.print-only{display:none}
+/* Page numbers exist only in the PDF, where they are written in by
+   tests/tools/gen-pdf.mjs after the document has been laid out. */
+.pno{display:none}
+
+/* --- the print rendering (tutorial.pdf) ---------------------------------
+   Screen furniture that cannot work on paper is dropped: the sticky reading
+   track, the "open the app" link (a printed page cannot follow it — the
+   address is printed instead), and the sticky positioning on the contents.
+   Everything else is repaginated: a title page, a contents page, then one
+   page break per part, with nothing that reads as a unit allowed to split. */
+@media print{
+  :root,:root[data-theme="dark"]{
+    --paper:#fff; --paper-2:#fff; --paper-sunk:#fff;
+    --ink:#14181f; --ink-2:#3b4252; --ink-3:#5c6478;
+    --rule:#c8c0ae; --rule-2:#a89e88;
+    --accent:#e2603c; --accent-text:#a8431f;
+  }
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:10.4pt;line-height:1.45}
+  .wrap{display:block;max-width:none;padding:0}
+  .track,.backlink,.pdflink{display:none}
+  .print-only{display:block}
+
+  /* title page */
+  header.masthead{border-bottom:0;padding:34mm 0 0;break-after:page}
+  h1{font-size:30pt}
+  .lede{font-size:12pt;max-width:none}
+  .byline{margin-top:1.4rem}
+  .print-only{margin-top:1.2rem;font-family:var(--mono);font-size:8.5pt;color:var(--ink-3)}
+
+  /* contents page */
+  nav.toc{position:static;max-height:none;overflow:visible;padding:0;
+    break-after:page;columns:2;column-gap:10mm}
+  nav.toc::before{content:"Contents";display:block;column-span:all;
+    font-size:16pt;font-weight:700;margin:0 0 .8rem}
+  nav.toc>ul>li{break-inside:avoid}
+  nav.toc a{color:var(--ink);border-bottom:0;display:flex;align-items:baseline;gap:.4rem}
+  .pno{display:block;margin-left:auto;font-family:var(--mono);font-size:8pt;
+    color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+  /* body */
+  main{max-width:none}
+  .part{border-top:0;margin-top:0;padding-top:0}
+  .part+.part{break-before:page}
+  h2{font-size:19pt}
+  h3{font-size:12.4pt;margin-top:1.4rem}
+  h1,h2,h3,.eyebrow,figcaption{break-after:avoid}
+  .eyebrow+h2,h2+.blurb{break-before:avoid}
+  p{orphans:3;widows:3}
+  li,.note,.warn,.tap,.elided,.roll,figure,blockquote{break-inside:avoid}
+  .roll{background:#fff;border-color:var(--rule-2)}
+  .die{color:#1b2130}
+  /* A quick-start step may run past a page end — its heading may not be the
+     last thing on that page. */
+  .step h3{break-after:avoid}
+  a{text-decoration:none}
+  footer{break-inside:avoid;margin-top:2rem}
+}
 </style>
 </head>
 <body>
@@ -250,7 +313,9 @@ a{color:var(--accent-text)}
     <h1>${esc(TUTORIAL_META.title)}</h1>
     <p class="lede">${esc(TUTORIAL_META.blurb)}</p>
     <p class="byline">PUM v9 · SUM v8 Rev2 · GUM v2.2 — a complete guide</p>
-    <p class="backlink"><a href="./index.html">← Open the app</a></p>
+    <p class="backlink"><a href="./index.html">← Open the app</a>
+      &nbsp;·&nbsp; <a class="pdflink" href="${esc(TUTORIAL_META.pdf)}">Download as PDF</a></p>
+    <p class="print-only">The app: ${esc(TUTORIAL_META.site)}</p>
   </header>
 
   <div class="track" id="track" aria-hidden="true">${boxes}</div>

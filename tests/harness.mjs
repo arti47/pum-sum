@@ -46,12 +46,12 @@ function eq(name, a, b) {
   const sw = readFileSync(join(root, "service-worker.js"), "utf8");
   const listed = new Set(
     [...sw.matchAll(/"\.\/([^"]+)"/g)].map((m) => m[1])
-      .filter((f) => /\.(js|css|html|svg|json)$/.test(f))
+      .filter((f) => /\.(js|css|html|svg|json|pdf)$/.test(f))
   );
   const shipped = [
     ...readdirSync(join(root, "src")).map((f) => "src/" + f),
     ...readdirSync(root).filter((f) =>
-      /^(data-.*\.js|styles\.css|index\.html|tutorial\.html|icon\.svg|manifest\.json)$/.test(f)),
+      /^(data-.*\.js|styles\.css|index\.html|tutorial\.html|tutorial\.pdf|icon\.svg|manifest\.json)$/.test(f)),
   ];
   const missing = shipped.filter((f) => !listed.has(f));
   ok("every shipped file is in the service-worker app shell", missing.length === 0, missing.join(", "));
@@ -316,6 +316,39 @@ ok("every node-invoking prompt has a play note",
   ok("the page is a complete document a static host can serve", /^<!doctype html>/i.test(page));
   ok("the page links back to the app", page.includes('href="./index.html"'));
   ok("the page requests nothing off-origin", !/https?:\/\/[^"'\s]+\.(js|css|woff2?)/.test(page));
+
+  // The fourth rendering. A PDF cannot be byte-diffed — its bytes carry a build
+  // timestamp — so the generator records the hash of the HTML it printed and
+  // this compares it against the HTML on disk. Same drift guarantee.
+  ok("the app offers the guide as a PDF beside the page",
+    tut.TUTORIAL_META.pdf === "./tutorial.pdf", tut.TUTORIAL_META.pdf);
+  ok("the print rendering states the app's address, which a printed link cannot carry",
+    /^https:\/\//.test(tut.TUTORIAL_META.site || "") && page.includes(tut.TUTORIAL_META.site),
+    tut.TUTORIAL_META.site);
+  ok("the page carries a print stylesheet", /@media\s*print\s*\{/.test(page));
+  let pdfOut = "";
+  try {
+    pdfOut = String(execFileSync(process.execPath,
+      [join(root, "tests/tools/gen-pdf.mjs"), "--check"], { stdio: "pipe" }));
+  } catch (err) {
+    pdfOut = String(err.stderr || err.stdout || err);
+  }
+  ok("the generated PDF is current", pdfOut.includes("current"), pdfOut.trim().split("\n")[0]);
+  const pdf = readFileSync(join(root, "tutorial.pdf"));
+  ok("tutorial.pdf is a PDF", pdf.subarray(0, 5).toString() === "%PDF-");
+  const pdfText = pdf.toString("latin1");
+  const pdfPages = (pdfText.match(/\/Type\s*\/Page[^s]/g) || []).length;
+  ok("the PDF paginates the whole guide", pdfPages >= 20, `${pdfPages} pages`);
+  // A contents entry with no destination would be a page number nobody can act
+  // on, and the numbering loop would have silently skipped it.
+  const navIds = [...(/<nav class="toc"[\s\S]*?<\/nav>/.exec(page)[0])
+    .matchAll(/href="#([^"]+)"/g)].map((m) => m[1]);
+  const dests = new Set([...pdfText.matchAll(/\/([A-Za-z0-9_.-]+)\s*\[\s*\d+ 0 R \/XYZ/g)]
+    .map((m) => m[1]));
+  const undested = navIds.filter((id) => !dests.has(id));
+  ok("every contents entry in the PDF points at a page", undested.length === 0,
+    undested.join(", "));
+  ok("the PDF carries bookmarks", /\/Outlines/.test(pdfText));
   ok("the licence notice travels with every rendering",
     /CC BY-NC-SA/.test(tut.TUTORIAL_META.licence));
   // every scenario quotes real rows: each roll cites a page

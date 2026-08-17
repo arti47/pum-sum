@@ -70,14 +70,21 @@ reference. It is *generated* from `data-tutorial.js` by `npm run tutorial`; edit
 the markdown, and the harness will tell you if the two drift apart.
 
 The same guide is inside the app at **More → Tutorial**, where it opens with an eleven-step
-quick start and reproduces the referenced tables in full, and beside the app as `tutorial.html`
-— a sibling page any static host serves, linked both ways and cached with the app so it works
-offline too. All three are generated from the one data file; the harness fails if they drift.
+quick start and reproduces the referenced tables in full; beside the app as `tutorial.html` —
+a sibling page any static host serves, linked both ways and cached with the app so it works
+offline too; and as `tutorial.pdf`, the paginated rendering, with a title page, a numbered
+contents, PDF bookmarks and one part per page break. All four come from the one data file; the
+harness fails if any of them drifts.
+
+`npm run tutorial` writes the markdown and the page. `npm run pdf` prints the page to
+`tutorial.pdf` — it needs a browser, so it is a separate script, and it records the hash of the
+HTML it printed in `docs/tutorial-pdf.sha256` for the drift check. Run both after editing
+`data-tutorial.js`.
 
 ## Hosting it
 
 The app has no build step, so a static host can serve the repository root as it stands: the app
-at `/`, the guide at `/tutorial.html`. `.github/workflows/pages.yml` does this on every push to
+at `/`, the guide at `/tutorial.html`, the PDF at `/tutorial.pdf`. `.github/workflows/pages.yml` does this on every push to
 `main`, after checking the generated guide is current and running the unit harness — a deploy
 that would ship a stale page or a service worker missing a file fails instead.
 

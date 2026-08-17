@@ -125,6 +125,14 @@ export function renderTutorial(host) {
     add(card, el("a", {
       class: "btn wide", href: TUTORIAL_META.page, target: "_blank", rel: "noopener",
     }, "Open the guide as a page →"));
+    // The PDF ships with the app and is cached with it, so this works offline
+    // too — it is the same guide, paginated, for a tablet or for paper.
+    if (TUTORIAL_META.pdf) {
+      add(card, el("p", { class: "muted", text: TUTORIAL_META.pdfNote }));
+      add(card, el("a", {
+        class: "btn wide", href: TUTORIAL_META.pdf, target: "_blank", rel: "noopener",
+      }, "Download the guide as a PDF"));
+    }
     add(host, card);
   }
 

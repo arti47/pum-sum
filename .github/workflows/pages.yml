@@ -1,5 +1,5 @@
 # Publishes the repository root to GitHub Pages: the app at /, the guide at
-# /tutorial.html. There is no build step — the app is native ES modules and the
+# /tutorial.html and /tutorial.pdf. There is no build step — the app is native ES modules and the
 # guide is generated into the repo — so this uploads the checkout as it stands,
 # after checking the generated files are current.
 name: Pages
@@ -32,7 +32,9 @@ jobs:
       # tutorial.html or docs/TUTORIAL.md, fail here rather than deploying a
       # page that disagrees with the app.
       - name: Check the generated guide is current
-        run: node tests/tools/gen-tutorial.mjs --check
+        run: |
+          node tests/tools/gen-tutorial.mjs --check
+          node tests/tools/gen-pdf.mjs --check
 
       # The unit harness needs no browser and takes seconds; it also asserts the
       # service-worker app shell lists every shipped file, which is exactly the
