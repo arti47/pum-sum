@@ -666,3 +666,29 @@ details.acc.group > summary .pill {
   .action-bar { max-width: 1000px; }
   .tab-bar { padding-inline: max(0px, calc((100% - 1000px) / 2)); }
 }
+
+/* ---------- tutorial ---------------------------------------------------
+   The guide renders from data-tutorial.js: paragraphs, UI paths, worked
+   die examples, rationale notes and traps. */
+.tut-tap {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .8rem; color: var(--accent-text);
+  /* paper-2, not paper-sunk: the accent reads 4.17 on the sunk tone and 4.93
+     on the card tone, and the contrast gate says so. */
+  background: var(--paper-2); border: 1px solid var(--rule);
+  border-radius: var(--radius); padding: .35rem .55rem; display: inline-block;
+}
+.tut-note, .tut-warn {
+  border-left: 3px solid var(--rule-2); padding: .1rem 0 .1rem .6rem;
+  color: var(--ink-2); font-size: .88rem;
+}
+.tut-warn { border-left-color: var(--accent-text); }
+.tut-roll {
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--paper-2); padding: .5rem .6rem; margin: .5rem 0;
+}
+.tut-roll-head { display: flex; align-items: baseline; gap: .5rem; }
+.tut-roll-what { font-weight: 700; font-size: .86rem; }
+.tut-roll-head .cite { margin-left: auto; white-space: nowrap; }
+.tut-roll-result { font-size: .95rem; margin: .2rem 0; }
+.tut-roll-then { font-size: .86rem; color: var(--ink-2); margin: .35rem 0 0; }

@@ -12,7 +12,8 @@
     "probe:flow": "node tests/probe-flow.mjs",
     "probe": "node tests/probe-layout.mjs",
     "deadcode": "node tests/deadcode.mjs",
-    "audit:deep": "node tests/audit-deep.mjs"
+    "audit:deep": "node tests/audit-deep.mjs",
+    "tutorial": "node tests/tools/gen-tutorial.mjs"
   },
   "dependencies": {
     "playwright-core": "^1.62.1"

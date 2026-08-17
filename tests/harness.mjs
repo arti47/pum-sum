@@ -265,6 +265,52 @@ ok("every node-invoking prompt has a play note",
   }
 }
 
+// --- 12c. the tutorial covers every control ---------------------------------
+// "Don't leave out any function" is checkable rather than claimed: scan src/ for
+// every labelled control and dialog, and assert each is named somewhere in the
+// tutorial. Generic dialog verbs are exempt — they are documented once, in
+// Part 3's "Controls that appear everywhere".
+{
+  const tut = await import("../data-tutorial.js");
+  const text = JSON.stringify([tut.QUICK_START, tut.PARTS, tut.TUTORIAL_META]).toLowerCase();
+
+  const GENERIC = new Set([
+    "save", "cancel", "close", "done", "add", "remove", "delete", "edit", "open",
+    "rename", "name", "undo", "re-roll", "reroll", "dismiss", "back", "play",
+    "scene", "oracles", "journal", "more", "invoke", "choose", "import", "copy",
+    "download", "prepare a game", "what happened?", "your note",
+  ]);
+
+  const labels = new Set();
+  for (const f of readdirSync(join(root, "src")).filter((n) => n.endsWith(".js"))) {
+    const src = readFileSync(join(root, "src", f), "utf8");
+    for (const m of src.matchAll(/\}\s*,\s*"([^"]{2,44})"\s*\)\)?/g)) labels.add(m[1]);
+    for (const m of src.matchAll(/label:\s*"([^"]{2,44})"/g)) labels.add(m[1]);
+    for (const m of src.matchAll(/title:\s*"([^"]{2,44})"/g)) labels.add(m[1]);
+  }
+  const checkable = [...labels].filter((l) => !GENERIC.has(l.toLowerCase()));
+  ok("there are controls to check the tutorial against", checkable.length >= 100,
+    `${checkable.length} found`);
+
+  const missing = checkable.filter((l) => !text.includes(l.toLowerCase()));
+  ok("the tutorial names every control in the app", missing.length === 0,
+    `${missing.length} unmentioned: ${missing.slice(0, 12).join(" · ")}`);
+
+  // and the three renderings cannot drift
+  const gen = execFileSync(process.execPath,
+    [join(root, "tests/tools/gen-tutorial.mjs"), "--check"], { stdio: "pipe" });
+  ok("docs/TUTORIAL.md is regenerated from the data", String(gen).includes("current"));
+  ok("the licence notice travels with every rendering",
+    /CC BY-NC-SA/.test(tut.TUTORIAL_META.licence));
+  // every scenario quotes real rows: each roll cites a page
+  const rolls = tut.PARTS.flatMap((p) => p.sections.flatMap((s) => s.blocks))
+    .filter((b) => b.roll).map((b) => b.roll);
+  ok("every worked example cites its page", rolls.every((r) => r.page && r.result),
+    `${rolls.filter((r) => !r.page).length} without`);
+  ok("the tutorial carries a worked example for each scenario", rolls.length >= 20,
+    `${rolls.length} rolls`);
+}
+
 // --- 13-20. SUM tables ------------------------------------------------------
 eq("twenty-four SUM tables", sum.SUM_TABLES.length, 24);
 eq("eight SUM sections", sum.SUM_SECTIONS.length, 8);

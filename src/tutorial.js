@@ -1,111 +1,123 @@
-// The first-session walkthrough. A screen, not a modal sequence, so a player can
-// come back to it mid-session (§6.6 layer 3).
+// The tutorial screen. A screen, not a modal sequence, so a player can come
+// back to it mid-session (§6.6 layer 3). The content lives in data-tutorial.js
+// and is rendered here, in docs/TUTORIAL.md by tests/tools/gen-tutorial.mjs,
+// and on the published page — one source, three renderings.
 
 import { el, add } from "./core.js";
 import { explain, toast } from "./ui.js";
 import { Settings } from "./settings.js";
 import { go } from "./router.js";
 import { startWizard } from "./wizard.js";
+import { TUTORIAL_META, QUICK_START, PARTS } from "../data-tutorial.js";
 
-const STEPS = [
-  {
-    title: "1 · Prepare a game",
-    why: "PUM asks for a little prep so your head is in the right creative context. Four steps: a universe, a plot scope, your protagonists, and a plot sheet.",
-    do: "Tap Prepare a game on the Home screen. Name the world you want to play in, then say in one line what this thread is about — that is your plot scope.",
-    to: { label: "Prepare a game", go: () => startWizard() },
-  },
-  {
-    title: "2 · Choose a plot sheet, and understand what you chose",
-    why: "The sheet is a pacing decision, not a theme. Its track length says how many beats stand between you and this thread resolving — more boxes means more of the universe pushing back.",
-    do: "Standard (11 boxes) is the book's recommendation for a first game. Scenes and Dungeon give you one beat per scene or per room. Sandbox has no track at all.",
-  },
-  {
-    title: "3 · Write a few plot nodes",
-    why: "Plot nodes are your game's own content. When a random prompt says 'handle a potential problem', it rolls on the list you wrote — so a blank list makes the prompts generic.",
-    do: "Three or four entries per list is plenty to start. Empty slots are not a failure: they are an invitation to invent something on the spot, and whatever you invent becomes a permanent entry.",
-    to: { label: "Plot nodes", go: () => go("play", "nodes") },
-  },
-  {
-    title: "4 · Decide the starting point",
-    why: "The book asks you to decide where the game opens and what is introduced there. It suggests in medias res — a battle, a shock — so your characters must act immediately.",
-    do: "Write it on the plot sheet. The Home screen keeps asking until you do, because a game that never opens never starts.",
-  },
-  {
-    title: "5 · Open a scene",
-    why: "SUM's scene opener exists for the moment you know a scene should happen but not how it begins. It is a d20 that tells you what to describe first.",
-    do: "Scene tab → Roll a scene opener. If you already know how it opens, use 'Open it myself' — you never have to roll.",
-    to: { label: "Scene arc", go: () => go("scene", "arc") },
-  },
-  {
-    title: "6 · Roleplay, and ask when you don't know",
-    why: "Most of your time is state one: playing your characters. The oracles are for the moments you genuinely don't know, or would rather not decide.",
-    do: "Oracles tab → Yes or No. Pick the register that matches who is answering: the universe (Deterministic), a character's own view (Subjective), or someone talking to you (Conversation). Keep it to one or two questions per matter.",
-    to: { label: "Oracles", go: () => go("oracles", "yesno") },
-  },
-  {
-    title: "7 · Bias: two different rules, and the app keeps them apart",
-    why: "PUM's bias hands the choice to you: roll twice, pick the answer that fits. SUM's Rule of Bias is mechanical: roll twice, keep the lowest if you expect good and the highest if you expect trouble.",
-    do: "On a PUM Yes/No the app shows both answers and waits for your tap. On a SUM table it keeps the die for you and shows both, marking the one it kept.",
-  },
-  {
-    title: "8 · Call a plot beat",
-    why: "This is the machine. A modified proposal twists an idea you already have; a random prompt tells you what happens when you don't have one.",
-    do: "Play tab → the pinned button rolls a random prompt; the smaller one rolls a proposal. Then play the answer out for a while before deciding anything.",
-    to: { label: "Plot sheet", go: () => go("play", "track") },
-  },
-  {
-    title: "9 · Confirm the beat — or don't",
-    why: "Calling a beat authorises you to cross a box; it does not oblige you. Cross one only once the outcome turned out to matter to the bigger picture.",
-    do: "Confirm — cross a box, or Not this time. Both are journalled. The track in the header is the honest answer to 'how close is this to over?'",
-  },
-  {
-    title: "10 · Close the scene",
-    why: "SUM's closure asks how the world responds — fortunately or unfortunately — and hands you the hook into what comes next.",
-    do: "Scene tab → Roll a scene closure. You get a summary of what changed, and a one-step undo if you closed it by mistake.",
-    to: { label: "Scene arc", go: () => go("scene", "arc") },
-  },
-  {
-    title: "11 · Read it back",
-    why: "Every roll landed in the journal with its dice, so you can re-derive any result later — and the Dice view counts every face, so you can check the app instead of arguing with it.",
-    do: "Journal tab. Add your own entries too; that is where the story you are telling actually lives.",
-    to: { label: "Journal", go: () => go("journal", "entries") },
-  },
-  {
-    title: "Optional · The disruption die",
-    why: "PUM's variant for players who want the machine to interrupt them. A d10 rides along with every oracle answer: on a 1 a random prompt breaks in, on a 2 a proposal alters the scene.",
-    do: "Settings → Optional rules. It is off by default because the book presents it as a variant you opt into, not as the default way to play.",
-    to: { label: "Settings", go: () => go("more", "settings") },
-  },
-];
+function block(b) {
+  if (b.p) return el("p", { text: b.p });
+  if (b.tap) return el("p", { class: "tut-tap", text: b.tap });
+  if (b.note) return el("p", { class: "tut-note" }, el("strong", { text: "Why. " }), b.note);
+  if (b.warn) return el("p", { class: "tut-warn" }, el("strong", { text: "Watch out. " }), b.warn);
+  if (b.ref) return el("p", { class: "cite", text: b.ref });
+  if (b.bullets) {
+    const ul = el("ul");
+    for (const t of b.bullets) add(ul, el("li", { text: t }));
+    return ul;
+  }
+  if (b.steps) {
+    const ol = el("ol");
+    for (const t of b.steps) add(ol, el("li", { text: t }));
+    return ol;
+  }
+  if (b.roll) {
+    const r = b.roll;
+    const box = el("div", { class: "tut-roll" });
+    add(box, el("div", { class: "tut-roll-head" },
+      el("span", { class: "tut-roll-what", text: r.what }),
+      el("span", { class: "cite", text: r.die + (r.value ? " = " + r.value : "") })
+    ));
+    add(box, el("div", { class: "tut-roll-result" }, "“" + r.result + "”"));
+    add(box, el("div", { class: "cite", text: r.page }));
+    if (r.then) add(box, el("p", { class: "tut-roll-then", text: r.then }));
+    return box;
+  }
+  if (b.table) {
+    // In-app only: the app already contains every row, so nothing is disclosed
+    // here that the reader does not already have. The shared renderings quote
+    // only the single rows their examples land on.
+    const t = b.table;
+    const wrap = el("div", { class: "table-scroll" });
+    const table = el("table", { class: "rows" });
+    if (t.head) {
+      const tr = el("tr");
+      for (const h of t.head) add(tr, el("th", { text: h }));
+      add(table, tr);
+    }
+    for (const row of t.rows) {
+      const tr = el("tr");
+      row.forEach((cell, i) => add(tr, el("td", { class: i === 0 ? "r" : null, text: cell })));
+      add(table, tr);
+    }
+    add(wrap, table);
+    return el("div", null,
+      el("p", { class: "cite", text: `${t.name} — ${t.page}` }),
+      wrap
+    );
+  }
+  return null;
+}
 
 export function renderTutorial(host) {
-  add(host, el("h1", { text: "Your first session" }));
+  add(host, el("h1", { text: TUTORIAL_META.title }));
+  add(host, el("p", { class: "lede", text: TUTORIAL_META.blurb }));
   add(host, explain([
-    "Eleven steps, in play order, each saying what to tap and why the game asks for it.",
-    "It is a screen, not a wizard — come back to any step mid-session.",
+    "The quick start below gets a first session played tonight. Everything under it is the complete guide: every function, four worked scenarios, and a screen-by-screen reference.",
+    "It is a screen, not a wizard — come back to any part mid-session.",
   ]));
 
+  // --- the fast path ------------------------------------------------------
+  const quick = el("div", { class: "card" });
+  add(quick, el("h2", { text: "Your first session in ten minutes" }));
+  for (const s of QUICK_START) {
+    const d = el("details", { class: "acc" }, el("summary", null, s.title));
+    const body = el("div", { class: "acc-body" });
+    add(body, el("p", null, el("strong", { text: "Why: " }), s.why));
+    add(body, el("p", null, el("strong", { text: "Do: " }), s.act));
+    if (s.to) {
+      add(body, el("button", {
+        class: "btn small",
+        onclick: () => (s.to.go[0] === "wizard" ? startWizard() : go(s.to.go[0], s.to.go[1])),
+      }, `${s.to.label} →`));
+    }
+    add(d, body);
+    add(quick, d);
+  }
   if (!Settings.seenTutorial()) {
-    add(host, el("button", {
+    add(quick, el("button", {
       class: "btn wide",
       onclick: () => { Settings.setSeenTutorial(true); toast("Marked as read."); },
     }, "Mark as read"));
   }
+  add(host, quick);
 
-  for (const s of STEPS) {
-    const d = el("details", { class: "acc" }, el("summary", null, s.title));
-    const body = el("div", { class: "acc-body" });
-    add(body, el("p", null, el("strong", { text: "Why: " }), s.why));
-    add(body, el("p", null, el("strong", { text: "Do: " }), s.do));
-    if (s.to) {
-      add(body, el("button", { class: "btn small", onclick: s.to.go }, `${s.to.label} →`));
+  // --- the complete guide -------------------------------------------------
+  for (const part of PARTS) {
+    const card = el("div", { class: "card" });
+    const body = el("div");
+    add(card, el("details", { class: "acc group" },
+      el("summary", null, part.title, el("span", { class: "pill", text: String(part.sections.length) })),
+      body
+    ));
+    add(body, el("p", { class: "muted", text: part.blurb }));
+    for (const sec of part.sections) {
+      const d = el("details", { class: "acc" }, el("summary", null, sec.title));
+      const sb = el("div", { class: "acc-body" });
+      for (const b of sec.blocks) add(sb, block(b));
+      add(d, sb);
+      add(body, d);
     }
-    add(d, body);
-    add(host, d);
+    add(host, card);
   }
 
   add(host, el("div", { class: "card" },
-    el("h3", { text: "One thing PUM will not do for you" }),
-    el("p", { class: "muted", text: "It never resolves a task. It will not tell you whether you picked the lock, hit the guard, or convinced the magistrate. Bring your own RPG's rules for that, or simply decide. PUM tells you what the world offers; you are still the one playing." })
+    el("h3", { text: "The books" }),
+    el("p", { class: "muted", text: TUTORIAL_META.licence })
   ));
 }
