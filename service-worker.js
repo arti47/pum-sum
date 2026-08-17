@@ -1,11 +1,12 @@
 // Mixed strategy per template §5: the app shell and data files are cache-first against a
 // versioned cache; navigation requests are network-first so a stale shell never outlives a
 // deploy. Bump CACHE_VERSION on ANY shipped-file change.
-const CACHE_VERSION = "um-v14";
+const CACHE_VERSION = "um-v15";
 
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./tutorial.html",
   "./styles.css",
   "./manifest.json",
   "./icon.svg",
@@ -62,16 +63,21 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  // Navigation: network-first, cache fallback.
+  // Navigation: network-first, cache fallback. The response is cached against
+  // the URL that was actually requested — the app is two pages now (index.html
+  // and tutorial.html), and caching every navigation as index.html would put
+  // the guide's markup in the shell's slot and serve the wrong page offline.
   if (req.mode === "navigate") {
     e.respondWith(
       fetch(req)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE_VERSION).then((c) => c.put("./index.html", copy));
+          caches.open(CACHE_VERSION).then((c) => c.put(req, copy));
           return res;
         })
-        .catch(() => caches.match("./index.html").then((r) => r || caches.match("./")))
+        .catch(() => caches.match(req)
+          .then((r) => r || caches.match("./index.html"))
+          .then((r) => r || caches.match("./")))
     );
     return;
   }

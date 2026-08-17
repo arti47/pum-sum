@@ -19,10 +19,10 @@
 export const TUTORIAL_META = {
   title: "Using Unfolding Machines",
   blurb: "A complete guide to every function of the app, for someone who owns the three books and has not run a solo game before.",
-  // The same guide, published as a page for reading on a second screen while you
-  // play on the first. Private to the owner unless shared from the page itself.
-  page: "https://claude.ai/code/artifact/9dceec5c-346c-4e54-95a3-7cdfbdd7fcff",
-  pageNote: "This guide is also a web page — the same content, easier to read on a laptop while you play on your phone. It is offline here either way.",
+  // The same guide as a sibling page, served by whatever hosts the app and
+  // cached with it, so the link works offline and wherever the app is deployed.
+  page: "./tutorial.html",
+  pageNote: "The same guide is also a page beside the app — easier to read on a laptop while you play on your phone. It is cached with the app, so it works offline too.",
   licence: "Plot Unfolding Machine, Scene Unfolding Machine and Game Unfolding Machine are by JeansenVaars, licensed CC BY-NC-SA 4.0. This guide quotes individual table rows to make its examples checkable against your own copy, and is shared under the same licence.",
 };
 

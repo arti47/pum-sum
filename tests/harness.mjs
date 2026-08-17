@@ -51,7 +51,7 @@ function eq(name, a, b) {
   const shipped = [
     ...readdirSync(join(root, "src")).map((f) => "src/" + f),
     ...readdirSync(root).filter((f) =>
-      /^(data-.*\.js|styles\.css|index\.html|icon\.svg|manifest\.json)$/.test(f)),
+      /^(data-.*\.js|styles\.css|index\.html|tutorial\.html|icon\.svg|manifest\.json)$/.test(f)),
   ];
   const missing = shipped.filter((f) => !listed.has(f));
   ok("every shipped file is in the service-worker app shell", missing.length === 0, missing.join(", "));
@@ -296,10 +296,26 @@ ok("every node-invoking prompt has a play note",
   ok("the tutorial names every control in the app", missing.length === 0,
     `${missing.length} unmentioned: ${missing.slice(0, 12).join(" · ")}`);
 
-  // and the three renderings cannot drift
-  const gen = execFileSync(process.execPath,
-    [join(root, "tests/tools/gen-tutorial.mjs"), "--check"], { stdio: "pipe" });
-  ok("docs/TUTORIAL.md is regenerated from the data", String(gen).includes("current"));
+  // and the three renderings cannot drift. execFileSync throws on a non-zero
+  // exit, so catch it — a stale file is a failure to report, not a crash that
+  // takes the rest of the harness with it.
+  let genOut = "";
+  try {
+    genOut = String(execFileSync(process.execPath,
+      [join(root, "tests/tools/gen-tutorial.mjs"), "--check"], { stdio: "pipe" }));
+  } catch (err) {
+    genOut = String(err.stderr || err.stdout || err);
+  }
+  ok("the generated guide — doc and page — is current", genOut.includes("current"),
+    genOut.trim().split("\n")[0]);
+  // The page is served beside the app by whatever hosts it, so the app links to
+  // a sibling path rather than to somewhere off the deployment.
+  ok("the app links to the guide as a sibling page",
+    tut.TUTORIAL_META.page === "./tutorial.html", tut.TUTORIAL_META.page);
+  const page = readFileSync(join(root, "tutorial.html"), "utf8");
+  ok("the page is a complete document a static host can serve", /^<!doctype html>/i.test(page));
+  ok("the page links back to the app", page.includes('href="./index.html"'));
+  ok("the page requests nothing off-origin", !/https?:\/\/[^"'\s]+\.(js|css|woff2?)/.test(page));
   ok("the licence notice travels with every rendering",
     /CC BY-NC-SA/.test(tut.TUTORIAL_META.licence));
   // every scenario quotes real rows: each roll cites a page

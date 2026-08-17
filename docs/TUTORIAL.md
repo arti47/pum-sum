@@ -4,7 +4,7 @@
 
 *Generated from `data-tutorial.js` by `tests/tools/gen-tutorial.mjs`. Edit the data, not this file.*
 
-The same guide is inside the app at **More → Tutorial**, where it also reproduces the tables in full. It is published as a page at <https://claude.ai/code/artifact/9dceec5c-346c-4e54-95a3-7cdfbdd7fcff>.
+The same guide is inside the app at **More → Tutorial**, where it also reproduces the tables in full. It is published as a page at <./tutorial.html>.
 
 ---
 

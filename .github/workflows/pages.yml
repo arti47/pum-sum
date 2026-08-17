@@ -1,0 +1,56 @@
+# Publishes the repository root to GitHub Pages: the app at /, the guide at
+# /tutorial.html. There is no build step — the app is native ES modules and the
+# guide is generated into the repo — so this uploads the checkout as it stands,
+# after checking the generated files are current.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; let a running one finish rather than cancelling it.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # The guide is generated from data-tutorial.js. If someone hand-edited
+      # tutorial.html or docs/TUTORIAL.md, fail here rather than deploying a
+      # page that disagrees with the app.
+      - name: Check the generated guide is current
+        run: node tests/tools/gen-tutorial.mjs --check
+
+      # The unit harness needs no browser and takes seconds; it also asserts the
+      # service-worker app shell lists every shipped file, which is exactly the
+      # mistake that breaks a static deploy.
+      - name: Unit harness
+        run: node tests/harness.mjs
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

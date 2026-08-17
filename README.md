@@ -70,8 +70,23 @@ reference. It is *generated* from `data-tutorial.js` by `npm run tutorial`; edit
 the markdown, and the harness will tell you if the two drift apart.
 
 The same guide is inside the app at **More → Tutorial**, where it opens with an eleven-step
-quick start and reproduces the referenced tables in full. A third rendering is published as a
-web page for reading on a second screen while you play on the first.
+quick start and reproduces the referenced tables in full, and beside the app as `tutorial.html`
+— a sibling page any static host serves, linked both ways and cached with the app so it works
+offline too. All three are generated from the one data file; the harness fails if they drift.
+
+## Hosting it
+
+The app has no build step, so a static host can serve the repository root as it stands: the app
+at `/`, the guide at `/tutorial.html`. `.github/workflows/pages.yml` does this on every push to
+`main`, after checking the generated guide is current and running the unit harness — a deploy
+that would ship a stale page or a service worker missing a file fails instead.
+
+**One setting has to be flipped by hand, once:** GitHub → *Settings* → *Pages* → *Source:
+**GitHub Actions***. Until then the workflow runs and the deploy step fails. After that the app
+is at `https://<owner>.github.io/<repo>/` and the guide at `.../tutorial.html`.
+
+A `.nojekyll` file sits at the root so Pages serves the files as they are rather than running
+them through Jekyll.
 
 `CLAUDE.md` is the canonical spec and is updated in the same change as the code it describes.
 

@@ -133,7 +133,15 @@ const partsHtml = PARTS.map((part) => `<section class="part" id="${part.id}">
 
 const boxes = Array.from({ length: 22 }, () => `<i></i>`).join("");
 
-const html = `<title>${esc(TUTORIAL_META.title)}</title>
+const html = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(TUTORIAL_META.title)}</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta name="description" content="${esc(TUTORIAL_META.blurb)}">
+<meta name="theme-color" content="#f7f1e3">
 <style>
 :root{
   --paper:#f7f1e3; --paper-2:#fffaf0; --paper-sunk:#efe7d4;
@@ -166,6 +174,7 @@ h1{font-size:clamp(2rem,5vw,3rem);line-height:1.08;margin:0 0 .5rem;
 .lede{font-size:1.12rem;color:var(--ink-2);margin:0 0 1.2rem;max-width:60ch}
 .byline{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);
   text-transform:uppercase;letter-spacing:.09em}
+.backlink{margin:.8rem 0 0;font-size:.9rem}
 /* The plot track, as a reading-progress bar. The app's core visual is a row of
    boxes you cross; here they cross as you read. */
 .track{position:sticky;top:0;z-index:5;background:var(--paper);
@@ -233,12 +242,15 @@ a{color:var(--accent-text)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+</head>
+<body>
 
 <div class="wrap">
   <header class="masthead">
     <h1>${esc(TUTORIAL_META.title)}</h1>
     <p class="lede">${esc(TUTORIAL_META.blurb)}</p>
     <p class="byline">PUM v9 · SUM v8 Rev2 · GUM v2.2 — a complete guide</p>
+    <p class="backlink"><a href="./index.html">← Open the app</a></p>
   </header>
 
   <div class="track" id="track" aria-hidden="true">${boxes}</div>
@@ -276,23 +288,31 @@ a{color:var(--accent-text)}
   paint();
 })();
 </script>
+</body>
+</html>
 `;
 
 const text = out.join("\n");
 const path = join(root, "docs/TUTORIAL.md");
+const htmlPath = join(root, "tutorial.html");
 const prev = (() => { try { return readFileSync(path, "utf8"); } catch { return null; } })();
+const prevHtml = (() => { try { return readFileSync(htmlPath, "utf8"); } catch { return null; } })();
+
 if (process.argv.includes("--check")) {
   if (prev !== text) {
     console.error("docs/TUTORIAL.md is out of date — run `npm run tutorial`");
     process.exit(1);
   }
-  console.log("docs/TUTORIAL.md is current.");
+  if (prevHtml !== html) {
+    console.error("tutorial.html is out of date — run `npm run tutorial`");
+    process.exit(1);
+  }
+  console.log("docs/TUTORIAL.md and tutorial.html are current.");
 } else {
   writeFileSync(path, text);
+  writeFileSync(htmlPath, html);
   console.log(`docs/TUTORIAL.md written — ${text.split("\n").length} lines, ${text.length} chars`);
+  console.log(`tutorial.html written — ${html.length} chars`);
   const htmlArg = process.argv.indexOf("--html");
-  if (htmlArg > -1 && process.argv[htmlArg + 1]) {
-    writeFileSync(process.argv[htmlArg + 1], html);
-    console.log(`page written — ${html.length} chars`);
-  }
+  if (htmlArg > -1 && process.argv[htmlArg + 1]) writeFileSync(process.argv[htmlArg + 1], html);
 }

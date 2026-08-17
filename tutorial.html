@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using Unfolding Machines</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta name="description" content="A complete guide to every function of the app, for someone who owns the three books and has not run a solo game before.">
+<meta name="theme-color" content="#f7f1e3">
+<style>
+:root{
+  --paper:#f7f1e3; --paper-2:#fffaf0; --paper-sunk:#efe7d4;
+  --ink:#1b2130; --ink-2:#46506a; --ink-3:#656d87;
+  --rule:#d9cfb8; --rule-2:#c3b79b;
+  --accent:#e2603c; --accent-text:#b64d30;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#14161d; --paper-2:#1c1f28; --paper-sunk:#0f1116;
+  --ink:#ece5d6; --ink-2:#b3ab9a; --ink-3:#8c8678;
+  --rule:#333744; --rule-2:#454a5b;
+  --accent:#f4784f; --accent-text:#f4784f;
+}}
+:root[data-theme="dark"]{
+  --paper:#14161d; --paper-2:#1c1f28; --paper-sunk:#0f1116;
+  --ink:#ece5d6; --ink-2:#b3ab9a; --ink-3:#8c8678;
+  --rule:#333744; --rule-2:#454a5b;
+  --accent:#f4784f; --accent-text:#f4784f;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.1rem 5rem;
+  display:grid;grid-template-columns:1fr;gap:0 3rem}
+header.masthead{grid-column:1/-1;padding:3.2rem 0 1.4rem;border-bottom:1px solid var(--rule)}
+h1{font-size:clamp(2rem,5vw,3rem);line-height:1.08;margin:0 0 .5rem;
+  text-wrap:balance;letter-spacing:-.015em}
+.lede{font-size:1.12rem;color:var(--ink-2);margin:0 0 1.2rem;max-width:60ch}
+.byline{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);
+  text-transform:uppercase;letter-spacing:.09em}
+.backlink{margin:.8rem 0 0;font-size:.9rem}
+/* The plot track, as a reading-progress bar. The app's core visual is a row of
+   boxes you cross; here they cross as you read. */
+.track{position:sticky;top:0;z-index:5;background:var(--paper);
+  padding:.5rem 0 .45rem;border-bottom:1px solid var(--rule);
+  grid-column:1/-1;display:flex;gap:3px;align-items:center}
+.track i{flex:1 1 0;height:7px;border-radius:2px;background:var(--paper-sunk);
+  border:1px solid var(--rule-2)}
+.track i.on{background:var(--accent);border-color:var(--accent)}
+nav.toc{grid-column:1/-1;padding:1.4rem 0;font-size:.9rem}
+nav.toc ul{list-style:none;margin:0;padding:0}
+nav.toc>ul>li{margin:0 0 .55rem}
+nav.toc ul ul{padding-left:.9rem;margin:.25rem 0 0;color:var(--ink-3)}
+nav.toc ul ul li{margin:.1rem 0;font-size:.85rem}
+nav.toc a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid transparent}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--accent-text);border-bottom-color:var(--accent)}
+nav.toc a.top{font-weight:700;color:var(--ink)}
+main{grid-column:1/-1;max-width:68ch}
+.part{padding:2.6rem 0 0;border-top:1px solid var(--rule);margin-top:2.6rem}
+.part:first-of-type{border-top:0;margin-top:0}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--accent-text);margin:0 0 .3rem}
+h2{font-size:1.7rem;line-height:1.15;margin:0 0 .4rem;text-wrap:balance}
+h3{font-size:1.12rem;margin:2rem 0 .5rem;text-wrap:balance}
+.blurb{color:var(--ink-2);font-style:italic;margin:0 0 .5rem}
+p{margin:.75rem 0}
+ul,ol{margin:.75rem 0;padding-left:1.15rem}
+li{margin:.3rem 0}
+b{font-weight:700}
+.cite{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);margin:.2rem 0}
+.tap{font-family:var(--mono);font-size:.82rem;color:var(--accent-text);
+  background:var(--paper-2);border:1px solid var(--rule);border-radius:8px;
+  padding:.4rem .6rem;display:inline-block}
+.note,.warn{border-left:3px solid var(--rule-2);padding:.15rem 0 .15rem .8rem;
+  color:var(--ink-2);font-size:.94rem;margin:.9rem 0}
+.warn{border-left-color:var(--accent)}
+.roll{margin:1rem 0;padding:.7rem .8rem;background:var(--paper-2);
+  border:1px solid var(--rule);border-radius:10px}
+.roll figcaption{display:flex;align-items:center;gap:.5rem}
+.roll .what{font-weight:700;font-size:.94rem}
+.roll .cite{margin:0 0 0 auto}
+.die{font-family:var(--mono);font-size:.8rem;font-weight:700;
+  min-width:26px;height:26px;display:grid;place-items:center;
+  background:var(--accent);color:#1b2130;border-radius:6px;padding:0 .35rem;
+  font-variant-numeric:tabular-nums}
+.roll blockquote{margin:.45rem 0 .2rem;font-size:1.02rem}
+.roll blockquote::before{content:"\201C"}
+.roll blockquote::after{content:"\201D"}
+.roll .then{font-size:.93rem;color:var(--ink-2);margin:.5rem 0 0}
+.elided{font-family:var(--mono);font-size:.76rem;color:var(--ink-3);
+  border:1px dashed var(--rule-2);border-radius:8px;padding:.45rem .6rem}
+.step{border-top:1px solid var(--rule);padding-top:.9rem;margin-top:1.2rem}
+.step:first-of-type{border-top:0}
+.step h3{margin-top:0}
+footer{grid-column:1/-1;max-width:68ch;margin-top:3.5rem;padding-top:1.2rem;
+  border-top:1px solid var(--rule);font-size:.88rem;color:var(--ink-2)}
+a{color:var(--accent-text)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (min-width:1000px){
+  .wrap{grid-template-columns:16rem minmax(0,1fr)}
+  .track{grid-column:1/-1}
+  nav.toc{grid-column:1;position:sticky;top:2.6rem;align-self:start;
+    max-height:calc(100vh - 4rem);overflow-y:auto;padding-right:.5rem}
+  main{grid-column:2}
+  footer{grid-column:2}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <h1>Using Unfolding Machines</h1>
+    <p class="lede">A complete guide to every function of the app, for someone who owns the three books and has not run a solo game before.</p>
+    <p class="byline">PUM v9 · SUM v8 Rev2 · GUM v2.2 — a complete guide</p>
+    <p class="backlink"><a href="./index.html">← Open the app</a></p>
+  </header>
+
+  <div class="track" id="track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+  <nav class="toc" aria-label="Contents"><ul><li><a class="top" href="#quick">Your first session in ten minutes</a></li><li><a class="top" href="#walkthrough">Part 1 · Learning it in play order</a><ul><li><a href="#machines">The three machines, and which one you are using</a></li><li><a href="#prep">Preparing a game — the five steps, field by field</a></li><li><a href="#sheet">The plot sheet — what you are looking at</a></li><li><a href="#scene-open">Opening a scene</a></li><li><a href="#oracles">Asking the oracles</a></li><li><a href="#beats">Calling a plot beat</a></li><li><a href="#confirm">Confirming a beat, and the track</a></li><li><a href="#nodes-live">Plot nodes in play</a></li><li><a href="#cast">The cast, and SUM's character emulation</a></li><li><a href="#scene-run">Running and closing the scene</a></li><li><a href="#journal">The journal and the dice record</a></li><li><a href="#forge">The Forge — GUM's generators</a></li><li><a href="#inspire">Three words beside a blank</a></li><li><a href="#settings">Settings, your data, and the library</a></li></ul></li><li><a class="top" href="#scenarios">Part 2 · Four scenarios</a><ul><li><a href="#vault">Scenario A · “The Sunken Vault” — Dungeon sheet, dark fantasy</a></li><li><a href="#ceres">Scenario B · “Nine Hours to Ceres” — Journey sheet, sci-fi mystery</a></li><li><a href="#lodger">Scenario C · “The Lodger” — Sandbox sheet, modern horror</a></li><li><a href="#levy">Scenario D · “The Winter Levy” — Customized sheet, historical</a></li></ul></li><li><a class="top" href="#reference">Part 3 · Complete reference</a><ul><li><a href="#ref-frame">The frame — header, plot header, tabs</a></li><li><a href="#ref-play">Play</a></li><li><a href="#ref-scene">Scene</a></li><li><a href="#ref-oracles">Oracles</a></li><li><a href="#ref-journal">Journal</a></li><li><a href="#ref-more">More</a></li><li><a href="#ref-dialogs">Every dialog, by name</a></li><li><a href="#ref-journal-kinds">What the journal calls things</a></li><li><a href="#ref-everywhere">Controls that appear everywhere</a></li></ul></li><li><a class="top" href="#limits">Part 4 · What the app does not do</a><ul><li><a href="#limits">What it will not do, and why</a></li></ul></li></ul></nav>
+
+  <main>
+    <section class="part" id="quick">
+      <p class="eyebrow">Start here</p>
+      <h2>Your first session in ten minutes</h2>
+      <p class="blurb">Enough to play tonight. Everything after it is the complete guide.</p>
+      <section class="step">
+  <h3>1 · Prepare a game</h3>
+  <p><b>Why.</b> PUM asks for a little preparation so your head is in the right creative context before you start. Four steps: a universe, a plot scope, your protagonists, and a plot sheet.</p>
+  <p><b>Do.</b> More → Home → Prepare a game. Name the world you want to play in, then say in one line what this thread is about — that is your plot scope.</p>
+</section><section class="step">
+  <h3>2 · Choose a plot sheet, and understand what you chose</h3>
+  <p><b>Why.</b> The sheet is a pacing decision, not a theme. Its track length says how many beats stand between you and this thread resolving — more boxes means more of the universe pushing back.</p>
+  <p><b>Do.</b> Standard (11 boxes) is the book's recommendation for a first game. Scenes and Dungeon give you one beat per scene or per room. Sandbox has no track at all.</p>
+</section><section class="step">
+  <h3>3 · Write a few plot nodes</h3>
+  <p><b>Why.</b> Plot nodes are your game's own content. When a random prompt says 'handle a potential problem', it rolls on the list you wrote — so a blank list makes the prompts generic.</p>
+  <p><b>Do.</b> Three or four entries per list is plenty. Empty slots are not a failure: they are an invitation to invent, and whatever you invent becomes a permanent entry.</p>
+</section><section class="step">
+  <h3>4 · Decide the starting point</h3>
+  <p><b>Why.</b> The book asks you to decide where the game opens and what is introduced there. It suggests in medias res — a battle, a shock — so your characters must act immediately.</p>
+  <p><b>Do.</b> Write it on the plot sheet. The Home screen keeps asking until you do, because a game that never opens never starts.</p>
+</section><section class="step">
+  <h3>5 · Open a scene</h3>
+  <p><b>Why.</b> SUM's scene opener exists for the moment you know a scene should happen but not how it begins. It is a d20 that tells you what to describe first.</p>
+  <p><b>Do.</b> Scene → Roll a scene opener. If you already know how it opens, use 'Open it myself' — you never have to roll.</p>
+</section><section class="step">
+  <h3>6 · Roleplay, and ask when you don't know</h3>
+  <p><b>Why.</b> Most of your time is state one: playing your characters. The oracles are for the moments you genuinely don't know, or would rather not decide.</p>
+  <p><b>Do.</b> Oracles → Yes or No. Pick the register that matches who is answering. Keep it to one or two questions per matter.</p>
+</section><section class="step">
+  <h3>7 · Bias: two different rules, kept apart</h3>
+  <p><b>Why.</b> PUM's bias hands the choice to you: roll twice, pick the answer that fits. SUM's Rule of Bias is mechanical: roll twice, keep the lowest if you expect good and the highest if you expect trouble.</p>
+  <p><b>Do.</b> On a PUM Yes/No the app shows both answers and waits for your tap. On a SUM table it keeps the die for you and marks the one it kept.</p>
+</section><section class="step">
+  <h3>8 · Call a plot beat</h3>
+  <p><b>Why.</b> This is the machine. A modified proposal twists an idea you already have; a random prompt tells you what happens when you don't have one.</p>
+  <p><b>Do.</b> Play → the pinned button rolls a random prompt; the smaller one rolls a proposal. Then play the answer out for a while before deciding anything.</p>
+</section><section class="step">
+  <h3>9 · Confirm the beat — or don't</h3>
+  <p><b>Why.</b> Calling a beat authorises you to cross a box; it does not oblige you. Cross one only once the outcome turned out to matter.</p>
+  <p><b>Do.</b> Confirm — cross a box, or Not this time. Both are journalled. The track in the header is the honest answer to 'how close is this to over?'</p>
+</section><section class="step">
+  <h3>10 · Close the scene</h3>
+  <p><b>Why.</b> SUM's closure asks how the world responds — fortunately or unfortunately — and hands you the hook into what comes next.</p>
+  <p><b>Do.</b> Scene → Roll a scene closure. You get a summary of what changed, and a one-step undo if you closed it by mistake.</p>
+</section><section class="step">
+  <h3>11 · Read it back</h3>
+  <p><b>Why.</b> Every roll landed in the journal with its dice, so you can re-derive any result later — and the Dice view counts every face, so you can check the app instead of arguing with it.</p>
+  <p><b>Do.</b> Journal. Add your own entries too; that is where the story you are telling actually lives.</p>
+</section>
+    </section>
+    <section class="part" id="walkthrough">
+  <p class="eyebrow">Part 1</p>
+  <h2>Learning it in play order</h2>
+  <p class="blurb">Every function, introduced where you would first meet it, with the reason the rule exists.</p>
+  <section class="sec" id="machines">
+    <h3>The three machines, and which one you are using</h3>
+    <p>Three books, three jobs. Confusing them is the commonest way to get stuck, so it is worth ten seconds now.</p>
+<ul><li>PUM — Plot Unfolding Machine. Manages the plot: what happens next, and how close this thread is to finishing. This is the game.</li><li>SUM — Scene Unfolding Machine. A supplement. Once PUM says a beat happens, SUM tells you what the scene offers, how the fight goes, and how the people in it behave.</li><li>GUM — Game Unfolding Machine. Prep. Worlds, factions, objects, a nemesis, characters as concepts. Use it before you play, and when a blank field stops you mid-play.</li></ul>
+<aside class="note"><b>Why.</b> The division that matters: GUM creates a character as a concept — an archetype, an edge, a flaw. SUM decides how that character behaves when you actually meet them. If you find yourself asking 'what is this person like', you want SUM. If you are asking 'who even is this person', you want GUM.</aside>
+<p>None of the three resolves a task. No book here tells you whether you picked the lock, hit the guard, or convinced the magistrate. Bring your own RPG's rules for that, or simply decide. The app will never report success or failure — it reports what the world offers.</p>
+<p class="cite">PUM p.2 · SUM p.3 · GUM p.3</p>
+  </section>
+<section class="sec" id="prep">
+    <h3>Preparing a game — the five steps, field by field</h3>
+    <p class="tap">More → Home → Prepare a game</p>
+<p>The wizard will not let you past a step whose answer it needs. When the pinned button is greyed out, the line beside it says which answer is missing — 'Name the game to continue', and so on. Steps you have already satisfied stay tappable in the row of step pills, so you can go back and change anything.</p>
+<p>Step 1 · Universe. Four fields, and only the first is required.</p>
+<ul><li>Name this game — a label for your library. 'The Neverwinter road'.</li><li>Universe or RPG — which game or fiction you are playing in. 'D&amp;D 5e', 'Blade Runner', 'my own'. This is the one field in the app with no inspiration roll: GUM generates worlds, but not the names of published ones.</li><li>World, tone and theme — 'grim frontier fantasy, low magic'. Mystery or horror? Social or action? Narrow it down; the book asks you to.</li><li>Inspiration — artbooks, films, lore, tarot. Anything you intend to draw on.</li></ul>
+<p>Step 2 · Scope. A plot scope is one defined mission, task or goal — the thread this plot sheet is about, not the whole campaign. 'Find out who burned the caravan' is a scope. 'Become king' is a campaign.</p>
+<ul><li>Plot scope name — required.</li><li>Mission and initial goals — a pitch for the situation you start in.</li><li>Starting point — where this opens and what is introduced there. Optional now; the Home screen keeps asking until it is written.</li></ul>
+<aside class="note"><b>Why.</b> The mission field's inspiration block is GUM's plot seed exactly — a hook, a motivation, a mission, a lead, a caveat and the opposition. Open it and tap 'All 6 tables' and you have rolled the book's own six-table combination without leaving the field.</aside>
+<p>Step 3 · Protagonists. Your PCs are your eyes and ears. You are in full control of their thoughts, voice and actions — PUM never rolls for them, ever. At least one is required. The name is yours; the notes field beside it is where a rolled GUM archetype lands, because a concept does not belong in a name box.</p>
+<p>Step 4 · Sheet. Ten plot sheets, each a pacing decision. The card shows the track drawn to scale, the box count, how many node slots it gives you, and whether it reaches the extension lists.</p>
+<p class="elided">The ten plot sheets, PUM pp.14–23 — reproduced in the app only.</p>
+<aside class="warn"><b>Watch out.</b> More boxes is not 'better'. It is longer. Eleven boxes is a night or two; twenty is a campaign arc. Pick the one whose length matches the story you actually want to tell.</aside>
+<p>Step 5 · Nodes. Plot nodes are your game's own content — the things a random prompt reaches into. Each list shows three slots and an 'Add another slot' control; the rest exist on the plot sheet and appear as you fill them. Three or four entries per list is plenty to start.</p>
+<aside class="note"><b>Why.</b> A blank list is not broken. When a prompt lands on an empty slot the app offers you three things — add something new, choose an entry that fits, or reroll — and whatever you invent becomes a permanent entry in that list. The lists are meant to grow in play. This is why prep does not demand sixty boxes of content before you have played a minute.</aside>
+<p>On a sheet that pairs with the plot-node extension sheet (Journey, Story-focus, Sandbox, Customized), a further card offers to name a list of your own: factions, rumours, omens, debts owed. Name it and it comes into being with the same ten slots and the same die rule.</p>
+<p class="cite">PUM p.3 · p.27 · p.28</p>
+  </section>
+<section class="sec" id="sheet">
+    <h3>The plot sheet — what you are looking at</h3>
+    <p class="tap">Play → Plot track</p>
+<p>This is the screen you will spend most of your time on. Top to bottom:</p>
+<ul><li>The persistent plot header, above everything, on every in-play screen: the scope's name, the section you are in, and the crossed/total count. This is the honest answer to 'how close is this to over?' and it is why it never scrolls away.</li><li>This scope — a fold holding your mission, starting point and game notes. Context you re-read occasionally, not every beat.</li><li>1 · Call a plot beat — the two beat controls, and the last beat you rolled.</li><li>2 · Cross a box — the track itself, plus what the current section is for.</li><li>What now — the book's own loop (PUM p.5), with the next step offered in place so you are not driving the game from the tab bar.</li><li>3 · When to call which — the p.28 cheat sheet, folded.</li></ul>
+<p>The pinned bar at the foot carries the primary action — Random prompt — with Proposal beside it, and the track position as its context line. Those two are the same actions the card above spells out; the card explains them, the bar performs them.</p>
+  </section>
+<section class="sec" id="scene-open">
+    <h3>Opening a scene</h3>
+    <p class="tap">Scene → Scene arc → Roll a scene opener</p>
+<p>SUM's opener is for the exact moment you know a scene should happen but not how it starts. It is a d20 that tells you what to describe first.</p>
+<figure class="roll">
+      <figcaption><span class="what">Scene opener</span><span class="die">14</span><span class="cite">d20</span></figcaption>
+      <blockquote>Describe a sensory effect — smells, sounds, or feeling</blockquote>
+      <p class="cite">SUM p.4</p>
+      <p class="then">So the scene does not open on the door, or the guard, or the plan. It opens on the smell of wet ash in the stairwell. What the opener is doing is stopping you writing the same establishing shot every time.</p>
+    </figure>
+<p>You never have to roll. 'Open it myself' takes a line of your own and opens the scene with it. Both routes write a journal entry and both put the scene into the open state, which lights a dot on the Scene tab and changes what the plot sheet's 'What now' card suggests.</p>
+<aside class="note"><b>Why.</b> Why the app makes you open a scene at all, when the books have no such requirement: an open scene is what an intervention check interrupts and what a closure closes. It is a container, not a rule. Nothing forces you to use it — you can play beats and oracles all night without opening one.</aside>
+  </section>
+<section class="sec" id="oracles">
+    <h3>Asking the oracles</h3>
+    <p class="tap">Oracles</p>
+<p>Two moments deserve an oracle: when you genuinely do not know, and when you would rather not decide. Avoid rolling if you already have a strong bias toward an answer, or if some outcome would leave you stuck. One or two questions per matter — more than that slows the pace and produces contradictions.</p>
+<p class="cite">PUM p.10</p>
+<p>The question field at the top of the tab is optional but worth using: whatever you type is stamped on the result card and into the journal, so an answer never floats free of what it answered.</p>
+<p>Yes or No — 1d10. Three registers, and picking the right one is most of the skill:</p>
+<ul><li>Deterministic — the universe answering objectively. 'Is the bridge intact?'</li><li>Subjective — a character's own view, which may answer 'don't know'. 'Does Vera think the captain is lying?'</li><li>Conversation — a non-protagonist replying to you in dialogue. 'Will you take us across?'</li></ul>
+<p class="elided">Yes/No · Deterministic, PUM p.12 — reproduced in the app only.</p>
+<figure class="roll">
+      <figcaption><span class="what">Yes or No · conversation</span><span class="die">8</span><span class="cite">d10</span></figcaption>
+      <blockquote>Yes, be careful</blockquote>
+      <p class="cite">PUM p.12</p>
+      <p class="then">Note what the Conversation register gives you that Deterministic never would: not just assent, but a warning attached to it. The ferryman will take you — and he is telling you something about the crossing. That rider is the answer, not decoration.</p>
+    </figure>
+<p>Tick 'I have a bias' and the app rolls twice and shows you both answers as chips, committing neither until you tap one. That is PUM's bias rule and it deliberately hands the choice to you.</p>
+<p>Descriptive oracles — Someone, Place, Object, Hazard, Mood, Notice. 1d10 for the answer, plus a d100 Description word to colour it.</p>
+<figure class="roll">
+      <figcaption><span class="what">Someone</span><span class="die">6</span><span class="cite">d10</span></figcaption>
+      <blockquote>Someone who knows the area</blockquote>
+      <p class="cite">PUM p.12</p>
+      <p class="then">enriched with Description d100 = 33, 'futuristic / far'. Read the pair, not the first line: a local guide who is somehow out of place — too well-equipped, or from much further away than they admit.</p>
+    </figure>
+<p>Story oracles — Discovery, Problem, Intent, Activity, Reason, Explain. Same shape, enriched with a Focus word instead.</p>
+<p>Quantifiers — how many, how good, how hard. Set a baseline in your head before rolling, because the table answers relative to it. Four faces in ten are 'as expected': most of the time the world is unremarkable, and that is deliberate.</p>
+<p>Granular Yes or No — the d100 variant. Declare a likelihood first — no way, hardly, unlikely, neutral, likely, surely, certain — and the roll is read against that column. Use it when the odds genuinely are not even and you want the dice to know that.</p>
+<p>Every result card carries Re-roll, Note it and Dismiss. Re-rolling is not cheating; the book says so explicitly. Both rolls stay in the journal, linked, so the record remains honest.</p>
+<p class="cite">PUM p.8</p>
+<p>After any Yes/No answer the card also offers 'It said yes — random prompt' and 'It said no — modified proposal'. Two of the p.28 triggers are answers rather than situations, and the app cannot know which question you asked — so it offers both and fires neither.</p>
+  </section>
+<section class="sec" id="beats">
+    <h3>Calling a plot beat</h3>
+    <p>A beat is the moment you stop deciding and let the machine decide. You will feel resistance to this the first few times. That resistance is the point.</p>
+<p>Two kinds, both 1d10:</p>
+<ul><li>Modified proposal — you have an idea what happens next, and the table twists it.</li><li>Random prompt — you do not have an idea, and the sheet's own column tells you what the story reaches for.</li></ul>
+<p class="elided">Modified proposals, PUM p.14 — reproduced in the app only.</p>
+<aside class="note"><b>Why.</b> The column is symmetric: 1–5 push against the PCs, 6–10 favour them. It is not a punishment table. The beat card also names the kind of modification that came up — location, emotion, an added element, someone arriving, intensity — and explains what the book means by it, because 'Bring someone quite inconvenient' is a category, not a person.</aside>
+<figure class="roll">
+      <figcaption><span class="what">Modified proposal</span><span class="die">2</span><span class="cite">d10</span></figcaption>
+      <blockquote>Bring someone quite inconvenient</blockquote>
+      <p class="cite">PUM p.14</p>
+      <p class="then">You had already decided the party would bribe the gate sergeant. The proposal does not cancel that — it adds someone to it. The sergeant's superior is standing there. Use the Someone or Intent oracle if you need to know who they are.</p>
+    </figure>
+<p>A random prompt rolls the ten faces your plot sheet prints. Some faces are ABCD random events; some invoke one of your plot node lists. Either way the app rolls the second die for you and shows both.</p>
+<figure class="roll">
+      <figcaption><span class="what">Random prompt</span><span class="die">3</span><span class="cite">d10</span></figcaption>
+      <blockquote>Deal with a difficult challenge</blockquote>
+      <p class="cite">PUM p.14</p>
+      <p class="then">That is an ABCD face, so a second d10 rolls on table C — Challenge — and comes up 9: 'A locked door, object, or path'. The book's advice on C is to let the kind of challenge inspire the whole situation, and to think of a reward.</p>
+    </figure>
+<p>When a prompt invokes a node list, the die size depends on how full the list is: 1d10 while fewer than half the slots are filled, 1d20 from the halfway entry on. The pill above each list tells you which the app is about to roll.</p>
+<p>Land on a written entry and it comes into play. Land on an empty slot and you get four controls, which are four permissions the book grants:</p>
+<ul><li>Add new — invent something. It becomes a permanent entry in that list.</li><li>Choose — pick an entry that fits better than the one the die found.</li><li>Reroll — try the die again.</li><li>Leave it to destiny — reroll until a written entry comes up. This is the 'still stuck' rule, and it can never hand you an empty slot back.</li></ul>
+<p class="cite">PUM p.6</p>
+<aside class="warn"><b>Watch out.</b> On an all-in-one sheet, faces 5 and 6 reach for a notable character and an interesting location — lists that sheet does not print. The app says so and offers to bring one in, recall one from your cast, or roll one from GUM. It does not quietly roll on a list you cannot see.</aside>
+<p>If a beat repeats the last one, the card flags it and offers a re-roll. Flagged, never forced: sometimes a repeat is exactly right.</p>
+  </section>
+<section class="sec" id="confirm">
+    <h3>Confirming a beat, and the track</h3>
+    <p>Calling a beat authorises you to cross a box. It does not oblige you to. Play the answer out in the fiction first — for minutes, not seconds — and cross a box only if the outcome turned out to matter to the bigger picture.</p>
+<p class="cite">PUM p.7</p>
+<ul><li>Confirm — cross a box. The box crosses, the header updates, the journal records it.</li><li>Not this time — the beat is journalled as played, and the track stays where it is.</li><li>Re-roll — try again.</li><li>Add a note — write what actually happened onto the beat's journal entry.</li></ul>
+<aside class="note"><b>Why.</b> This is the single rule most likely to be skipped by someone used to progress clocks that tick automatically. The track is a compass against endless wandering, not a clock. If every beat crossed a box, the length of your story would be decided by how often you happened to roll, not by what happened.</aside>
+<p>The track card also carries three permissions the book grants and the app therefore makes controls, not sentences:</p>
+<ul><li>Advance without a beat — when an event was exceptionally impactful. The journal records that it was voluntary.</li><li>Step back — undo a crossing.</li><li>End this scope — a scope ends when you say it ends. On Sandbox and Improvised, which have no track, this is the only way one can ever finish. Reversible; nothing is deleted.</li></ul>
+<p>Tap any box to mark a timed plot beat: an event you know is coming — a siege, a horde, an awakening. When play reaches that box it fires once, and counts as a random prompt. You still do not know the circumstances, so it can still surprise you.</p>
+<p>Fill the last box and the scope has resolved. That is the Threshold the whole sheet is built around, and the app says so with a dialog rather than a quiet colour change.</p>
+  </section>
+<section class="sec" id="nodes-live">
+    <h3>Plot nodes in play</h3>
+    <p class="tap">Play → Plot nodes</p>
+<p>Each list shows what you have written plus one empty slot, with 'Show all N slots' when you want the rest. The header carries the die the app will roll and how full the list is.</p>
+<ul><li>Tap a slot to write, rewrite or clear it. Every text field here can roll three context-matched GUM words for inspiration.</li><li>Invoke — on a written entry, brings it in deliberately as a beat, no die rolled. PUM p.9 allows this and says it counts as a beat for advancing the track.</li><li>Roll this list — the other half of the same permission: you pick the list on purpose, the die picks the entry.</li><li>Rename / Remove — on a list of your own. Removing it deletes its entries and any prompt face pointing at it falls back to the printed column.</li></ul>
+<aside class="note"><b>Why.</b> Deliberate invocation is how you steer without cheating. Travelling? Reach for world elements. Time for a confrontation? Reach for potential problems. The PCs have earned an answer? Reach for pending questions. You are choosing the category; the die still chooses the entry, and it still costs you a beat.</aside>
+<p class="cite">PUM p.9</p>
+  </section>
+<section class="sec" id="cast">
+    <h3>The cast, and SUM's character emulation</h3>
+    <p class="tap">Play → Cast</p>
+<p>Three groups: your protagonists, notable characters, and interesting locations. Protagonists are yours entirely and nothing rolls for them. The other two are everyone and everywhere the story has actually met.</p>
+<p>Open any character and SUM's twelve character tables are there, in four depths of acquaintance. Roll only the depth the scene has actually reached — you do not ask about someone's deep backstory the moment you meet them.</p>
+<ul><li>First contact (p.8) — Meet reaction, Outside looks, Filler talks.</li><li>Shallow interaction (p.9) — Personality type, Recent anecdote, Job or profession.</li><li>Trust conversation (p.10) — Opinion or answer, Honesty check, Plot contribution.</li><li>Deep relationship (p.11) — Parallel matters, Lingering backstories, Bonding relations.</li></ul>
+<figure class="roll">
+      <figcaption><span class="what">Meet reaction</span><span class="die">17</span><span class="cite">d20</span></figcaption>
+      <blockquote>Ignore you intentionally, avoiding any interaction</blockquote>
+      <p class="cite">SUM p.8</p>
+      <p class="then">Rolled from the person's own entry, so it is stored with them: next session the app still knows the archivist blanked you. That is the difference between rolling on the Scene tab and rolling from the cast — same table, but one result is attached to somebody.</p>
+    </figure>
+<aside class="note"><b>Why.</b> Every SUM table is ordered so low rolls favour your protagonists and high rolls bring trouble. That ordering is what makes the Rule of Bias work, and it is why 17 above is a cold reception rather than a warm one.</aside>
+<p>'Add to plot nodes' writes a cast member into the matching node list. Until a name sits in a list, a random prompt can never reach them — the cast is a record, the node lists are what the machine rolls on.</p>
+  </section>
+<section class="sec" id="scene-run">
+    <h3>Running and closing the scene</h3>
+    <p class="tap">Scene → Scene arc</p>
+<p>Intervention check — roll it when the PCs are taking too long, tension is high, danger is near, or silence lingers. It is a d100, and it is SUM asking whether the world does something while you deliberate.</p>
+<figure class="roll">
+      <figcaption><span class="what">Intervention check</span><span class="die">40</span><span class="cite">d100</span></figcaption>
+      <blockquote>Places an element of interest behind a challenge</blockquote>
+      <p class="cite">SUM p.4</p>
+      <p class="then">Not an attack. The thing they want is now on the far side of something — which is more useful than another fight, and is the sort of answer you would not have written yourself at 11pm.</p>
+    </figure>
+<p>The Rule of Bias sits above the roll: Neutral rolls once, Favourable rolls twice and keeps the lowest, Trouble rolls twice and keeps the highest. Declare it before you roll. The result card shows both dice and marks the one it kept.</p>
+<aside class="warn"><b>Watch out.</b> This is not PUM's bias rule. PUM's hands you both answers and lets you choose; SUM's keeps the die for you according to what you declared. The app implements them separately and deliberately — conflating them would hand your authorship to the machine.</aside>
+<p>Scene closure — a d20 asking how the world responds, fortunately or unfortunately, and handing you the hook into what comes next. Closing summarises what changed: how long the scene ran, how many interventions fired, what was written. One Undo puts the whole thing back.</p>
+<figure class="roll">
+      <figcaption><span class="what">Scene closure</span><span class="die">18</span><span class="cite">d20</span></figcaption>
+      <blockquote>That was a bad move — now things get much harder</blockquote>
+      <p class="cite">SUM p.4</p>
+      <p class="then">High roll, so trouble — the ordering again. Close on this and you know what the next scene opens into, which is exactly what a closure is for.</p>
+    </figure>
+<p>The Scene tab also carries SUM's situation tables, three to a screen: Exploration (location features, core challenge, challenge conditions), Battle (terrain, enemy tactics, enemy composition), Discovery (type of clue, revealing finding, opposition activity). Each screen pins its first table as the primary action, and every table can be opened in full to read.</p>
+  </section>
+<section class="sec" id="journal">
+    <h3>The journal and the dice record</h3>
+    <p class="tap">Journal</p>
+<p>Every roll the app makes lands here with its dice, so any result can be re-derived later. Thirteen filters cover every kind of entry the app writes. Entries page forty at a time and cap at five hundred.</p>
+<ul><li>Write an entry — your own narration. This is where the story you are telling actually lives.</li><li>Session break — a bookmark for where you stopped. Neither book defines a session procedure, so nothing is reset or rolled; the app does not invent one.</li><li>Per entry, behind Edit — add or change a note, or delete the entry.</li></ul>
+<p>The Dice view counts every face the app has rolled in this game, grouped by die size, with d100 bucketed into tens. Digital dice are only worth trusting if you can check them; the app uses the browser's cryptographic random source, never Math.random.</p>
+<aside class="note"><b>Why.</b> One exception is stated on the screen rather than hidden: an inspiration roll beside a text field is only recorded when you keep a word from it. Words rolled and discarded are not counted, so that chart is a record of the dice you used.</aside>
+  </section>
+<section class="sec" id="forge">
+    <h3>The Forge — GUM's generators</h3>
+    <p class="tap">More → Forge</p>
+<p>Forty-three tables in four sections, for prep and for the moment a blank stops you.</p>
+<ul><li>Plot seed — GUM's own six-table combination in the book's order: a hook, a motivation, a mission, the first lead, a caveat, and the opposition. Plus World truths: where this happens and what is already wrong there.</li><li>World — factions, locations, objects, a nemesis, creatures. Eighteen tables.</li><li>Characters — archetypes, edges, flaws, purposes, deeds. Fourteen tables.</li><li>Grand oracle — an action, an adjective and a subject, for when nothing specific fits.</li></ul>
+<figure class="roll">
+      <figcaption><span class="what">Plot seed</span><span class="cite">6 × d20</span></figcaption>
+      <blockquote>hook 6 · motivation 13 · mission 9 · lead 4 · caveat 11 · opposition 17</blockquote>
+      <p class="cite">GUM pp.6–7</p>
+      <p class="then">Reading them together: a formal request or royal mandate (6) to destroy an objective (9), driven by the wish to trigger a drastic world-changing element (13); there is a source of information nearby (4); too many uncertainties, stay low profile (11); and you have a friend or family on their side (17). That last one is what makes it a story rather than a job.</p>
+    </figure>
+<aside class="note"><b>Why.</b> GUM's stated method is combination — roll several tables for one subject, or the same table twice, and read the results as one thing. Every group offers 'Roll all of it' for exactly that reason. A single row is rarely the point.</aside>
+<p>'Keep it →' is what stops a good roll evaporating: write it into any plot node list, add it to the cast as a character or a location, or keep it in the journal. With no game open the app says there is nowhere to keep it yet rather than pretending to save it.</p>
+  </section>
+<section class="sec" id="inspire">
+    <h3>Three words beside a blank</h3>
+    <p>Every text field the app can serve carries a collapsed line: 'Stuck? Roll three words'. Open it and three GUM tables roll, chosen by what the field is for — a character field pulls archetypes and flaws, a location field pulls features and purpose, the mission field pulls the whole plot seed.</p>
+<ul><li>Each word is a chip that appends to what you have written. It never replaces it.</li><li>Roll again rotates through the field's tables, so extras are not wasted.</li><li>All N tables rolls the whole mapped set at once.</li><li>Nothing rolls until you open the block — the books ask you not to roll when you already know.</li></ul>
+<aside class="warn"><b>Watch out.</b> Eight fields deliberately offer nothing, and Rules → 'Where the app does not roll' lists them with reasons. Every GUM row is a phrase about fiction, which is the wrong shape for a proper name or a real-world answer. A table pointed at the wrong question reads as noise.</aside>
+  </section>
+<section class="sec" id="settings">
+    <h3>Settings, your data, and the library</h3>
+    <p class="tap">More → Settings</p>
+<p>Your data. Everything lives in this browser's local storage and nothing is sent anywhere.</p>
+<ul><li>Export JSON — the complete state, as text you can copy or download.</li><li>Import JSON — replaces everything on this device. Export first.</li><li>Export readable — a Markdown summary of the current game: protagonists, each plot sheet, its nodes, and the journal.</li><li>Check my data — re-runs normalisation and reports what, if anything, needed repair.</li><li>Undo — the last twenty actions, most recent first. You will rarely need it here: every mutating action raises a toast with its own Undo button.</li></ul>
+<p>Optional rules.</p>
+<ul><li>Disruption die — off by default, because PUM presents it as a variant. A d10 rides along with every oracle answer except quantifiers, Description and Focus: on a 1 a random prompt interrupts, on a 2 a proposal alters the scene. Read your answer first, then resolve the disruption.</li><li>Volatile situation — widens the proposal range from 2 to 2–5. A 1 remains the only face for a prompt.</li><li>GUM — on by default. Turn it off and the Forge section and every inspiration block disappear.</li><li>Enrich descriptive and story oracles — on, because the books make it the default.</li></ul>
+<p>Appearance: theme follows the system unless you override it, and a text-size slider runs 85% to 140%. Pinch-zoom is locked so a stray gesture cannot disturb a roll; the slider is what pays that back.</p>
+<p>The library. One game holds many plot sheets — one per scope — and finished ones stay as a record. Home lets you switch scope, edit or delete one, add a new one, switch or archive whole games, and prepare another.</p>
+<aside class="warn"><b>Watch out.</b> Danger zone, at the foot of Settings and out of the thumb's resting arc: Delete the current game, and Erase everything. Both confirm and both name exactly what is lost.</aside>
+  </section>
+</section>
+<section class="part" id="scenarios">
+  <p class="eyebrow">Part 2</p>
+  <h2>Four scenarios</h2>
+  <p class="blurb">Four games on four structurally different plot sheets. Every quoted result is the real row at that die value.</p>
+  <section class="sec" id="vault">
+    <h3>Scenario A · “The Sunken Vault” — Dungeon sheet, dark fantasy</h3>
+    <p>Seven boxes, one per room. Four node lists of five slots each. No extension lists, which is the interesting part: this sheet's prompt column still reaches for a notable character and an interesting location, and has no list for either.</p>
+<p>Prep. Universe: “Dolmenwood-ish folk horror, no high magic.” Scope: “Reach the reliquary before the flood does.” Starting point, written in medias res: “Waist-deep in the entry stair, the water still rising, the door above already jammed.”</p>
+<p>Four lists, three entries each — enough. Game or world elements: the flood is on a timer · lantern oil runs out · the vault answers to old vows. Potential problems: something is already down here · the stair is the only way out · Brother Aldo is lying. Useful findings: a dry ledger page · the sluice key · Aldo's rope. Pending questions: who broke the sluice? · is the reliquary still sealed?</p>
+<p>Scene one. Opener rolled rather than written, because you know a scene starts here but not how:</p>
+<figure class="roll">
+      <figcaption><span class="what">Scene opener</span><span class="die">14</span><span class="cite">d20</span></figcaption>
+      <blockquote>Describe a sensory effect — smells, sounds, or feeling</blockquote>
+      <p class="cite">SUM p.4</p>
+      <p class="then">Cold to the sternum, and the sound of the water finding a new way in somewhere below you. Not the doorway you would have described.</p>
+    </figure>
+<p>You explore. On the Scene tab, Exploration gives three tables; declare Trouble first, because you expect this place to be hostile — that is SUM's Rule of Bias, and it keeps the higher of two d20s.</p>
+<figure class="roll">
+      <figcaption><span class="what">Location features · bias high</span><span class="cite">2d20 → 12</span></figcaption>
+      <blockquote>Being watched or protected by an unseen entity</blockquote>
+      <p class="cite">SUM p.5</p>
+      <p class="then">Something is already down here — which is a node you wrote, arriving without a prompt asking for it. That is allowed and common: SUM's tables and PUM's nodes will agree with each other more often than chance suggests, because you wrote the nodes about this place.</p>
+    </figure>
+<p>First beat. You do not know what happens next, so: a random prompt.</p>
+<figure class="roll">
+      <figcaption><span class="what">Random prompt</span><span class="die">3</span><span class="cite">d10</span></figcaption>
+      <blockquote>Deal with a difficult challenge</blockquote>
+      <p class="cite">PUM p.14</p>
+      <p class="then">ABCD table C, second d10 = 9: “A locked door, object, or path”. The book says to let the kind of challenge inspire the whole situation and to think of a reward.</p>
+    </figure>
+<p>The reliquary door is sealed by a vow, not a lock — and the reward for solving it is the sluice key, which is on your findings list. You play that out for ten minutes of narration. It mattered. Confirm — cross a box. 1/7.</p>
+<p>Second beat, and the awkward one. Prompt face 5:</p>
+<figure class="roll">
+      <figcaption><span class="what">Random prompt</span><span class="die">5</span><span class="cite">d10</span></figcaption>
+      <blockquote>Meet or recall a notable character</blockquote>
+      <p class="cite">PUM p.14</p>
+      <p class="then">This sheet prints no notable-characters list. The app says so plainly and offers three things: bring one in, recall one from the cast, or roll one from GUM. It does not roll on a list you cannot see.</p>
+    </figure>
+<p>You take “roll one from GUM” and get archetype 42, “Dark Jester: A joker hiding dark intentions in sarcasm”. Sixty metres down, in a flooding vault, in folk horror. A joker.</p>
+<aside class="note"><b>Why.</b> This is the moment the book's advice chapter exists for. PUM p.10: re-roll for a better fit, or downplay it, or go with whatever came to mind first whether or not it matches. What came to mind first was Brother Aldo — already on your problems list as a liar — and the realisation that his lying is not fear. He is enjoying this. The roll did not describe a new person; it re-described one you already had. Kept, named him in the cast, notes carry the archetype.</aside>
+<p>Confirm. 2/7.</p>
+<p>Ask an oracle rather than a beat. Conversation register, because Aldo is answering you: “Do you know how the sluice broke?”</p>
+<figure class="roll">
+      <figcaption><span class="what">Yes or No · conversation</span><span class="die">8</span><span class="cite">d10</span></figcaption>
+      <blockquote>Yes, be careful</blockquote>
+      <p class="cite">PUM p.12</p>
+      <p class="then">He does know, and the register tells you he is warning you as he says it. The card also offers “It said yes — random prompt”, which is one of the p.28 triggers. You decline it; one beat per interesting moment is plenty.</p>
+    </figure>
+<p>Before the last room, mark a timed beat. Tap box 7 — “Way out” — and write “the stair collapses”. It will fire once when you reach it, and it counts as a random prompt. You still do not know the circumstances.</p>
+<p>Close the scene. Bias left at Trouble:</p>
+<figure class="roll">
+      <figcaption><span class="what">Scene closure</span><span class="cite">2d20 → 18</span></figcaption>
+      <blockquote>That was a bad move — now things get much harder</blockquote>
+      <p class="cite">SUM p.4</p>
+      <p class="then">The summary names what changed: how long the scene ran, how many intervention checks fired, and the two journal entries written. Undo is right there if you closed it by accident.</p>
+    </figure>
+<p>Functions this scenario used: prep wizard all five steps · Dungeon sheet · four node lists · scene opener · SUM exploration with bias · random prompt · ABCD · unavailable-list handling · GUM inspiration · cast · Yes/No conversation register · beat trigger offered and declined · confirm · timed beat · scene closure · journal.</p>
+  </section>
+<section class="sec" id="ceres">
+    <h3>Scenario B · “Nine Hours to Ceres” — Journey sheet, sci-fi mystery</h3>
+    <p>Twenty boxes over five acts. Six node lists of ten slots each, because this sheet pairs with the plot-node extension sheet — so notable characters and interesting locations are real lists here, and you can name two more of your own.</p>
+<p>Prep. Universe: “hard-ish SF, one ship, no FTL.” Scope: “Find out who killed the ship's doctor before we dock.” Mission seeded from GUM's plot seed, rolled from the mission field's own inspiration block — hook 6 “Formal request, a petition, royal mandate”, caveat 11 “Too many uncertainties, stay low profile”. A company mandate to investigate quietly. That is the whole premise in two rows.</p>
+<p>In prep you name a list of your own: “Ship systems.” Entries: the recycler is failing · comms are logged · the medbay locks from inside. This is the p.27 blank list, and it is the one your Random Prompt column will keep reaching for on a ship.</p>
+<p>Settings → Optional rules → Disruption die ON. This mystery wants the machine to interrupt you.</p>
+<p>The node die. Your characters list has four entries out of ten, so the pill above it reads 1d10 — fewer than half filled, so the die only reaches the first five slots. Write two more and it becomes 1d20 and reaches all ten.</p>
+<aside class="note"><b>Why.</b> This trips people. It is not the app rationing your content: a d10 maps to five slots and a d20 to ten, so rolling a d20 on a mostly-empty list would point past the end of what you have written more often than not.</aside>
+<p class="cite">PUM p.25</p>
+<p>Mid-investigation, an oracle rather than a beat — and the disruption die is on, so it rides along.</p>
+<figure class="roll">
+      <figcaption><span class="what">Granular Yes/No · deterministic · unlikely</span><span class="die">62</span><span class="cite">d100</span></figcaption>
+      <blockquote>No</blockquote>
+      <p class="cite">PUM p.24</p>
+      <p class="then">You declared it unlikely that the doctor's terminal was wiped remotely, and the d100 read against that column agrees. Then the disruption strip: the d10 came up 1, which is always and only a random prompt. Read your answer first, the book says, then resolve the disruption.</p>
+    </figure>
+<p>The disruption's prompt lands on face 7, “Reflect a world or game element”, which rolls your world list and finds “the recycler is failing”. The lights brown out mid-interview. You did not choose that; you asked an unrelated question and the machine put a hand on the table.</p>
+<p>Someone to interview. Open them from the cast so the answers stay attached to them, and roll only the depth this scene has reached — first contact, not deep relationship.</p>
+<figure class="roll">
+      <figcaption><span class="what">Meet reaction</span><span class="die">4</span><span class="cite">d20</span></figcaption>
+      <blockquote>Act with motivation, high energy, full engagement</blockquote>
+      <p class="cite">SUM p.8</p>
+      
+    </figure>
+<figure class="roll">
+      <figcaption><span class="what">Outside looks</span><span class="die">11</span><span class="cite">d20</span></figcaption>
+      <blockquote>Know what they're talking about — educated, informed</blockquote>
+      <p class="cite">SUM p.8</p>
+      <p class="then">Two low rolls: the ordering means the engineer is helpful and credible. Both are stored on her cast entry, so next session the app still knows.</p>
+    </figure>
+<p>Later, once trust exists, the Trust depth:</p>
+<figure class="roll">
+      <figcaption><span class="what">Honesty check</span><span class="die">16</span><span class="cite">d20</span></figcaption>
+      <blockquote>It's clear they aren't telling the real truth at all</blockquote>
+      <p class="cite">SUM p.10</p>
+      <p class="then">A high roll now, from the same person who read as credible at first contact. That is not a contradiction — it is the shape of a mystery, and it is why you roll the depth the scene has reached rather than everything at once.</p>
+    </figure>
+<p>The awkward one. A beat, and it repeats:</p>
+<figure class="roll">
+      <figcaption><span class="what">Modified proposal</span><span class="die">2</span><span class="cite">d10</span></figcaption>
+      <blockquote>Bring someone quite inconvenient</blockquote>
+      <p class="cite">PUM p.14</p>
+      <p class="then">Same as the previous beat. The card flags the repeat and offers a re-roll — flagged, never forced. You keep it, because a second inconvenient arrival in ten minutes is not repetition, it is a pattern: someone is steering people into your path. The re-roll was offered; declining it was the interesting move.</p>
+    </figure>
+<p>Box 14 was marked at prep with “docking burn — no more free movement”. Confirming the beat that lands on it fires the timed beat once, in a dialog, and it counts as a random prompt.</p>
+<p>Functions this scenario used: extension node lists · a player-named list · the 1d10/1d20 node die rule · disruption die and its cascade · granular oracle with a declared likelihood · SUM character emulation at two depths, stored on the cast · repeated-beat re-roll offered · timed beat firing · GUM plot seed via a field's inspiration block.</p>
+  </section>
+<section class="sec" id="lodger">
+    <h3>Scenario C · “The Lodger” — Sandbox sheet, modern horror</h3>
+    <p>No track at all. Six node lists of ten. The Sandbox sheet is for playing open-endedly, and it is the sheet that makes one permission load-bearing: a scope ends when you say it ends, because there is no Threshold to reach.</p>
+<p>Prep. Universe: “present day, one street, nothing supernatural is confirmed.” Scope: “Work out what is wrong with the man in the upstairs room.” World truths rolled in the Forge before prep, from GUM's seeding section:</p>
+<figure class="roll">
+      <figcaption><span class="what">Location archetype</span><span class="die">12</span><span class="cite">d20</span></figcaption>
+      <blockquote>Outskirts: Remote town, village, ghost town, old farms, wasteland</blockquote>
+      <p class="cite">GUM p.4</p>
+      
+    </figure>
+<figure class="roll">
+      <figcaption><span class="what">Background problem</span><span class="die">7</span><span class="cite">d20</span></figcaption>
+      <blockquote>Punishment: Plague, curse, damnation, sickness, disease, we are helpless, we are dying</blockquote>
+      <p class="cite">GUM p.5</p>
+      <p class="then">Read together: a failing edge-of-town street where something is making people ill and nobody official is coming. “Keep it →” wrote both into the world-elements list so a prompt can reach them later.</p>
+    </figure>
+<p>Because there is no track, the beat controls behave differently: the beat card offers “Played it” instead of “Confirm — cross a box”, since there is no box to cross. Everything else is the same. Beats still shape what happens; they just do not measure progress.</p>
+<p>The awkward roll, and the useful lesson in it. You have built to a confrontation on the landing and you want the house to do something. Intervention check, bias Trouble:</p>
+<figure class="roll">
+      <figcaption><span class="what">Intervention check · bias high</span><span class="cite">2d100 → 5</span></figcaption>
+      <blockquote>Remains silent — nothing really happens (peaceful)</blockquote>
+      <p class="cite">SUM p.4</p>
+      <p class="then">Both d100s came in low, so even keeping the higher one you got the quietest answer on the table, at the exact moment you wanted the loudest.</p>
+    </figure>
+<aside class="note"><b>Why.</b> The temptation is to re-roll until the house cooperates. The book's advice is the better read: nothing happens is an answer, and in horror it is frequently the answer. You stood on the landing and the house did not oblige you. The silence went on slightly too long. That is worse than a noise, and you did not write it — the dice declined to.</aside>
+<p class="cite">PUM p.10 · SUM p.4</p>
+<p>The cast does the heavy lifting on this sheet. Four depths on the lodger, rolled over four sessions rather than four minutes:</p>
+<figure class="roll">
+      <figcaption><span class="what">Personality type</span><span class="die">9</span><span class="cite">d20</span></figcaption>
+      <blockquote>Very focused, goal-oriented and driven to succeed</blockquote>
+      <p class="cite">SUM p.9</p>
+      
+    </figure>
+<figure class="roll">
+      <figcaption><span class="what">Parallel matters</span><span class="die">3</span><span class="cite">d20</span></figcaption>
+      <blockquote>Develop a skill that requires constant training</blockquote>
+      <p class="cite">SUM p.11</p>
+      <p class="then">Rolled only once the relationship had reached Deep. Together: he is not ill, he is training for something, and the discipline looks like symptoms. The tables did not decide that — reading two of them together did.</p>
+    </figure>
+<p>Session breaks. Journal → Session break marks where you stopped. Neither book defines a session procedure, so nothing is reset, nothing is rolled, and the app does not invent a ritual for it. It is a bookmark, and on a sheet with no track it is the only chronological landmark you get.</p>
+<p>Ending it. Eleven sessions in, the lodger's story is told. There is no box to fill, so: Play → Plot track → End this scope. The app asks you to confirm, records it in the journal, and offers to start another plot sheet. Reopen is one tap if you were wrong.</p>
+<aside class="warn"><b>Watch out.</b> On Sandbox and Improvised this control is the only way a scope can ever finish. Without it those two sheets would be the only ones you could never complete — which is why it is a control and not a sentence.</aside>
+<p>Functions this scenario used: Forge world truths and “Keep it →” into a node list · a trackless sheet · “Played it” in place of confirm · SUM intervention with bias · reading an unhelpful roll rather than re-rolling it · character emulation across all four depths · session breaks · ending a scope by declaration, and reopening.</p>
+  </section>
+<section class="sec" id="levy">
+    <h3>Scenario D · “The Winter Levy” — Customized sheet, historical</h3>
+    <p>The Customized sheet starts with nothing: no track, and the standard prompt column until you change it. You build both. Use it when you already know the shape of the story — a pre-written adventure, or history.</p>
+<p>Prep. Universe: “England, 1069, no fantasy.” Scope: “Get the village through the levy without losing the men.” The Customized sheet gives six lists of ten, so both player-named lists are available; you name them “Obligations” and “Rumours from the north”.</p>
+<p>Pre-drawing the track. Play → Plot track → Customize → Add a section. You know this story has three movements, so you draw them: “The summons” 2 boxes, “The march” 4, “The reckoning” 3. Nine boxes, built by you rather than chosen from a menu.</p>
+<ul><li>+ box adds one to any section, mid-play, when a movement turns out to have more in it than you thought.</li><li>Remove deletes a section; if you had crossed past it the track steps back to fit.</li><li>Or add nothing at prep and grow the track as you play, which is the other half of the same permission.</li></ul>
+<p class="cite">PUM p.9</p>
+<p>Editing the prompt column. Customize → Edit the prompt column gives ten dropdowns, one per d10 face. The printed column spends four faces on ABCD random events; this story is about obligation, not incident, so you re-point three of them:</p>
+<ul><li>Faces 1–2: keep A Complication and B Catalyst.</li><li>Face 3: → Obligations (your list).</li><li>Face 4: → Rumours from the north (your list).</li><li>Faces 5–10: unchanged — character, location, world, problem, finding, question.</li></ul>
+<aside class="note"><b>Why.</b> This is PUM's Plot Focus rule and it is the strongest tool in the book for making a machine feel like it is about your story. A social game points more faces at characters; a dungeon points more at challenges. The app rolls exactly what you put there, and “Reset to the standard column” puts the printed one back.</aside>
+<p>In play, the column bites immediately:</p>
+<figure class="roll">
+      <figcaption><span class="what">Random prompt</span><span class="die">3</span><span class="cite">d10</span></figcaption>
+      <blockquote>Obligations</blockquote>
+      <p class="cite">your column</p>
+      <p class="then">Which rolls that list — four entries of ten, so 1d10 — and lands on slot 2: “the reeve is owed a horse”. A face that would have been a Challenge on the printed sheet is now a debt coming due. Nothing about the engine changed; you changed what it points at.</p>
+    </figure>
+<p>The awkward one. A prompt lands on an empty slot in Rumours:</p>
+<figure class="roll">
+      <figcaption><span class="what">Random prompt → Rumours</span><span class="die">7</span><span class="cite">d10</span></figcaption>
+      <blockquote>(empty slot 4)</blockquote>
+      <p class="cite">PUM p.6</p>
+      <p class="then">Four controls appear. You do not want to invent — you want the machine to give you something. “Leave it to destiny” rerolls until a written entry comes up, which is the book's “still stuck” rule, and it can never hand back an empty slot.</p>
+    </figure>
+<p>It found “they are burning the Riding”. Two sessions old, written when it seemed like colour. It is now the reason the levy cannot be refused.</p>
+<p>Deliberate invocation. Later you want the story to answer something rather than complicate it. Play → Plot nodes → Pending questions → Roll this list. You chose the list on purpose; the die chose the entry; it still counts as a beat and can still cross a box. The alternative, Invoke on a specific written entry, skips the die entirely — also allowed, also a beat.</p>
+<p class="cite">PUM p.9</p>
+<p>Export before you stop. Settings → Export readable gives a Markdown summary of the game: protagonists, each plot sheet with its track position, every filled node list, and the whole journal in order. Export JSON gives the restorable copy. Downloads are blocked in some embedded viewers, so both dialogs also offer Copy, and say so.</p>
+<p>Functions this scenario used: Customized sheet · pre-drawn track, sections added and removed · + box mid-play · the custom prompt column and its reset · both player-named lists · rolling a list you pointed a face at · the “leave it to destiny” compulsion · deliberate invocation, rolled and chosen · readable and JSON export.</p>
+  </section>
+</section>
+<section class="part" id="reference">
+  <p class="eyebrow">Part 3</p>
+  <h2>Complete reference</h2>
+  <p class="blurb">Every screen and every control, for looking something up.</p>
+  <section class="sec" id="ref-frame">
+    <h3>The frame — header, plot header, tabs</h3>
+    <ul><li>◈ Home (top left) — jumps to More → Home from anywhere.</li><li>◐ Switch theme (top right) — cycles system → light → dark.</li><li>The persistent plot header — scope name, current section, crossed/total, and the drawn track. Hidden on More; compacted in landscape, where it drops the drawn track and keeps the count.</li><li>Tabs: Play · Scene · Oracles · Journal · More. A dot on Scene means a scene is open; a dot on Play means a beat is waiting or the scope has finished.</li><li>Every screen offers a folded “What this does” note, and many link on to the matching rules-library entry with “Read the rule →”.</li></ul>
+  </section>
+<section class="sec" id="ref-play">
+    <h3>Play</h3>
+    <p>Plot track</p>
+<ul><li>Random prompt (pinned) / Proposal — the two beat controls. The card above repeats them as Modified proposal and Random prompt.</li><li>On a beat card: Confirm — cross a box · Not this time (or Played it, on a trackless sheet) · Re-roll · Add a note · Re-roll the beat when a repeat is flagged.</li><li>On a node result: Add new · Choose · Reroll · Leave it to destiny · Name it and roll (an unnamed list) · Bring one in and Recall (a list this sheet does not print).</li><li>Track: any box opens Box N — Mark a timed beat / Edit the timed beat / Clear the mark / Close.</li><li>Advance without a beat · Step back · End this scope · Reopen this scope.</li><li>Customize (Customized sheet only) → Add a section · + box · Remove · Edit the prompt column → Save the column / Reset to the standard column · Done.</li><li>Add track section dialog: Section name, Boxes, Add.</li><li>This scope fold → Add game notes / Edit game notes.</li><li>Next step: decide the starting point → Write the starting point.</li><li>What now → Open a scene / Back to the scene · Ask an oracle · Write it down · Start another plot sheet when the scope has finished.</li><li>Dialogs that can fire on confirming: A timed plot beat fires (Play it) · The scope has resolved (Start another plot sheet / Stay here) · The scope is finished.</li></ul>
+<p>Plot nodes</p>
+<ul><li>Per list: the 1d10/1d20 pill, the fill count, Roll this list — 1dN, a “What goes in here” fold, each slot as a button, Invoke on written entries, Show all N slots.</li><li>Player-named lists add Rename and Remove.</li><li>Add a plot node list — names one of the two blank lists from the extension sheet.</li><li>Invoke this node → Invoke as a beat / Cancel.</li></ul>
+<p>Cast</p>
+<ul><li>Add a protagonist (name + notes) · Edit → Save / Remove / Cancel.</li><li>Add a character · Add a location (name + what GUM says about them).</li><li>Open a cast entry → Notes, the twelve SUM character tables on a character, Save · Rename · Add to plot nodes · Remove. Rolled traits list with Remove per trait.</li><li>Add to plot nodes → Write it in / Cancel, or an explanation and Back to the cast when this sheet prints no such list.</li></ul>
+  </section>
+<section class="sec" id="ref-scene">
+    <h3>Scene</h3>
+    <ul><li>Scene arc — Rule of Bias (Neutral / Favourable / Trouble) · Roll a scene opener · Open it myself · Roll an intervention check · Roll a scene closure. While a scene runs the pinned action becomes Intervention check with Close beside it.</li><li>Scene closed dialog — Open the next scene · Back to the plot sheet · Undo.</li><li>While the scene runs: Call a plot beat · Ask an oracle · Who is here?</li><li>Exploration · Battle · Discovery — three SUM tables each, the first pinned as the primary, each with the whole table readable in a fold.</li><li>Characters — the twelve character tables grouped by depth, and Go to the cast →.</li><li>Every result card: Re-roll · Dismiss.</li></ul>
+  </section>
+<section class="sec" id="ref-oracles">
+    <h3>Oracles</h3>
+    <ul><li>Your question — optional, stamped on the result card and into the journal.</li><li>Yes or No — three registers, an “I have a bias” checkbox, Ask.</li><li>Granular — three registers, seven likelihood bands, Ask.</li><li>Descriptive · Story · Quantifiers — one button per oracle.</li><li>Result card: Re-roll · Note it · Dismiss; on a bias roll, two answer chips to choose between.</li><li>Does this call for a beat? — It said yes — random prompt · It said no — modified proposal.</li><li>Disruption die strip, when the setting is on: reports the d10 and offers Roll the random prompt / Roll the modified proposal.</li></ul>
+  </section>
+<section class="sec" id="ref-journal">
+    <h3>Journal</h3>
+    <ul><li>Entries — thirteen filters, Write an entry (pinned), Session break, Show N more.</li><li>Per entry, behind Edit: Add note / Edit note · Delete.</li><li>Dice — distribution per die size, and Clear the journal.</li></ul>
+  </section>
+<section class="sec" id="ref-more">
+    <h3>More</h3>
+    <p>Home</p>
+<ul><li>Before you play — the outstanding prep steps, each a link.</li><li>The current game card: Go to the plot sheet · Open a scene / Continue the scene · Edit → Title, Universe or RPG, World tone and theme, Inspiration.</li><li>Plot sheets in this game: Switch to this · Edit (scope name, mission, starting point) · Delete · New plot sheet.</li><li>Your games: Open · Archive / Restore · Prepare another game.</li><li>The machines — what PUM, SUM and GUM each do.</li><li>With no game: Prepare a game (pinned) · Read the first-session walkthrough.</li></ul>
+<p>Forge (hidden when GUM is off)</p>
+<ul><li>Plot seed · World · Characters · Grand oracle.</li><li>Roll a whole plot seed (pinned) · World truths · Roll all three · per-table dN buttons · Roll all of &lt;group&gt;.</li><li>Result card: Re-roll · Keep it → · Dismiss · Re-roll this one on a set.</li><li>Keep this → Write into &lt;list&gt; · Add to the cast as a character · Add to the cast as a location · Just keep it in the journal. With no game open, Prepare a game instead.</li></ul>
+<p>Rules</p>
+<ul><li>Search, then collapsible groups of rule entries, each page-cited; “guidance” marks the ones the app deliberately does not enforce.</li><li>Glossary — twelve terms.</li><li>From the books — the three play states, the playing flowchart, the advice chapter, advanced mechanics.</li><li>Errata — where the books disagree with themselves.</li><li>Where the app does not roll — the eight fields with no inspiration block, and why.</li></ul>
+<p>Tutorial — this document. Settings — see Part 1.</p>
+<ul><li>Your data: Export JSON · Import JSON · Export readable · Check my data · Undo.</li><li>Export and import dialogs: Copy · Download · Close · Import · Cancel.</li><li>Optional rules: Disruption die · Volatile situation · Game Unfolding Machine · Enrich descriptive and story oracles.</li><li>Appearance: Theme · Text size.</li><li>About the books, including what they do not contain.</li><li>Danger zone: Delete the current game · Erase everything.</li></ul>
+  </section>
+<section class="sec" id="ref-dialogs">
+    <h3>Every dialog, by name</h3>
+    <p>Each of these opens over the screen, traps focus, closes on Escape, and returns focus where it was. Primary action first, always.</p>
+<ul><li>Prepare a game (the wizard) — five steps; “Back to preparing it” returns to a half-finished draft from anywhere in More.</li><li>Starting point — “Where does this open, and what is introduced?”</li><li>Game notes — “Notes for this plot sheet”.</li><li>Timed plot beat — “What is waiting at this box?”; Box N carries Mark / Edit / Clear the mark.</li><li>Add a track section — Section name and Boxes. Customize this sheet holds it, alongside Your prompt column.</li><li>Advance without a beat · A timed plot beat fires · The scope has resolved · The scope is finished — the four dialogs the track can raise.</li><li>Add a new plot node · Name your list (“What is this list of?”) · Rename this list · Invoke this node.</li><li>Note this beat / Note this answer (“How did you read it?”) / Note — the three note dialogs.</li><li>Add a protagonist (the wizard's inline form uses “Add protagonist”, disabled until there is a name) · Protagonist · Remove this protagonist? (its notes field is labelled “A line about them (optional)”) · Add a character / Add a location · Rename · Add to plot nodes, which offers “Back to the cast” when the sheet prints no such list.</li><li>Open a scene — “How does it open?”</li><li>Scene closed — Open the next scene / Back to the plot sheet / Undo.</li><li>Keep this (the Forge) — Name them / Name the place, or “Open Settings” when GUM is off.</li><li>Write in the journal · Mark a session break (“A line about where you stopped (optional)”) · Delete this entry? · Clear the journal?</li><li>This game · Plot sheet — the two edit dialogs on Home.</li><li>Export / Readable export — Copy, Download, Close. Import. Data check. Erase everything?</li><li>Rules → “Clear the search” when a search matches nothing. Journal → “Go to the oracles” and “Go to the plot sheet” when it is empty. Plot nodes → “Back to the track” on a sheet with no nodes.</li><li>Tutorial → “Mark as read”, which stops the quick start offering it again, and “Open the guide as a page →”, which opens this same guide as a web page for a second screen.</li></ul>
+  </section>
+<section class="sec" id="ref-journal-kinds">
+    <h3>What the journal calls things</h3>
+    <p>Every entry carries a kind, and the filter row uses it. Knowing the titles the app writes makes the filters worth using.</p>
+<ul><li>prep — “Game prepared”, “Starting point set”, “New plot sheet”, “New plot node list”.</li><li>beat — the beat's own text, plus “Beat played, track unchanged” when you decline to cross, and “Plot node invoked deliberately” / “Plot node list invoked deliberately”.</li><li>node — “Plot node invented”, “Plot node chosen”, “Plot node from GUM”, “Recalled from the cast”, “Character brought in”.</li><li>track — “Advanced without a beat”, “Beat confirmed”, “Plot scope ended”, “Plot scope reopened”.</li><li>timed — “Timed plot beat”, written when a marked box fires.</li><li>scene — “Scene opened”, “Intervention check”, “Scene closed”.</li><li>yesno · granular · oracle — one per oracle roll, titled with the register and the answer.</li><li>sum — SUM table rolls, titled with the table and its result.</li><li>gum — Forge rolls and any inspiration word you kept.</li><li>note — your own entries, and anything kept from the Forge.</li><li>session — “— session break —”.</li></ul>
+<aside class="note"><b>Why.</b> A re-roll writes a second entry linked to the first rather than replacing it, so the record shows what you rolled and what you decided to use instead. That is the point of keeping both.</aside>
+  </section>
+<section class="sec" id="ref-everywhere">
+    <h3>Controls that appear everywhere</h3>
+    <ul><li>Save · Cancel · Close · Done · Add · Remove · Delete · Edit · Open · Rename — the standard dialog verbs.</li><li>Undo — in the toast raised by any mutating action, and in Settings as a fallback. One player action is one undo, however many things it changed.</li><li>Stuck? Roll three words — the inspiration block, in every text field GUM can serve. Use this · Use all three · Roll again · All N tables.</li><li>What this does — the folded per-screen note, with Read the rule → where a rules entry matches.</li></ul>
+  </section>
+</section>
+<section class="part" id="limits">
+  <p class="eyebrow">Part 4</p>
+  <h2>What the app does not do</h2>
+  <p class="blurb">The deliberate omissions, and the reasoning behind each.</p>
+  <section class="sec" id="limits">
+    <h3>What it will not do, and why</h3>
+    <ul><li>Resolve a task. No book here says whether you succeeded. Bring your own RPG's rules, or decide. The app reports what the world offers and never reports success.</li><li>Cross a box for you. Confirming is a judgement about whether the beat mattered, and judgements are yours.</li><li>Roll for your protagonists. You control their thoughts, voice and actions entirely.</li><li>Fire a beat automatically. The one exception is the disruption die, which is off by default because the book presents it as a variant you opt into.</li><li>Define a session. Neither book has a session procedure, so nothing is reset or rolled at a session break — it is a bookmark.</li><li>Ship safety tools. Neither book contains any. The app says so in Settings rather than inventing an X-card and presenting it as the books'.</li><li>Invent table content. Every row in the app is from the printed books; where a book disagrees with itself the app records the erratum instead of correcting it.</li><li>Send anything anywhere. Everything is in this browser's local storage. There is no account, no sync and no server.</li></ul>
+<aside class="note"><b>Why.</b> Two of these are worth sitting with. The app not resolving tasks is not an omission — it is what makes PUM work with any rulebook you own. And the app not crossing boxes for you is what keeps the plot track a compass rather than a clock.</aside>
+  </section>
+</section>
+  </main>
+
+  <footer>
+    <p>Plot Unfolding Machine, Scene Unfolding Machine and Game Unfolding Machine are by JeansenVaars, licensed CC BY-NC-SA 4.0. This guide quotes individual table rows to make its examples checkable against your own copy, and is shared under the same licence.</p>
+    <p class="cite">Generated from data-tutorial.js — the same content the app renders at More → Tutorial, where the tables appear in full.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var boxes=[].slice.call(document.querySelectorAll("#track i"));
+  function paint(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    var p=max>0?h.scrollTop/max:0;
+    var n=Math.round(p*boxes.length);
+    for(var i=0;i<boxes.length;i++) boxes[i].className=i<n?"on":"";
+  }
+  addEventListener("scroll",paint,{passive:true});
+  addEventListener("resize",paint);
+  paint();
+})();
+</script>
+</body>
+</html>
