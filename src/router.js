@@ -5,9 +5,11 @@ import { clearActionBar } from "./ui.js";
 import * as store from "./store.js";
 import { crossed, trackLength, hasTrack, isResolved, currentSection } from "./derived.js";
 import { plotSheet } from "./rules.js";
+import { Settings } from "./settings.js";
 
 export const TABS = [
   { id: "play",    icon: "▤", label: "Play",    sections: ["track", "nodes", "cast"] },
+  { id: "forge",   icon: "✦", label: "Forge",   sections: ["seed", "world", "character", "grand"], gated: "gum" },
   { id: "oracles", icon: "◇", label: "Oracles", sections: ["yesno", "descriptive", "story", "granular", "quantifiers"] },
   { id: "scene",   icon: "◗", label: "Scene",   sections: ["arc", "explore", "battle", "discovery", "people"] },
   { id: "journal", icon: "✎", label: "Journal", sections: ["entries", "dice"] },
@@ -16,6 +18,7 @@ export const TABS = [
 
 const SECTION_LABELS = {
   track: "Plot track", nodes: "Plot nodes", cast: "Cast",
+  seed: "Plot seed", world: "World", character: "Characters", grand: "Grand oracle",
   yesno: "Yes or No", descriptive: "Descriptive", story: "Story",
   granular: "Granular", quantifiers: "Quantifiers",
   arc: "Scene arc", explore: "Exploration", battle: "Battle",
@@ -31,6 +34,8 @@ export function registerScreen(tab, fn) { renderers.set(tab, fn); }
 
 export function go(tab, section = null) {
   const t = TABS.find((x) => x.id === tab) || TABS[0];
+  // A gated route reached directly explains itself rather than silently
+  // redirecting (§8) — the screen renders and offers to switch the toggle on.
   current.tab = t.id;
   current.section = section && t.sections.includes(section) ? section : t.sections[0];
   render();
@@ -53,11 +58,16 @@ function liveState() {
   };
 }
 
+// A gated tab is hidden by the router when its toggle is off (§8).
+function visibleTabs() {
+  return TABS.filter((t) => !t.gated || Settings[t.gated]());
+}
+
 export function renderTabs() {
   const bar = $("#tab-bar");
   clear(bar);
   const live = liveState();
-  for (const t of TABS) {
+  for (const t of visibleTabs()) {
     const btn = el("button", {
       onclick: () => go(t.id),
       "aria-current": current.tab === t.id ? "page" : null,

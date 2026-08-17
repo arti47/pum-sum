@@ -10,6 +10,8 @@ import { render, go } from "./router.js";
 import { currentBias } from "./scene.js";
 import { CHARACTER_TABLE_IDS } from "../data-sum.js";
 import { NODE_CATEGORIES } from "../data-pum-plot.js";
+import { gumSuggest, gumTablesForNode } from "./forge.js";
+import { Settings } from "./settings.js";
 
 export function renderCast(host) {
   const game = store.activeGame();
@@ -65,14 +67,27 @@ export function renderCast(host) {
     for (const c of list) {
       add(card, castEntry(c));
     }
-    add(card, el("button", {
-      class: "btn wide",
-      onclick: () => promptModal({
-        title: kind === "character" ? "Add a character" : "Add a location",
-        label: "Name",
-        onSubmit: (v) => { if (v) { store.addCast(kind, v); render(); } },
-      }),
-    }, kind === "character" ? "Add a character" : "Add a location"));
+    add(card, el("div", { class: "btn-row" },
+      el("button", {
+        class: "btn",
+        onclick: () => promptModal({
+          title: kind === "character" ? "Add a character" : "Add a location",
+          label: "Name",
+          onSubmit: (v) => { if (v) { store.addCast(kind, v); render(); } },
+        }),
+      }, kind === "character" ? "Add a character" : "Add a location"),
+      Settings.gum() ? el("button", {
+        class: "btn",
+        onclick: () => gumSuggest({
+          title: kind === "character" ? "A character" : "A location",
+          tableIds: gumTablesForNode(kind === "character" ? "characters" : "locations"),
+          onPick: (text) => promptModal({
+            title: "Name them", label: "Name", hint: text,
+            onSubmit: (v) => { if (v) { store.addCast(kind, v, text); render(); } },
+          }),
+        }),
+      }, "Roll one from GUM") : null
+    ));
     add(host, card);
   }
 }

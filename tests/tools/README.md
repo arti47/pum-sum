@@ -20,6 +20,23 @@ both books) and orders each row by `xMin`, printing the x-offset of each column 
 opposite, inverting the Rule of Bias across all twenty-four SUM tables. This pass pairs the
 halves row by row, so the ordering is recovered rather than guessed.
 
+## `gum-parse.py`
+
+GUM's 43 tables are two-per-row in narrow columns. A long left-hand entry can end within 12pt
+of the right-hand entry's number, so a naive gap-based split merges the two and silently loses
+rows. This script:
+
+1. rebuilds rows from word boxes as above, but **forces a column break before any list number
+   more than 150pt from its run's start**;
+2. clusters entries into columns by x, splits each column wherever the numbering restarts, and
+   names each table from the nearest heading above it;
+3. merges the two halves of a d100 table (1-50 and 51-100 on the same page);
+4. **validates that every table's numbering is contiguous 1..N** and that N is 20 or 100 before
+   anything is transcribed.
+
+It reported 43 tables, 1,580 rows, 0 malformed. That validation is what makes parsing safer
+than hand-transcription at this volume — a dropped row cannot pass it silently.
+
 ## `count-track-boxes.py`
 
 The plot-track box counts are vector geometry, not text.

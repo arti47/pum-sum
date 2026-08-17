@@ -156,6 +156,31 @@ export const RULES_LIBRARY = [
     ],
   },
   {
+    group: "Game seeding (GUM)",
+    entries: [
+      {
+        id: "gum-what", title: "What GUM is for", page: "GUM p.3",
+        body: "The third machine, and a prep tool rather than a play tool. PUM manages the plot and SUM brings the scene to life; GUM lays the groundwork both of them assume you already have — where this happens, what is wrong there, who wants what, and who stands in the way.",
+      },
+      {
+        id: "gum-combine", title: "Combination is the method", page: "GUM p.3",
+        body: "GUM's strength is combining tables: roll several for one subject, or the same table twice, and read the results together. Its tables are abstract on purpose — the interpretation is yours, and that is what makes each use different.",
+      },
+      {
+        id: "gum-nodes", title: "GUM fills a plot sheet", page: "GUM p.3",
+        body: "PUM's plot nodes are exactly what GUM generates. Every empty node slot in this app offers a Roll from GUM button pointed at the tables that suit that category, and whatever you keep is written into the slot as a permanent entry.",
+      },
+      {
+        id: "gum-seed", title: "The plot seed", page: "GUM pp.6-7",
+        body: "Six tables in the book's own order — a hook, a motivation, a mission, the initial lead, a caveat, and the opposition. Rolled as a set they describe one situation. Keep the parts that spark something and re-roll or ignore the rest.",
+      },
+      {
+        id: "gum-grand", title: "The grand oracle", page: "GUM pp.22-24",
+        body: "An action, an adjective and a subject, each d100, for the moment when no specific oracle fits. Three words and your reading of them. It answers nothing on its own — that is the point.",
+      },
+    ],
+  },
+  {
     group: "About this app",
     entries: [
       {

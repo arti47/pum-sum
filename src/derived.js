@@ -208,6 +208,8 @@ export function normalize(raw = {}) {
       disruptionVolatile: !!(raw.settings && raw.settings.disruptionVolatile),
       autoEnrich: raw.settings && typeof raw.settings.autoEnrich === "boolean"
         ? raw.settings.autoEnrich : true,
+      gum: raw.settings && typeof raw.settings.gum === "boolean"
+        ? raw.settings.gum : true,
       seenTutorial: !!(raw.settings && raw.settings.seenTutorial),
     },
     activeGameId: raw.activeGameId || null,

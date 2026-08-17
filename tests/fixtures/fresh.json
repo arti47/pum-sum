@@ -6,6 +6,7 @@
     "disruptionDie": false,
     "disruptionVolatile": false,
     "autoEnrich": true,
+    "gum": true,
     "seenTutorial": false
   },
   "activeGameId": null,

@@ -5,6 +5,7 @@ import { YES_NO, GRANULAR, GRANULAR_BANDS, DESCRIPTIVE, STORY, DESCRIPTION, FOCU
 import { PLOT_SHEETS, ABCD, MODIFIED_PROPOSALS, NODE_CATEGORIES, PROPOSAL_KINDS, PROPOSAL_NOTES }
   from "../data-pum-plot.js";
 import { SUM_TABLES } from "../data-sum.js";
+import { GUM_TABLES, GUM_SECTIONS } from "../data-gum.js";
 
 // --- range lookup (one helper for every [min,max,text] table) ---------------
 export function rangeLookup(rows, roll) {
@@ -17,6 +18,19 @@ export function rangeLookup(rows, roll) {
 // --- the one lookup per kind of thing (§10.16) ------------------------------
 export function sumTable(id) {
   return SUM_TABLES.find((t) => t.id === id) || null;
+}
+
+export function gumTable(id) {
+  return GUM_TABLES.find((t) => t.id === id) || null;
+}
+
+export function gumSection(id) {
+  return GUM_SECTIONS.find((s) => s.id === id) || null;
+}
+
+// GUM tables are plain 1..N lists, so the row index is the roll.
+export function gumRow(table, roll) {
+  return table && roll >= 1 && roll <= table.rows.length ? table.rows[roll - 1] : null;
 }
 
 export function plotSheet(id) {

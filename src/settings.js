@@ -19,6 +19,14 @@ export const Settings = {
   autoEnrich: () => getState().settings.autoEnrich !== false,
   setAutoEnrich: (v) => setSetting("autoEnrich", !!v),
 
+  // GUM is a separate book. The template defaults an expansion OFF (§8), but the
+  // fiction here is that this player owns it — it was supplied to build against —
+  // and a default-off toggle would make 1,580 extracted rows invisible (D-18).
+  // Recorded as a deliberate deviation in CLAUDE.md §1.1; the toggle still exists
+  // so a fork without the book can hide it.
+  gum: () => getState().settings.gum !== false,
+  setGum: (v) => setSetting("gum", !!v),
+
   seenTutorial: () => !!getState().settings.seenTutorial,
   setSeenTutorial: (v) => setSetting("seenTutorial", !!v),
 

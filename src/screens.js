@@ -15,6 +15,7 @@ import { renderTutorial } from "./tutorial.js";
 import { RULES_LIBRARY } from "../data-rules-library.js";
 import { PLAY_STATES, FLOWCHART, ADVICE, ADVANCED, MACHINES } from "../data-guidance.js";
 import { PUM_ERRATA } from "../data-pum-plot.js";
+import { GUM_ERRATA } from "../data-gum.js";
 
 let ruleSearch = "";
 let pendingRuleId = null;
@@ -389,9 +390,13 @@ function guidanceCard() {
 function errataCard() {
   const card = el("div", { class: "card" });
   add(card, el("h3", { text: "Errata" }));
-  add(card, el("p", { class: "muted", text: "Where the books disagree with themselves. The printed plot sheets are the play surface and win; the app records the discrepancy rather than quietly correcting it." }));
-  for (const e of PUM_ERRATA) {
-    const d = el("details", { class: "acc" }, el("summary", null, `${e.id} · PUM p.${e.page}`));
+  add(card, el("p", { class: "muted", text: "Where the books disagree with themselves, or print something twice. The app records the discrepancy rather than quietly correcting it — the printed table is what you would roll on paper." }));
+  const errata = [
+    ...PUM_ERRATA.map((e) => ({ ...e, book: "PUM" })),
+    ...(Settings.gum() ? GUM_ERRATA.map((e) => ({ ...e, book: "GUM" })) : []),
+  ];
+  for (const e of errata) {
+    const d = el("details", { class: "acc" }, el("summary", null, `${e.id} · ${e.book} p.${e.page}`));
     add(d, el("div", { class: "acc-body" },
       el("p", { text: e.text }),
       el("p", null, el("strong", { text: "Ruling: " }), e.ruling)
@@ -409,28 +414,6 @@ function renderSettings(host) {
   add(host, explain([
     "Optional rules are off unless the books present them as the default. Everything here is stored on this device only.",
   ]));
-
-  // Optional rules
-  const rules = el("div", { class: "card" });
-  add(rules, el("h2", { text: "Optional rules" }));
-  add(rules, toggle(
-    "Disruption die",
-    "Roll a d10 alongside every oracle answer. On a 1 a random prompt interrupts; on a 2 a modified proposal alters the scene. PUM presents this as an optional variant, so it starts off.",
-    Settings.disruptionDie(), (v) => { Settings.setDisruptionDie(v); render(); }
-  ));
-  if (Settings.disruptionDie()) {
-    add(rules, toggle(
-      "Volatile situation",
-      "Widen the modified-proposal range from 2 to 2–5. A 1 is always the only face for a random prompt.",
-      Settings.disruptionVolatile(), (v) => { Settings.setDisruptionVolatile(v); render(); }
-    ));
-  }
-  add(rules, toggle(
-    "Enrich descriptive and story oracles",
-    "Roll the d100 Description or Focus word with every 1d10 oracle answer. This is the books' default, so it starts on.",
-    Settings.autoEnrich(), (v) => { Settings.setAutoEnrich(v); render(); }
-  ));
-  add(host, rules);
 
   // Data
   const data = el("div", { class: "card" });
@@ -472,6 +455,33 @@ function renderSettings(host) {
   ));
   add(host, data);
 
+  // Optional rules
+  const rules = el("div", { class: "card" });
+  add(rules, el("h2", { text: "Optional rules" }));
+  add(rules, toggle(
+    "Disruption die",
+    "Roll a d10 alongside every oracle answer. On a 1 a random prompt interrupts; on a 2 a modified proposal alters the scene. PUM presents this as an optional variant, so it starts off.",
+    Settings.disruptionDie(), (v) => { Settings.setDisruptionDie(v); render(); }
+  ));
+  if (Settings.disruptionDie()) {
+    add(rules, toggle(
+      "Volatile situation",
+      "Widen the modified-proposal range from 2 to 2–5. A 1 is always the only face for a random prompt.",
+      Settings.disruptionVolatile(), (v) => { Settings.setDisruptionVolatile(v); render(); }
+    ));
+  }
+  add(rules, toggle(
+    "Game Unfolding Machine (GUM v2.2)",
+    "The third book's 43 prep tables — plot seeds, factions, locations, objects, a nemesis, creatures, characters, and the grand oracle. Adds a Forge tab. On by default because you supplied the book; turn it off to hide it entirely.",
+    Settings.gum(), (v) => { Settings.setGum(v); render(); }
+  ));
+  add(rules, toggle(
+    "Enrich descriptive and story oracles",
+    "Roll the d100 Description or Focus word with every 1d10 oracle answer. This is the books' default, so it starts on.",
+    Settings.autoEnrich(), (v) => { Settings.setAutoEnrich(v); render(); }
+  ));
+  add(host, rules);
+
   // Appearance
   const look = el("div", { class: "card" });
   add(look, el("h2", { text: "Appearance" }));
@@ -497,7 +507,7 @@ function renderSettings(host) {
   // About the books — including what they do not contain (ruling A8)
   const about = el("div", { class: "card" });
   add(about, el("h2", { text: "About the books" }));
-  add(about, el("p", { class: "muted", text: "Plot Unfolding Machine v9.0 and Scene Unfolding Machine v8.0 Rev2 by JeansenVaars, CC BY-NC-SA 4.0. This app is a personal play aid built from those books; it reproduces no rules prose and carries no setting content." }));
+  add(about, el("p", { class: "muted", text: "Plot Unfolding Machine v9.0, Scene Unfolding Machine v8.0 Rev2 and Game Unfolding Machine v2.2 by JeansenVaars, CC BY-NC-SA 4.0. This app is a personal play aid built from those books; it reproduces no rules prose and carries no setting content." }));
   add(about, el("h3", { text: "Safety tools" }));
   add(about, el("p", { class: "muted", text: "Neither book ships any — no lines and veils, no X-card, no debrief. The app does not invent one and present it as theirs. If your table wants them, bring them from elsewhere; solo play still benefits from deciding in advance what you would rather not write about tonight." }));
   add(about, el("h3", { text: "Task resolution" }));

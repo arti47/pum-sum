@@ -172,10 +172,46 @@ clean at 320/360/390 under the stress fixture. **A full cycle with no new findin
 
 ---
 
+## Cycle 3 — after adding GUM v2.2
+
+**F-16 · A duplicate row — in the book, not the parser.** The harness's uniqueness check went
+red on `evil-deeds`. Page 21 prints *Vandalism and destruction* at both 17 and 22.
+*Fix:* recorded as `GUM_ERRATA` G1, surfaced in the rules library beside PUM's errata, and the
+guard relaxed to "unique except for recorded errata" with an assertion pinning the duplicate to
+exactly those two rows.
+*Why it mattered:* the tempting fix is to dedupe. That would silently change a probability the
+paper player does not get to change. A guard going red is not always a defect in the code —
+here it was the code being right and the assertion being too strong.
+
+**F-17 · Two Forge screens claimed a primary action they did not have.** The measured table put
+`forge/world`'s first primary at 641px and `forge/character`'s at 770px on a 780px viewport. The
+cause was the per-group "Roll all of X" buttons being styled primary — one per card, so none of
+them is *the* screen's action.
+*Fix:* demoted to ordinary full-width buttons. Those screens now honestly report no single
+primary action, like the other browse surfaces.
+
+**F-18 · The new toggle pushed Settings' primary action off the screen.** Adding the GUM row to
+Optional rules moved Export JSON to 789px.
+*Fix:* Your data moved to the top of Settings — it is the card that protects everything else,
+and it now sits at 320px.
+*Why it mattered:* the same defect as F-9, re-created by adding one row above it. Any screen
+whose primary action is reached by scrolling is one edit away from being unreachable.
+
+### Cycle 3 result
+
+Unit harness 1,312 green · dead-data scan clean · browser smoke 362 green across 23 routes and
+three fixtures · interaction audit 440 controls with no error, no unclickable control and no
+no-op · layout probe clean at 320/360/390 under the stress fixture. **A full cycle with no new
+finding.**
+
+---
+
 ## Verified clean — do not re-litigate
 
 - **Data values.** Every table's row count, range coverage and uniqueness is asserted in the
-  unit harness (945 assertions). The granular columns tile 1–100 in all 21 register/band
+  unit harness (1,312 assertions). GUM's 43 tables each carry exactly `die` rows, every roll
+  resolves, rows are unique but for the one recorded erratum, and no row carries an embedded
+  list number — the signature a column-merge parse artifact would leave. The granular columns tile 1–100 in all 21 register/band
   combinations; all 24 SUM tables tile their die exactly; both d100 enrichment tables cover
   1–100 with 50 unique paired rows. Track box counts are measured from 300 dpi renders, not
   estimated, and pinned by `EXPECTED_TRACK`.

@@ -1,7 +1,7 @@
 # Unfolding Machines
 
-A solo-storytelling play aid for **PUM — Plot Unfolding Machine v9.0** and **SUM — Scene
-Unfolding Machine v8.0 Rev2** by JeansenVaars.
+A solo-storytelling play aid for **PUM — Plot Unfolding Machine v9.0**, **SUM — Scene
+Unfolding Machine v8.0 Rev2** and **GUM — Game Unfolding Machine v2.2** by JeansenVaars.
 
 An installable PWA with no build step: clone it, serve the folder, and it runs. Everything is
 stored in your browser's `localStorage`; nothing is sent anywhere.
@@ -14,6 +14,7 @@ stored in your browser's `localStorage`; nothing is sent anywhere.
 | **The plot sheet** | All eleven plot tracks with their measured box counts, plot nodes, beat controls, timed beats |
 | **Plot beats** | Modified proposals and random prompts, the ABCD random events, node invocation with add/choose/reroll, the disruption die |
 | **Oracles** | Yes/No in three registers, the granular d100 variant, six descriptive and six story oracles with d100 enrichment, quantifiers |
+| **Generators** | GUM's 43 tables (1,580 rows): plot seeds, world truths, factions, locations, objects, a nemesis, creatures, characters and the grand oracle — rollable singly or as the book's own combinations |
 | **Scenes** | SUM's whole arc — opener, intervention check, closure — plus exploration, battle and discovery tables |
 | **Characters** | SUM's four depths of acquaintance, rolled from a cast entry and stored with that person |
 | **Journal** | Every roll with its dice, your own notes, filters, paging, and a per-face distribution view |
@@ -28,6 +29,8 @@ stored in your browser's `localStorage`; nothing is sent anywhere.
 - **No multiplayer.** PUM's group mode is one device passed around a table; there is no sync
   phase and no account.
 - **No setting content.** Core rules only. Effect text is paraphrased, never reproduced.
+- **No invented mechanics.** GUM has no bias rule, so the app offers none on its tables; where
+  a book prints something twice, it stays printed twice and the erratum is recorded.
 
 ## Running it
 
@@ -61,7 +64,7 @@ change that file in the same commit. Any change to a shipped file bumps `CACHE_V
 
 ## Licensing
 
-PUM and SUM are © JeansenVaars, licensed **CC BY-NC-SA 4.0**, sold on
+PUM, SUM and GUM are © JeansenVaars, licensed **CC BY-NC-SA 4.0**, sold on
 [itch.io](https://jeansenvaars.itch.io) and DriveThruRPG. Support the author — this app is not
 a substitute for the books, and it assumes you own them.
 

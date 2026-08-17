@@ -129,8 +129,8 @@ export const MACHINES = [
     text: "A supplement, not a standalone game. Once PUM has told you a beat happens, SUM tells you what the scene offers, how the battle unfolds, who the enemy is, and how the people in it behave, speak and remember.",
   },
   {
-    id: "gum", name: "GUM — Game Unfolding Machine", version: "not supplied",
-    text: "The third machine, for game creation, world-building and prep. Not part of this app: no copy was supplied. Use GUM to create a character as a concept, and SUM when you meet them in a scene.",
+    id: "gum", name: "GUM — Game Unfolding Machine", version: "v2.2",
+    text: "The third machine: game creation, world-building and prep. It lays the groundwork the other two play on — plot seeds, factions, locations, objects, a nemesis, creatures and characters. Use GUM when setting a game up, and SUM while playing it: GUM creates a character as a concept, SUM decides how they behave when you meet them.",
   },
 ];
 

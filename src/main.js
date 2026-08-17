@@ -10,12 +10,14 @@ import { renderOracles } from "./oracles.js";
 import { renderScene } from "./scene.js";
 import { renderJournal } from "./journal.js";
 import { renderMore } from "./screens.js";
+import { renderForge } from "./forge.js";
 import { clearTransient } from "./viewstate.js";
 
 store.load();
 applyTheme();
 
 registerScreen("play", renderPlay);
+registerScreen("forge", renderForge);
 registerScreen("oracles", renderOracles);
 registerScreen("scene", renderScene);
 registerScreen("journal", renderJournal);
