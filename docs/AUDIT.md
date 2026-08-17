@@ -442,3 +442,47 @@ blind spot (F-22). The second produced three, all real (F-23, F-24). The third �
 pass re-run after those fixes — produced none: 1,427 controls, 1,857 in-dialog buttons and
 3,286 write-back checks across ten plot sheets and the wizard, plus unit, dead-data, smoke,
 interaction, modal, flow and layout, all clean. **Cycle closed.**
+
+---
+
+## Phase 8 — inspiration prompts on every text field
+
+Not an audit pass: a feature, recorded here because it retired a surface the audits had been
+checking and changed what "every control" means.
+
+**What was built.** Every text input in the app now carries a collapsed *Stuck? Roll three
+words* line. Opening it rolls three GUM tables chosen by what the field is for; each word is a
+chip that appends to the field. `GUM_FOR_FIELDS` maps 29 fields, with the grand oracle as the
+fallback for anything unmapped — which is what the grand oracle is for.
+
+**No new content.** The same 43 tables, pointed at a blank. Nothing was authored, so §1.0's
+*never invent* rule needed no deviation and the extraction ledger is unchanged.
+
+**Three decisions worth recording, because each closed off a worse version:**
+
+1. *ui.js must not know GUM exists.* `ui.js` is the primitive layer and imports only `core.js`;
+   having it import `forge.js` would have made a cycle (`forge` already imports `ui`) and put
+   book content in a module that has none. Instead `ui` exposes `registerInspire`, the Forge
+   registers a factory at boot, and `ui` only mounts whatever it returns.
+
+2. *The block had to render inside the dialog, not open one.* The obvious build was to reuse
+   `gumSuggest()` — but a dialog opened from inside a dialog replaces it, taking whatever the
+   player had typed. That constraint is what retired `gumSuggest` and its seven standalone GUM
+   buttons: the block does the same job in place, including the *All N tables* roll that was
+   `gumSuggest`'s only unique capability.
+
+3. *Append, never replace.* A stray tap must not cost a line already written. The wizard's
+   node lists made this sharp — one block serves ten slots, so its getter and setter have to
+   agree on which slot they mean, or appending to a full list would overwrite the last entry
+   instead of extending it.
+
+**A stated cost, not a hidden one.** Only words the player keeps are journalled, by decision.
+That makes the Dice view a record of the dice *used* rather than every die thrown, so the Dice
+screen now says exactly that rather than presenting a partial count as complete.
+
+**Coverage the feature forced.** The modal audit collected `.modal button` before clicking
+anything, so controls behind a `<summary>` were invisible to it — every inspiration block would
+have shipped unaudited. It now expands each dialog's folds first: 300 in-dialog buttons became
+492. The deep audit expands `details.inspire` on the Play routes for the same reason. A
+source-scanning unit test asserts every `promptModal` in the app names a field, so a dialog
+added later without one fails the harness; it was watched failing before it was trusted.

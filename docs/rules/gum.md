@@ -51,3 +51,16 @@ bias to them.
 ## Erratum
 **G1 (p.21):** "Evil intentions or deeds" prints *Vandalism and destruction* twice, at 17 and
 at 22. Kept as printed so the app's odds match the book's; surfaced in the rules library.
+
+## Three words beside any blank
+Every text field in the app can ask GUM for three words. The tables are chosen by what the
+field is *for* — `GUM_FOR_FIELDS`, 29 fields, falling back to the grand oracle for anything
+unmapped, because that is what the grand oracle is for. A field with more than three tables
+rotates through them on a re-roll; a field with fewer rolls repeatedly within the ones it has,
+which the book names as its own method. "All N tables" rolls the whole mapped set at once.
+
+Words **append**; they never replace what you already wrote. Nothing rolls until the block is
+opened, and only a word you keep reaches the journal — so the Dice view counts the dice you
+used, and says so.
+→ `forge.inspireTables` / `inspireFor`; `ui.registerInspire` / `inspireBlock`; a collapsed
+"Stuck? Roll three words" line in every text dialog and beside every inline field.

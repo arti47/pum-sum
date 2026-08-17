@@ -84,7 +84,34 @@ export function confirmModal({ title, message, confirmLabel = "Confirm", danger 
   });
 }
 
-export function promptModal({ title, label, value = "", multiline = false, placeholder = "", hint = "", onSubmit }) {
+// --- inspiration prompts ----------------------------------------------------
+// Any text field can offer three rolled words. The words come from GUM, but
+// ui.js is the primitive layer and must not know that (§6.1: core and ui import
+// nothing above them), so the Forge registers a factory here at boot and this
+// module only mounts whatever it returns.
+let inspireFactory = null;
+
+export function registerInspire(fn) { inspireFactory = fn; }
+
+// Append rather than replace: the words are a nudge, not a verdict, and a stray
+// tap must never cost the player a line they had already typed.
+function appendToField(input, text) {
+  const cur = input.value;
+  const sep = cur.trim() ? (input.tagName === "TEXTAREA" ? "\n" : " · ") : "";
+  input.value = cur + sep + text;
+  input.focus();
+  input.setSelectionRange(input.value.length, input.value.length);
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+// The mountable block, or null when there is nothing to offer (no factory
+// registered, or GUM switched off).
+export function inspireBlock(fieldId, input) {
+  if (!inspireFactory || !fieldId) return null;
+  return inspireFactory(fieldId, (text) => appendToField(input, text));
+}
+
+export function promptModal({ title, label, value = "", multiline = false, placeholder = "", hint = "", inspire = null, onSubmit }) {
   const input = multiline
     ? el("textarea", { placeholder })
     : el("input", { type: "text", placeholder });
@@ -96,6 +123,7 @@ export function promptModal({ title, label, value = "", multiline = false, place
       hint ? el("div", { class: "hint", text: hint }) : null
     )
   );
+  add(body, inspireBlock(inspire, input));
   if (!multiline) {
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {

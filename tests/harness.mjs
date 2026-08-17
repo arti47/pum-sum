@@ -350,9 +350,9 @@ ok("every plot-seed table exists", gum.GUM_PLOT_SEED.every((id) => rules.gumTabl
 eq("the grand oracle is three tables", gum.GUM_GRAND.length, 3);
 ok("every grand-oracle table exists", gum.GUM_GRAND.every((id) => rules.gumTable(id)));
 ok("every plot-node category has GUM tables offered for it",
-  derived.NODE_IDS.every((id) => (gum.GUM_FOR_NODES[id] || []).length > 0));
-ok("every GUM_FOR_NODES id is a real table",
-  Object.values(gum.GUM_FOR_NODES).flat().every((id) => rules.gumTable(id)));
+  derived.NODE_IDS.every((id) => (gum.GUM_FOR_FIELDS[id] || []).length > 0));
+ok("every GUM_FOR_FIELDS id is a real table",
+  Object.values(gum.GUM_FOR_FIELDS).flat().every((id) => rules.gumTable(id)));
 // A table with no surface is the §0 defect: extracted, unit-checked, unreachable.
 // The Forge reaches the seeding section through the plot-seed and world-truths
 // cards, and the other two sections through their own grouped screens.
@@ -385,6 +385,47 @@ ok("every GUM_FOR_NODES id is a real table",
   ok("every descriptive, story and quantifier oracle is offered", offered.size === 15,
     `${offered.size} oracles`);
   ok("and each resolves through rules.oracle()", [...offered].every((id) => rules.oracle(id)));
+}
+
+// --- inspiration prompts: every field reaches real tables -------------------
+// A field whose map is wrong falls back silently to the grand oracle, so the
+// only way to catch a typo in GUM_FOR_FIELDS is to assert it here.
+{
+  const forge = await import("../src/forge.js");
+  const fields = Object.keys(gum.GUM_FOR_FIELDS);
+  ok("every field maps to at least one table", fields.every((f) => gum.GUM_FOR_FIELDS[f].length > 0));
+  ok("every field's tables all exist",
+    fields.every((f) => gum.GUM_FOR_FIELDS[f].every((id) => rules.gumTable(id))),
+    fields.filter((f) => !gum.GUM_FOR_FIELDS[f].every((id) => rules.gumTable(id))).join(", "));
+  // Every plot-node category is a field, so an empty slot always has an offer.
+  ok("every plot-node category is a field",
+    derived.NODE_IDS.every((id) => gum.GUM_FOR_FIELDS[id]));
+  // An unmapped field must still offer something rather than nothing.
+  eq("an unknown field falls back to the grand oracle",
+    forge.inspireTables("no-such-field").join(","), gum.GUM_GRAND.join(","));
+  eq("a mapped field uses its own tables",
+    forge.inspireTables("cast-location")[0], "location-archetype");
+  eq("three words is the roll", gum.INSPIRE_WORDS, 3);
+  // The seed field is exactly GUM's own plot seed, so "all its tables" rolls it.
+  eq("the mission field reaches the whole plot seed",
+    gum.GUM_FOR_FIELDS["scope-mission"].join(","), gum.GUM_PLOT_SEED.join(","));
+}
+
+// Every promptModal in the app names a field, so no text input is left without
+// the offer. Source-scanned: a new dialog added without one fails here.
+{
+  const sites = [];
+  for (const f of readdirSync(join(root, "src")).filter((n) => n.endsWith(".js"))) {
+    if (f === "ui.js") continue;   // the definition itself
+    const src = readFileSync(join(root, "src", f), "utf8");
+    for (const m of src.matchAll(/promptModal\(\{([\s\S]*?)\n\s*\}\)/g)) {
+      sites.push({ file: f, hasInspire: /\binspire:/.test(m[1]) });
+    }
+  }
+  ok("the app has text dialogs to audit", sites.length >= 20, `${sites.length} found`);
+  const bare = sites.filter((x) => !x.hasInspire).map((x) => x.file);
+  ok("every text dialog offers an inspiration roll", bare.length === 0,
+    `${bare.length} without: ${[...new Set(bare)].join(", ")}`);
 }
 
 // --- 21-24. Guidance and library --------------------------------------------

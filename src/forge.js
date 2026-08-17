@@ -7,8 +7,8 @@
 // not a single answer.
 
 import { el, add, announce } from "./core.js";
-import { explain, actionBar, resultCard, toast, modal, closeModal, promptModal, emptyState }
-  from "./ui.js";
+import { explain, actionBar, resultCard, toast, modal, closeModal, promptModal, emptyState,
+  registerInspire } from "./ui.js";
 import * as store from "./store.js";
 import { rollGum, rollGumSet, journalRoll, diceText } from "./roller.js";
 import { gumTable, gumSection } from "./rules.js";
@@ -17,7 +17,8 @@ import { sectionNav, render, go } from "./router.js";
 import { Settings } from "./settings.js";
 import { openRule } from "./screens.js";
 import { registerClearer } from "./viewstate.js";
-import { GUM_TABLES, GUM_PLOT_SEED, GUM_GRAND, GUM_FOR_NODES } from "../data-gum.js";
+import { GUM_TABLES, GUM_PLOT_SEED, GUM_GRAND, GUM_FOR_FIELDS, INSPIRE_WORDS }
+  from "../data-gum.js";
 import { NODE_CATEGORIES } from "../data-pum-plot.js";
 
 // The last result, held so a re-render never re-rolls it (§5.1).
@@ -278,6 +279,7 @@ function keepDialog(parts, label) {
       closeModal();
       promptModal({
         title: "Name them", label: "Name",
+        inspire: "cast-character",
         hint: text,
         onSubmit: (v) => {
           if (!v) return;
@@ -294,6 +296,7 @@ function keepDialog(parts, label) {
       closeModal();
       promptModal({
         title: "Name the place", label: "Name",
+        inspire: "cast-location",
         hint: text,
         onSubmit: (v) => {
           if (!v) return;
@@ -316,70 +319,97 @@ function keepDialog(parts, label) {
   modal({ title: "Keep this", body, actions: [{ label: "Cancel" }] });
 }
 
-// --- used by the blank-filling points elsewhere in the app -----------------
-// One dialog, reused wherever the app asks the player to write something (§10.11).
-export function gumSuggest({ title, tableIds, onPick }) {
-  if (!Settings.gum()) return false;
-  const body = el("div");
-  add(body, el("p", { class: "muted", text: "GUM's tables for this kind of blank. Roll one, or roll several and read them together." }));
-  const out = el("div", { class: "card" });
-  add(out, el("p", { class: "muted", text: "Nothing rolled yet." }));
+// --- inspiration: three rolled words beside any text field -----------------
+// Every text input in the app can ask GUM for three words. This is the one
+// mechanism for it (§10.11), mounted *inside* the dialog rather than opening a
+// second one — a nested dialog would replace the first and take whatever the
+// player had already typed with it.
 
-  const pick = (text) => { closeModal(); onPick(text); };
+// Which tables a field reaches for, falling back to the grand oracle.
+export function inspireTables(fieldId) {
+  const mapped = (GUM_FOR_FIELDS[fieldId] || []).filter((id) => gumTable(id));
+  return mapped.length ? mapped : GUM_GRAND.filter((id) => gumTable(id));
+}
 
-  function show(parts, label) {
+// Three tables from the field's set, starting at an offset that advances on each
+// re-roll so a field with more than three does not waste the extras. A field with
+// fewer than three rolls repeatedly within the ones it has, which GUM p.3 names
+// as its own method.
+function pickTables(ids, offset) {
+  const out = [];
+  for (let i = 0; i < INSPIRE_WORDS; i++) out.push(ids[(offset + i) % ids.length]);
+  return out;
+}
+
+// Only what the player actually uses is journalled (a recorded decision): the
+// dice that produced a kept word are counted, the discarded ones are not.
+function keepInspiration(parts, fieldId) {
+  const text = parts.map((p) => p.answer).join(" · ");
+  store.addJournal({
+    kind: "gum",
+    title: parts.length === 1
+      ? `${parts[0].table.name} — ${parts[0].answer}`
+      : `Inspiration — ${parts.length} words`,
+    detail: `${parts.map((p) => `${p.table.name}: ${p.answer}`).join(" · ")} · kept for ${fieldId}`,
+    dice: parts.flatMap((p) => p.dice.map((d) => ({ label: d.label, value: d.value, kept: d.kept }))),
+  });
+  return text;
+}
+
+function inspireFor(fieldId, append) {
+  if (!Settings.gum()) return null;
+  const ids = inspireTables(fieldId);
+  let offset = 0;
+
+  const out = el("div");
+  const body = el("div", { class: "body" }, out);
+  const block = el("details", { class: "explain inspire" },
+    el("summary", null, "Stuck? Roll three words"),
+    body
+  );
+
+  const use = (parts) => append(keepInspiration(parts, fieldId));
+
+  const show = (parts, all) => {
     out.replaceChildren();
-    add(out, el("div", { class: "card-head" }, el("h3", { text: label })));
+    add(out, el("p", { class: "cite", text: parts.map((p) => `${p.table.name} ${p.roll}`).join(" · ") }));
+    const words = el("div", { class: "btn-row" });
     for (const p of parts) {
-      add(out, el("div", { class: "entry" },
-        el("div", { class: "entry-head" },
-          el("span", { class: "entry-kind", text: p.table.name }),
-          el("span", { class: "entry-ts", text: `d${p.table.die} ${p.roll}` })
-        ),
-        el("div", { text: p.answer }),
-        el("button", { class: "btn small", onclick: () => pick(p.answer) }, "Use this")
-      ));
+      add(words, el("button", {
+        class: "btn small", "aria-label": `Use "${p.answer}"`,
+        onclick: () => use([p]),
+      }, p.answer));
     }
-    if (parts.length > 1) {
-      add(out, el("button", {
-        class: "btn primary wide",
-        onclick: () => pick(parts.map((p) => p.answer).join(" · ")),
-      }, "Use all of them together"));
+    add(out, words);
+    const tools = el("div", { class: "btn-row" });
+    add(tools, el("button", {
+      class: "btn small primary", onclick: () => use(parts),
+    }, parts.length === INSPIRE_WORDS ? "Use all three" : `Use all ${parts.length}`));
+    add(tools, el("button", { class: "btn small", onclick: () => roll() }, "Roll again"));
+    // GUM p.3's own method is combination, so the whole mapped set stays one tap
+    // away — rendered here rather than in a dialog of its own.
+    if (!all && ids.length > INSPIRE_WORDS) {
+      add(tools, el("button", {
+        class: "btn small ghost", onclick: () => rollAll(),
+      }, `All ${ids.length} tables`));
     }
-  }
+    add(out, tools);
+  };
 
-  const row = el("div", { class: "btn-grid" });
-  for (const id of tableIds) {
-    const t = gumTable(id);
-    if (!t) continue;
-    add(row, el("button", {
-      class: "btn small",
-      onclick: () => {
-        const r = rollGum({ tableId: id });
-        journalRoll(r, { kind: "gum", title: `${t.name} — ${r.answer}`, detail: diceText(r.dice) });
-        show([r], t.name);
-      },
-    }, t.name));
-  }
-  add(body, row);
-  add(body, el("button", {
-    class: "btn wide",
-    onclick: () => {
-      const r = rollGumSet(tableIds);
-      journalRoll(r, {
-        kind: "gum", title: `${title} — GUM set`,
-        detail: r.parts.map((p) => `${p.table.name}: ${p.answer}`).join(" · "),
-      });
-      show(r.parts, "All of them");
-    },
-  }, "Roll them all"));
-  add(body, out);
+  const roll = () => {
+    const picks = pickTables(ids, offset);
+    offset = (offset + INSPIRE_WORDS) % ids.length;
+    show(picks.map((id) => rollGum({ tableId: id })), false);
+  };
 
-  modal({ title: `GUM · ${title}`, body, actions: [{ label: "Close" }] });
-  return true;
+  const rollAll = () => show(ids.map((id) => rollGum({ tableId: id })), true);
+
+  // Nothing is rolled until the block is opened: PUM p.10 asks you not to roll
+  // when you already know, and an unopened field is a field you may well know.
+  block.addEventListener("toggle", () => {
+    if (block.open && !out.firstChild) roll();
+  });
+  return block;
 }
 
-// The tables GUM offers for a given plot-node category.
-export function gumTablesForNode(categoryId) {
-  return (GUM_FOR_NODES[categoryId] || []).filter((id) => gumTable(id));
-}
+registerInspire(inspireFor);

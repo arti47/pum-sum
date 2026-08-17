@@ -90,6 +90,7 @@ function renderEntries(host, game) {
       onClick: () => promptModal({
         title: "Mark a session break",
         label: "A line about where you stopped (optional)",
+        inspire: "session-break",
         hint: "Neither book defines a session procedure, so nothing is reset or rolled. This is a bookmark for you.",
         multiline: true,
         onSubmit: (v) => {
@@ -103,6 +104,7 @@ function renderEntries(host, game) {
       title: "Write in the journal",
       label: "What happened?",
       multiline: true,
+      inspire: "journal-entry",
       onSubmit: (v) => { if (v) { store.addJournal({ kind: "note", title: "", detail: v }); render(); } },
     }),
   });
@@ -126,7 +128,7 @@ function entryEl(e) {
   add(tools, el("button", {
     class: "btn small ghost",
     onclick: () => promptModal({
-      title: "Note", label: "Your note", value: e.note, multiline: true,
+      title: "Note", label: "Your note", value: e.note, multiline: true, inspire: "journal-note",
       onSubmit: (v) => { store.updateJournal(e.id, { note: v }); render(); },
     }),
   }, e.note ? "Edit note" : "Add note"));
@@ -149,6 +151,7 @@ function renderDice(host, game) {
   add(host, explain([
     "Every die the app has rolled in this game, counted by face. Digital dice are only trusted if you can check them.",
     "The app uses the browser's cryptographic random source, never Math.random.",
+    "One exception, stated rather than hidden: an inspiration roll beside a text field is only recorded when you keep a word from it. Words you rolled and discarded are not counted here, so this chart is a record of the dice you used, not of every die thrown.",
   ], "dice"));
 
   const buckets = new Map();

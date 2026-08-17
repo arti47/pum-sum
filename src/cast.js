@@ -2,7 +2,7 @@
 // SUM's character emulation rolls attach to a person and stay with them.
 
 import { el, add, announce } from "./core.js";
-import { explain, modal, closeModal, promptModal, confirmModal, toast } from "./ui.js";
+import { explain, modal, closeModal, promptModal, confirmModal, toast, inspireBlock } from "./ui.js";
 import * as store from "./store.js";
 import { rollSum, journalRoll, diceText } from "./roller.js";
 import { sumTable, plotSheet } from "./rules.js";
@@ -11,8 +11,6 @@ import { currentBias } from "./scene.js";
 import { CHARACTER_TABLE_IDS } from "../data-sum.js";
 import { NODE_CATEGORIES } from "../data-pum-plot.js";
 import { categoryName, nodeSlots } from "./derived.js";
-import { gumSuggest, gumTablesForNode } from "./forge.js";
-import { Settings } from "./settings.js";
 
 export function renderCast(host) {
   const game = store.activeGame();
@@ -46,7 +44,7 @@ export function renderCast(host) {
   add(pcs, el("button", {
     class: "btn wide",
     onclick: () => promptModal({
-      title: "Add a protagonist", label: "Name",
+      title: "Add a protagonist", label: "Name", inspire: "protagonist",
       onSubmit: (v) => { if (v) { store.addProtagonist(v); render(); } },
     }),
   }, "Add a protagonist"));
@@ -74,20 +72,10 @@ export function renderCast(host) {
         onclick: () => promptModal({
           title: kind === "character" ? "Add a character" : "Add a location",
           label: "Name",
+          inspire: kind === "character" ? "cast-character" : "cast-location",
           onSubmit: (v) => { if (v) { store.addCast(kind, v); render(); } },
         }),
-      }, kind === "character" ? "Add a character" : "Add a location"),
-      Settings.gum() ? el("button", {
-        class: "btn",
-        onclick: () => gumSuggest({
-          title: kind === "character" ? "A character" : "A location",
-          tableIds: gumTablesForNode(kind === "character" ? "characters" : "locations"),
-          onPick: (text) => promptModal({
-            title: "Name them", label: "Name", hint: text,
-            onSubmit: (v) => { if (v) { store.addCast(kind, v, text); render(); } },
-          }),
-        }),
-      }, "Roll one from GUM") : null
+      }, kind === "character" ? "Add a character" : "Add a location")
     ));
     add(host, card);
   }
@@ -123,7 +111,8 @@ function editProtagonist(p) {
     title: "Protagonist",
     body: el("div", null,
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Name" }), name),
-      el("label", { class: "field" }, el("span", { class: "lbl", text: "Notes" }), notes)
+      el("label", { class: "field" }, el("span", { class: "lbl", text: "Notes" }), notes),
+      inspireBlock("protagonist-notes", notes)
     ),
     actions: [
       {
@@ -156,6 +145,7 @@ function openCast(c) {
   const notes = el("textarea", { placeholder: "What do you know about them?" });
   notes.value = c.notes || "";
   add(body, el("label", { class: "field" }, el("span", { class: "lbl", text: "Notes" }), notes));
+  add(body, inspireBlock("cast-notes", notes));
 
   if (c.traits.length) {
     const list = el("div", { class: "card" });
@@ -218,6 +208,7 @@ function openCast(c) {
           closeModal();
           promptModal({
             title: "Rename", label: "Name", value: c.name,
+            inspire: c.kind === "location" ? "cast-location" : "cast-rename",
             onSubmit: (v) => { if (v) { store.updateCast(c.id, { name: v }); render(); } },
           });
           return true;

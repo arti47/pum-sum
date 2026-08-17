@@ -1,8 +1,8 @@
 // The More tab: home, the rules library, the tutorial, and settings.
 
 import { el, add, fmtTime, APP_VERSION } from "./core.js";
-import { explain, modal, confirmModal, toast, emptyState, inlineRow, defRow, actionBar }
-  from "./ui.js";
+import { explain, modal, confirmModal, toast, emptyState, inlineRow, defRow, actionBar,
+  inspireBlock } from "./ui.js";
 import * as store from "./store.js";
 import { Settings, applyTheme, cycleTheme } from "./settings.js";
 import { plotSheet } from "./rules.js";
@@ -183,9 +183,13 @@ function editGame(game) {
     title: "This game",
     body: el("div", null,
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Title" }), title),
+      inspireBlock("game-title", title),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Universe or RPG" }), universe),
+      inspireBlock("game-universe", universe),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "World, tone and theme" }), tone),
-      el("label", { class: "field" }, el("span", { class: "lbl", text: "Inspiration" }), inspiration)
+      inspireBlock("game-tone", tone),
+      el("label", { class: "field" }, el("span", { class: "lbl", text: "Inspiration" }), inspiration),
+      inspireBlock("game-inspiration", inspiration)
     ),
     actions: [
       {
@@ -215,8 +219,11 @@ function editScope(s) {
     title: "Plot sheet",
     body: el("div", null,
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Scope name" }), name),
+      inspireBlock("scope-name", name),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Mission" }), mission),
-      el("label", { class: "field" }, el("span", { class: "lbl", text: "Starting point" }), start)
+      inspireBlock("scope-mission", mission),
+      el("label", { class: "field" }, el("span", { class: "lbl", text: "Starting point" }), start),
+      inspireBlock("scope-start", start)
     ),
     actions: [
       {

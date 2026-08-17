@@ -171,6 +171,10 @@ export const RULES_LIBRARY = [
         body: "GUM's strength is combining tables: roll several for one subject, or the same table twice, and read the results together. Its tables are abstract on purpose — the interpretation is yours, and that is what makes each use different.",
       },
       {
+        id: "gum-inspire", title: "Three words beside any blank", page: "GUM p.3",
+        body: "Every text field in the app can roll three GUM words for inspiration. Which tables it rolls depends on what the field is for — a character field reaches for archetypes and flaws, a location field for features and purpose, the mission field for GUM's own six-table plot seed. Words are appended to what you have written, never substituted for it, and nothing is rolled until you open the block: the books ask you not to roll when you already know. Only words you keep are journalled.",
+      },
+      {
         id: "gum-nodes", title: "GUM fills a plot sheet", page: "GUM p.3",
         body: "PUM's plot nodes are exactly what GUM generates. Every empty node slot in this app offers a Roll from GUM button pointed at the tables that suit that category, and whatever you keep is written into the slot as a permanent entry.",
       },

@@ -540,3 +540,25 @@ table.rows tr.hit td { background: var(--accent-soft); font-weight: 700; }
 @media (min-width: 560px) {
   .chip { flex: 1 1 30%; }
 }
+
+/* --- inspiration prompts ---------------------------------------------------
+   The three-word roll beside any text field. It reuses .explain so it is
+   collapsed, quiet and consistent with every other fold in the app; the accent
+   marks it as a thing that rolls dice rather than a thing that explains. */
+details.inspire {
+  margin-top: -.2rem;
+}
+details.inspire > summary {
+  color: var(--accent);
+  font-size: .82rem;
+}
+details.inspire > summary::marker,
+details.inspire > summary::-webkit-details-marker {
+  color: var(--accent);
+}
+details.inspire .body {
+  padding-top: .2rem;
+}
+details.inspire .btn-row {
+  margin-top: .3rem;
+}

@@ -1120,7 +1120,29 @@ export const GUM_ERRATA = [
 
 // The blanks GUM is best at filling, by PUM plot-node category (GUM p.3:
 // "PUM uses plot nodes, with GUM providing inspiration to fill a plot sheet").
-export const GUM_FOR_NODES = {
+
+
+// A plot seed is the book's own combination, in its own order (GUM pp.6-7).
+export const GUM_PLOT_SEED = [
+  "plot-hook", "motivation", "mission", "initial-lead", "caveat", "opposition",
+];
+
+// The three-word roll the Grand oracle exists for (GUM pp.22-24).
+export const GUM_GRAND = ["grand-action", "grand-adjective", "grand-subject"];
+
+// --- Which tables a blank field reaches for --------------------------------
+// Every text input in the app can roll three words for inspiration. The tables
+// are chosen by what the field is *for*, so a character field pulls archetypes
+// and flaws while a location field pulls features and purpose. Nothing here is
+// new content: these are the same 43 tables, pointed at a blank.
+//
+// A field with more tables than it needs rotates through them on a re-roll; a
+// field with fewer rolls several times within the ones it has, which GUM p.3
+// names as its own method ("roll multiple times within one table"). Anything
+// not listed falls back to the grand oracle — GUM's own answer to "nothing
+// specific fits".
+export const GUM_FOR_FIELDS = {
+  // The eight plot-node lists (PUM p.28 and the p.27 extension).
   world: ["location-archetype", "background-problem", "faction-focus", "faction-society", "faction-politics"],
   problems: ["opposition", "caveat", "nemesis-intentions", "creature-type", "evil-deeds"],
   findings: ["object-function", "object-form", "location-worth", "location-content"],
@@ -1131,12 +1153,42 @@ export const GUM_FOR_NODES = {
   // grand oracle — GUM's own answer to "nothing specific fits" — is what suits.
   custom1: ["grand-action", "grand-adjective", "grand-subject"],
   custom2: ["grand-action", "grand-adjective", "grand-subject"],
+
+  // Game identity (PUM p.3 step 1)
+  "game-title": ["plot-hook", "location-archetype", "background-problem"],
+  "game-universe": ["location-archetype", "background-problem", "faction-focus"],
+  "game-tone": ["grand-adjective", "background-problem", "location-archetype"],
+  "game-inspiration": ["grand-action", "grand-adjective", "grand-subject"],
+
+  // The plot scope and its mission (PUM p.3 step 2)
+  "scope-name": ["plot-hook", "mission", "motivation"],
+  "scope-mission": ["plot-hook", "motivation", "mission", "initial-lead", "caveat", "opposition"],
+  "scope-start": ["plot-hook", "initial-lead", "location-archetype"],
+  "scope-notes": ["grand-action", "grand-adjective", "grand-subject"],
+
+  // People and places
+  "protagonist": ["archetypes-1", "archetypes-2", "character-edge", "character-flaw", "character-past"],
+  "protagonist-notes": ["character-past", "character-edge", "character-flaw", "character-possessions"],
+  "cast-character": ["archetypes-1", "archetypes-2", "character-edge", "character-flaw", "good-purposes"],
+  "cast-location": ["location-archetype", "location-feature", "location-purpose", "location-worth"],
+  "cast-notes": ["character-impression", "character-intentions", "character-activity", "character-past"],
+  "cast-rename": ["archetypes-1", "archetypes-2", "grand-subject"],
+
+  // The track and the sheet's own furniture
+  "timed-beat": ["nemesis-intentions", "opposition", "evil-deeds"],
+  "track-section": ["grand-action", "grand-adjective", "grand-subject"],
+  "list-name": ["grand-subject", "faction-focus", "object-function"],
+
+  // The scene
+  "scene-open": ["location-feature", "character-activity", "grand-action"],
+
+  // The record. Rolling words to describe what already happened is a stretch,
+  // but the grand oracle is exactly the table for "nothing specific fits", and
+  // a field the player can reach is a field that gets the same offer.
+  "journal-entry": ["grand-action", "grand-adjective", "grand-subject"],
+  "journal-note": ["grand-action", "grand-adjective", "grand-subject"],
+  "session-break": ["grand-action", "grand-adjective", "grand-subject"],
 };
 
-// A plot seed is the book's own combination, in its own order (GUM pp.6-7).
-export const GUM_PLOT_SEED = [
-  "plot-hook", "motivation", "mission", "initial-lead", "caveat", "opposition",
-];
-
-// The three-word roll the Grand oracle exists for (GUM pp.22-24).
-export const GUM_GRAND = ["grand-action", "grand-adjective", "grand-subject"];
+// How many words a roll produces. Three, per the grand oracle's own shape.
+export const INSPIRE_WORDS = 3;

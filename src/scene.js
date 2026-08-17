@@ -74,6 +74,7 @@ function renderArc(host, scope) {
         title: "Open a scene",
         label: "How does it open?",
         multiline: true,
+        inspire: "scene-open",
         hint: "You never have to roll. Write it yourself if you already know.",
         onSubmit: (v) => {
           store.openScene(v);

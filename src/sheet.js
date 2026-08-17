@@ -4,7 +4,7 @@
 import { el, add, announce, fmtRange } from "./core.js";
 import {
   explain, actionBar, modal, closeModal, toast, confirmModal, promptModal,
-  resultCard, emptyState,
+  resultCard, emptyState, inspireBlock,
 } from "./ui.js";
 import * as store from "./store.js";
 import {
@@ -19,8 +19,6 @@ import { NODE_CATEGORIES, PROMPT_NOTES } from "../data-pum-plot.js";
 import { BEAT_TRIGGERS } from "../data-guidance.js";
 import { renderCast } from "./cast.js";
 import { registerClearer } from "./viewstate.js";
-import { gumSuggest, gumTablesForNode } from "./forge.js";
-import { Settings } from "./settings.js";
 
 // The beat currently on the table, if any. Held in module state so a re-render
 // never re-rolls it (§5.1: roll once, store it, render from the stored value).
@@ -77,6 +75,7 @@ function renderTrack(host, scope) {
         title: "Game notes",
         label: "Notes for this plot sheet",
         multiline: true,
+        inspire: "scope-notes",
         value: scope.notes || "",
         hint: "The printed plot-node sheets carry a Game notes area. This is it.",
         onSubmit: (v) => { store.setScopeNotes(v); render(); },
@@ -97,6 +96,7 @@ function renderTrack(host, scope) {
           title: "Starting point",
           label: "Where does this open, and what is introduced?",
           multiline: true,
+          inspire: "scope-start",
           value: scope.startingPoint,
           onSubmit: (v) => {
             store.updateScope({ startingPoint: v });
@@ -419,6 +419,7 @@ function boxDialog(index, isDone, mark) {
           promptModal({
             title: "Timed plot beat",
             label: "What is waiting at this box?",
+            inspire: "timed-beat",
             value: mark || "",
             hint: "A zombie horde, a siege, a power awakening. You still won't know the circumstances.",
             onSubmit: (v) => { store.setMark(index, v); render(); },
@@ -442,6 +443,7 @@ function addSectionDialog() {
     title: "Add a track section",
     body: el("div", null,
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Section name" }), name),
+      inspireBlock("track-section", name),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Boxes" }), boxes),
       el("p", { class: "muted", text: "More boxes means more beats — and more of the universe pushing back before this thread resolves." })
     ),
@@ -606,6 +608,7 @@ function beatCard(scope) {
       title: "Note this beat",
       label: "What happened?",
       multiline: true,
+      inspire: "journal-note",
       onSubmit: (v) => { if (v) store.updateJournal(b.journalId, { note: v }); toast("Noted."); },
     }),
   });
@@ -637,6 +640,7 @@ function nodeBlock(scope, beat) {
         class: "btn small primary",
         onclick: () => promptModal({
           title: "Name your list", label: "What is this list of?",
+          inspire: "list-name",
           hint: "Factions, rumours, omens, debts owed — whatever this game keeps reaching for.",
           onSubmit: (v) => {
             if (!v) return;
@@ -667,6 +671,7 @@ function nodeBlock(scope, beat) {
     onclick: () => promptModal({
       title: "Add a new plot node",
       label: cat ? cat.name : "New node",
+      inspire: n.categoryId,
       hint: "Something new or unexpected at this point. It becomes a permanent entry in this list.",
       onSubmit: (v) => {
         if (!v) return;
@@ -688,25 +693,6 @@ function nodeBlock(scope, beat) {
       render();
     },
   }, "Reroll"));
-  if (Settings.gum() && gumTablesForNode(n.categoryId).length) {
-    add(row, el("button", {
-      class: "btn small",
-      onclick: () => gumSuggest({
-        title: cat ? cat.name : "Plot node",
-        tableIds: gumTablesForNode(n.categoryId),
-        onPick: (text) => {
-          const slots = nodeSlots(scope, n.categoryId);
-          const at = store.writeNodeToFirstEmpty(n.categoryId, text, slots);
-          openBeat.node = { ...n, text, empty: false, slot: at >= 0 ? at : n.slot };
-          store.addJournal({
-            kind: "node", title: "Plot node from GUM",
-            detail: `${cat ? cat.name : ""}: ${text}`, linkedTo: beat.journalId,
-          });
-          render();
-        },
-      }),
-    }, "Roll from GUM"));
-  }
   // The Compulsion: reroll until an entry comes up (PUM p.6).
   add(row, el("button", {
     class: "btn small",
@@ -749,6 +735,7 @@ function unprintedListBlock(scope, wrap, n, cat, beat) {
     onclick: () => promptModal({
       title: kind === "location" ? "An interesting location" : "A notable character",
       label: "Name",
+      inspire: n.categoryId,
       hint: "Whoever the moment asks for. They are kept in the cast so you can reach for them again.",
       onSubmit: (v) => { if (v) keep(v); },
     }),
@@ -775,19 +762,7 @@ function unprintedListBlock(scope, wrap, n, cat, beat) {
     }, `Recall (${known.length})`));
   }
 
-  if (Settings.gum() && gumTablesForNode(n.categoryId).length) {
-    add(row, el("button", {
-      class: "btn small",
-      onclick: () => gumSuggest({
-        title: cat ? cat.name : "Plot node",
-        tableIds: gumTablesForNode(n.categoryId),
-        onPick: (text) => promptModal({
-          title: "Name them", label: "Name", hint: text,
-          onSubmit: (v) => { if (v) keep(v, text); },
-        }),
-      }),
-    }, "Roll from GUM"));
-  }
+  // The roll lives inside the naming dialog now — one dialog, not two.
   add(wrap, row);
   return wrap;
 }
@@ -867,6 +842,7 @@ function renderNodes(host, scope) {
         onclick: () => promptModal({
           title: "Name your list",
           label: "What is this list of?",
+          inspire: "list-name",
           hint: "Factions, rumours, omens, debts owed, ship systems — whatever your game keeps reaching for.",
           onSubmit: (v) => {
             if (!v) return;
@@ -911,6 +887,7 @@ function nodeCard(scope, cat, slots) {
         class: "btn small ghost",
         onclick: () => promptModal({
           title: "Rename this list", label: "Name", value: customListName(scope, cat.id),
+          inspire: "list-name",
           onSubmit: (v) => { if (v) { store.setCustomListName(cat.id, v); render(); } },
         }),
       }, "Rename"),
@@ -948,6 +925,7 @@ function nodeCard(scope, cat, slots) {
           title: cat.name,
           label: `Slot ${lo}-${hi}`,
           value: text,
+          inspire: cat.id,
           onSubmit: (v) => { store.setNode(cat.id, i, v); render(); },
         }),
       }, text || "Add new, choose, or reroll"),
@@ -955,16 +933,7 @@ function nodeCard(scope, cat, slots) {
         class: "btn small",
         "aria-label": `Invoke ${text}`,
         onclick: () => invokeDeliberately(scope, cat, i, text),
-      }, "Invoke") : null,
-      (!text && Settings.gum() && gumTablesForNode(cat.id).length) ? el("button", {
-        class: "btn small",
-        "aria-label": `Roll slot ${lo}-${hi} from GUM`,
-        onclick: () => gumSuggest({
-          title: cat.name,
-          tableIds: gumTablesForNode(cat.id),
-          onPick: (v) => { store.setNode(cat.id, i, v); render(); },
-        }),
-      }, "GUM") : null
+      }, "Invoke") : null
     ));
   }
   add(card, listEl);

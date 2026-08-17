@@ -60,6 +60,15 @@ async function reset(tab, section) {
   await page.waitForTimeout(40);
 }
 
+// Opening a <details> fires its toggle, which is what makes an inspiration
+// block roll — so this both reveals the controls and populates them.
+async function expandFolds() {
+  await page.evaluate(() => {
+    document.querySelectorAll(".modal details").forEach((d) => { d.open = true; });
+  });
+  await page.waitForTimeout(60);
+}
+
 async function screenControls() {
   return page.evaluate(() => {
     const sel = "#screen button, #screen .btn, #action-bar button";
@@ -95,6 +104,9 @@ for (const [tab, section] of ROUTES) {
     if (!hasModal) continue;
     openers += 1;
 
+    // Expand every fold first: an inspiration block keeps its controls behind a
+    // <summary>, so collecting buttons without opening it audits none of them.
+    await expandFolds();
     const inner = await page.evaluate(() =>
       [...document.querySelectorAll(".modal button")]
         .filter((n) => !n.disabled)
@@ -115,6 +127,7 @@ for (const [tab, section] of ROUTES) {
       }, i);
       await page.waitForTimeout(110);
       if (!(await page.locator(".modal").count())) continue;
+      await expandFolds();
 
       const before = await page.evaluate(() => ({
         store: localStorage.getItem("umState") || "",

@@ -67,6 +67,12 @@ async function reset(state, tab, section) {
     document.querySelectorAll(".modal-back").forEach((n) => n.remove());
     (await import("./src/router.js")).go(t, sec);
   }, [state, tab, section]);
+  // Expand inspiration blocks so their controls are audited too. Only these —
+  // expanding every fold on a ten-list Nodes screen would triple the run for
+  // surfaces the other passes already cover.
+  await page.evaluate(() => {
+    document.querySelectorAll("#screen details.inspire").forEach((d) => { d.open = true; });
+  });
   await page.waitForTimeout(25);
 }
 

@@ -2,15 +2,13 @@
 // the thing to decide before play (template §6.3.7).
 
 import { el, add, uid, fmtRange } from "./core.js";
-import { explain, actionBar, toast, modal } from "./ui.js";
+import { explain, actionBar, toast, modal, inspireBlock } from "./ui.js";
 import * as store from "./store.js";
 import { plotSheet, trackTotal } from "./rules.js";
 import { go, render } from "./router.js";
 import { PLOT_SHEETS, NODE_CATEGORIES } from "../data-pum-plot.js";
 import { registerClearer } from "./viewstate.js";
-import { gumSuggest, gumTablesForNode } from "./forge.js";
 import { Settings } from "./settings.js";
-import { GUM_PLOT_SEED } from "../data-gum.js";
 
 let step = 0;
 let draft = null;
@@ -103,7 +101,7 @@ function legalUpTo(i) {
   return true;
 }
 
-function field(label, key, { multiline = false, placeholder = "", hint = "" } = {}) {
+function field(label, key, { multiline = false, placeholder = "", hint = "", inspire = null } = {}) {
   const input = multiline ? el("textarea", { placeholder }) : el("input", { type: "text", placeholder });
   input.value = draft[key] || "";
   input.addEventListener("input", () => {
@@ -115,21 +113,27 @@ function field(label, key, { multiline = false, placeholder = "", hint = "" } = 
     if (btn) btn.disabled = !legal.ok;
     if (ctx) ctx.textContent = legal.ok ? `step ${STEPS[step].n}/${STEPS.length}` : legal.why;
   });
-  return el("label", { class: "field" },
-    el("span", { class: "lbl", text: label }),
-    input,
-    hint ? el("div", { class: "hint", text: hint }) : null
+  // The wizard's fields are inline on the screen rather than in a dialog, so the
+  // block mounts beside the input instead of inside promptModal.
+  return el("div", null,
+    el("label", { class: "field" },
+      el("span", { class: "lbl", text: label }),
+      input,
+      hint ? el("div", { class: "hint", text: hint }) : null
+    ),
+    inspireBlock(inspire, input)
   );
 }
 
 function stepUniverse(host) {
   const card = el("div", { class: "card" });
   add(card, el("p", { class: "muted", text: "Narrow things down. Which RPG or universe do you want to roleplay in? If it brings no setting, define the world, tone and theme yourself. Mystery or horror? Social or action?" }));
-  add(card, field("Name this game", "title", { placeholder: "The Neverwinter road" }));
-  add(card, field("Universe or RPG", "universe", { placeholder: "D&D 5e · Blade Runner · my own" }));
-  add(card, field("World, tone and theme", "tone", { placeholder: "Grim frontier fantasy, low magic" }));
+  add(card, field("Name this game", "title", { placeholder: "The Neverwinter road", inspire: "game-title" }));
+  add(card, field("Universe or RPG", "universe", { placeholder: "D&D 5e · Blade Runner · my own", inspire: "game-universe" }));
+  add(card, field("World, tone and theme", "tone", { placeholder: "Grim frontier fantasy, low magic", inspire: "game-tone" }));
   add(card, field("Inspiration", "inspiration", {
     multiline: true,
+    inspire: "game-inspiration",
     placeholder: "Artbooks, video games, lore, films, tarot…",
     hint: "The book suggests drawing on anything to hand. Premade adventures work too — read only the minimum to get started.",
   }));
@@ -139,30 +143,23 @@ function stepUniverse(host) {
 function stepScope(host) {
   const card = el("div", { class: "card" });
   add(card, el("p", { class: "muted", text: "A plot scope is one defined mission, task or goal. What kind of story do you want to unfold — defeating a powerful enemy, uncovering a mystery, solving an inner problem?" }));
-  add(card, field("Plot scope name", "scopeName", { placeholder: "Find out who burned the caravan" }));
+  add(card, field("Plot scope name", "scopeName", { placeholder: "Find out who burned the caravan", inspire: "scope-name" }));
   add(card, field("Mission and initial goals", "mission", {
     multiline: true,
+    inspire: "scope-mission",
     placeholder: "A pitch for the situation you start in, and what the PCs are trying to do.",
     hint: "Draft a pitch for the starting situation: a civil war, a natural disaster, a background problem that seeds an interesting start.",
   }));
   add(card, field("Starting point", "startingPoint", {
     multiline: true,
+    inspire: "scope-start",
     placeholder: "Where does this open, and what is introduced there?",
     hint: "Optional now, and the home screen will keep asking until it's written. Consider starting in medias res.",
   }));
   if (Settings.gum()) {
-    add(card, el("button", {
-      class: "btn wide",
-      onclick: () => gumSuggest({
-        title: "A plot seed",
-        tableIds: GUM_PLOT_SEED,
-        onPick: (text) => {
-          draft.mission = draft.mission ? draft.mission + "\n" + text : text;
-          render();
-        },
-      }),
-    }, "Seed this from GUM"));
-    add(card, el("p", { class: "cite", text: "GUM rolls a hook, a motivation, a mission, a lead, a caveat and the opposition. Keep what you like." }));
+    // The mission field's own inspiration block is the plot seed: scope-mission
+    // maps to exactly GUM's six seed tables, so "All 6 tables" rolls the seed.
+    add(card, el("p", { class: "cite", text: "Stuck on the mission? Its inspiration block rolls GUM's plot seed — a hook, a motivation, a mission, a lead, a caveat and the opposition." }));
   }
   add(host, card);
 }
@@ -201,6 +198,7 @@ function stepProtagonists(host) {
   name.addEventListener("input", () => { addBtn.disabled = !name.value.trim(); });
   name.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addOne(); } });
   add(card, el("label", { class: "field" }, el("span", { class: "lbl", text: "Name" }), name));
+  add(card, inspireBlock("protagonist", name));
   add(card, el("label", { class: "field" }, el("span", { class: "lbl", text: "Notes" }), notes));
   add(card, addBtn);
   add(host, card);
@@ -274,24 +272,31 @@ function stepNodes(host) {
     add(card, el("p", { class: "muted", text: cat.definition }));
     add(card, el("p", { class: "cite", text: "e.g. " + cat.examples }));
     const list = draft.nodes[cat.id] || (draft.nodes[cat.id] = []);
+    const inputs = [];
     for (let i = 0; i < sheet.nodeSlots; i++) {
       const input = el("input", { type: "text", placeholder: "Add new, choose, or reroll" });
       input.value = list[i] || "";
       input.addEventListener("input", () => { list[i] = input.value; });
-      const gumTables = gumTablesForNode(cat.id);
+      inputs.push(input);
       add(card, el("div", { class: "node-row" },
         el("span", { class: "node-idx", text: fmtRange(i * 2 + 1, i * 2 + 2) }),
-        input,
-        (Settings.gum() && gumTables.length) ? el("button", {
-          class: "btn small",
-          "aria-label": `Roll ${cat.name} slot ${i + 1} from GUM`,
-          onclick: () => gumSuggest({
-            title: cat.name, tableIds: gumTables,
-            onPick: (v) => { list[i] = v; render(); },
-          }),
-        }, "GUM") : null
+        input
       ));
     }
+    // One block per list rather than one per slot: a rolled word lands in the
+    // first empty slot, which is where writeNodeToFirstEmpty puts one in play.
+    // Getter and setter must agree on which slot they mean, or appending to a
+    // full list would overwrite the last entry instead of extending it.
+    const slot = () => inputs.find((x) => !x.value.trim()) || inputs[inputs.length - 1];
+    const target = {
+      tagName: "INPUT",
+      get value() { return slot().value; },
+      set value(v) { const n = slot(); n.value = v; list[inputs.indexOf(n)] = v; },
+      focus() { slot().focus(); },
+      setSelectionRange() {},
+      dispatchEvent() { return true; },
+    };
+    add(card, inspireBlock(cat.id, target));
     add(host, card);
   }
 
@@ -316,6 +321,7 @@ function stepNodes(host) {
       name.addEventListener("input", () => { addBtn.disabled = !name.value.trim(); });
       name.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addList(); } });
       add(card, el("label", { class: "field" }, el("span", { class: "lbl", text: "What is this list of?" }), name));
+      add(card, inspireBlock("list-name", name));
       add(card, addBtn);
       add(card, el("p", { class: "cite", text: "PUM p.27 — point a face of the Random Prompt column at it on a Customized sheet." }));
       add(host, card);
