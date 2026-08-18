@@ -893,10 +893,18 @@ function nodeCard(scope, cat, slots) {
   const list = nodeList(scope, cat.id);
   const fill = nodeFill(scope, cat.id);
   const dieSize = nodeDie(scope, cat.id);
-  // Everything written, plus one empty slot to write in. The rest are one tap
-  // away; the die still rolls across all of them, which the pill already says.
+  // The first four written entries, plus one empty slot to write in. The rest
+  // are one tap away; the die still rolls across all of them, which the pill
+  // already says, and "Roll this list" reaches the hidden ones too.
+  //
+  // Measured: a full eight-list sheet showed every written entry, and every
+  // written entry carries its own Invoke — 89 controls over five screens, the
+  // second-tallest screen in the app. Four is what fits in a glance and what
+  // prep already shows while a list is being written.
   const lastWritten = list.reduce((n, t, i) => (t && t.trim() ? i + 1 : n), 0);
-  const shown = expandedLists[cat.id] ? slots : Math.min(slots, lastWritten + 1);
+  const shown = expandedLists[cat.id]
+    ? slots
+    : Math.min(slots, Math.min(lastWritten, 4) + 1);
 
   add(card, el("div", { class: "card-head" },
     el("h3", { text: categoryName(scope, cat.id) }),
@@ -976,10 +984,13 @@ function nodeCard(scope, cat, slots) {
   }
   add(card, listEl);
   if (shown < slots) {
+    const hiddenWritten = Math.max(0, lastWritten - shown);
     add(card, el("button", {
       class: "btn small ghost",
       onclick: () => { expandedLists[cat.id] = true; render(); },
-    }, `Show all ${slots} slots`));
+    }, hiddenWritten
+      ? `Show all ${slots} slots — ${hiddenWritten} more written`
+      : `Show all ${slots} slots`));
   }
   return card;
 }

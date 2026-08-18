@@ -286,6 +286,17 @@ p  { margin: .4rem 0; }
 .defrow:last-child { border-bottom: none; }
 .defrow .k { display: block; font-size: .74rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; }
 .defrow .v { display: block; }
+/* The glossary is twelve definitions read one after another, so the term runs
+   into its own definition rather than sitting on a line of its own: same words,
+   twelve fewer lines, on the one screen whose whole job is defining things. */
+.glossary .defrow { padding: .4rem 0; }
+.glossary .defrow .k {
+  display: inline; text-transform: none; letter-spacing: 0;
+  font-size: 1em; font-weight: 700; color: var(--ink);
+}
+.glossary .defrow .k::after { content: " \2014 "; color: var(--ink-3); font-weight: 400; }
+.glossary .defrow .v { display: inline; }
+
 .inlinerow {
   display: flex; align-items: baseline; gap: .6rem; padding: .4rem 0;
   border-bottom: 1px solid var(--rule);

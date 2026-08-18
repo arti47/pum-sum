@@ -399,7 +399,7 @@ function glossaryCard(q) {
   const terms = GLOSSARY.filter((g) => !q
     || g.term.toLowerCase().includes(q) || g.body.toLowerCase().includes(q));
   if (!terms.length) return null;
-  const card = el("div", { class: "card" });
+  const card = el("div", { class: "card glossary" });
   const body = el("div");
   // The one card in the library whose whole job is to answer "what does that
   // word mean". Folded shut it answered nothing, so it opens by default; the
@@ -423,7 +423,15 @@ function glossaryCard(q) {
 
 function guidanceCard() {
   const card = el("div", { class: "card" });
-  add(card, el("h3", { text: "From the books" }));
+  // Grouped like the rule sections below it: the library is a place you look
+  // something up in, and four chapters of prose left permanently open pushed
+  // the glossary — the card people actually arrive for — off the screen.
+  const group = el("details", { class: "acc group" },
+    el("summary", null, "From the books", el("span", { class: "pill", text: "4" })));
+  const inner = el("div");
+  add(group, inner);
+  add(card, group);
+  const shelf = { append: (n) => add(inner, n) };
 
   const states = el("details", { class: "acc" }, el("summary", null, "The three play states"));
   const sBody = el("div", { class: "acc-body" });
@@ -432,7 +440,7 @@ function guidanceCard() {
   }
   add(sBody, el("p", { class: "cite", text: "PUM p.4" }));
   add(states, sBody);
-  add(card, states);
+  shelf.append(states);
 
   const flow = el("details", { class: "acc" }, el("summary", null, "The playing flowchart"));
   const fBody = el("div", { class: "acc-body" });
@@ -445,7 +453,7 @@ function guidanceCard() {
   }
   add(fBody, el("p", { class: "cite", text: "PUM p.5" }));
   add(flow, fBody);
-  add(card, flow);
+  shelf.append(flow);
 
   const adv = el("details", { class: "acc" }, el("summary", null, "Advice"));
   const aBody = el("div", { class: "acc-body" });
@@ -454,7 +462,7 @@ function guidanceCard() {
   }
   add(aBody, el("p", { class: "cite", text: "PUM p.10" }));
   add(adv, aBody);
-  add(card, adv);
+  shelf.append(adv);
 
   const mech = el("details", { class: "acc" }, el("summary", null, "Advanced mechanics"));
   const mBody = el("div", { class: "acc-body" });
@@ -463,7 +471,7 @@ function guidanceCard() {
   }
   add(mBody, el("p", { class: "cite", text: "PUM p.9" }));
   add(mech, mBody);
-  add(card, mech);
+  shelf.append(mech);
 
   return card;
 }
@@ -473,35 +481,43 @@ function guidanceCard() {
 // offers three words and the next does not deserves the reason, not a shrug.
 function noRollCard() {
   const card = el("div", { class: "card" });
-  add(card, el("div", { class: "card-head" },
-    el("h3", { text: "Where the app does not roll" }),
-    el("span", { class: "cite", text: "GUM p.3" })
-  ));
-  add(card, el("p", { class: "muted", text: "Most text fields offer three GUM words. These do not, because every GUM row is a phrase about fiction — the right shape for a piece of story, the wrong shape for a proper name or a real-world answer. A table pointed at the wrong question reads as noise, so the app says nothing instead." }));
-  for (const [field, why] of Object.entries(INSPIRE_ABSENT)) {
+  const fields = Object.entries(INSPIRE_ABSENT);
+  const group = el("details", { class: "acc group" },
+    el("summary", null, "Where the app does not roll",
+      el("span", { class: "pill", text: String(fields.length) })));
+  const inner = el("div");
+  add(inner, el("p", { class: "muted", text: "Most text fields offer three GUM words. These do not, because every GUM row is a phrase about fiction — the right shape for a piece of story, the wrong shape for a proper name or a real-world answer. A table pointed at the wrong question reads as noise, so the app says nothing instead." }));
+  add(inner, el("p", { class: "cite", text: "GUM p.3" }));
+  for (const [field, why] of fields) {
     const d = el("details", { class: "acc" }, el("summary", null, field.replace(/-/g, " ")));
     add(d, el("div", { class: "acc-body" }, el("p", { text: why })));
-    add(card, d);
+    add(inner, d);
   }
+  add(group, inner);
+  add(card, group);
   return card;
 }
 
 function errataCard() {
   const card = el("div", { class: "card" });
-  add(card, el("h3", { text: "Errata" }));
-  add(card, el("p", { class: "muted", text: "Where the books disagree with themselves, or print something twice. The app records the discrepancy rather than quietly correcting it — the printed table is what you would roll on paper." }));
   const errata = [
     ...PUM_ERRATA.map((e) => ({ ...e, book: "PUM" })),
     ...(Settings.gum() ? GUM_ERRATA.map((e) => ({ ...e, book: "GUM" })) : []),
   ];
+  const group = el("details", { class: "acc group" },
+    el("summary", null, "Errata", el("span", { class: "pill", text: String(errata.length) })));
+  const inner = el("div");
+  add(inner, el("p", { class: "muted", text: "Where the books disagree with themselves, or print something twice. The app records the discrepancy rather than quietly correcting it — the printed table is what you would roll on paper." }));
   for (const e of errata) {
     const d = el("details", { class: "acc" }, el("summary", null, `${e.id} · ${e.book} p.${e.page}`));
     add(d, el("div", { class: "acc-body" },
       el("p", { text: e.text }),
       el("p", null, el("strong", { text: "Ruling: " }), e.ruling)
     ));
-    add(card, d);
+    add(inner, d);
   }
+  add(group, inner);
+  add(card, group);
   return card;
 }
 
@@ -519,7 +535,7 @@ function renderSettings(host) {
   add(data, el("h2", { text: "Your data" }));
   add(data, el("p", { class: "muted", text: "Everything lives in this browser's local storage. Nothing is sent anywhere. Export regularly — a game you cannot take with you is a rental." }));
   add(data, el("div", { class: "btn-row" },
-    el("button", { class: "btn primary", onclick: exportData }, "Export JSON"),
+    el("button", { class: "btn", onclick: exportData }, "Export JSON"),
     el("button", { class: "btn", onclick: importData }, "Import JSON")
   ));
   add(data, el("div", { class: "btn-row", style: "margin-top:.4rem" },
@@ -644,6 +660,17 @@ function renderSettings(host) {
     }),
   }, "Erase everything"));
   add(host, danger);
+
+  // Settings was the last screen with a primary that only sat inline — 390px
+  // down, below the toggles. Export is the one action here with a consequence
+  // ("a game you cannot take with you is a rental"), so it is the one pinned;
+  // the copy in the Data card is a plain button now, not a second accent.
+  actionBar({
+    label: "Export JSON",
+    context: `${store.games().length} game(s) on this device`,
+    onClick: exportData,
+    secondary: { label: "Import", onClick: importData },
+  });
 }
 
 function toggle(label, description, checked, onChange) {

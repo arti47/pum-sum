@@ -822,3 +822,26 @@ a scene that has just met someone starts from.
 controls and 6.6vh under the stress fixture. Twenty pages it to 57 and 3.8vh; the *Show N more
 of M* control already told the reader how much was left, so nothing is hidden that was not
 already one tap away.
+
+### Phase 11d — the three that were named and left
+
+**F-49 · The rules library buried its glossary.** 4.7vh, and measuring the screen said why: the
+glossary is 1300px, but *Where the app does not roll* was 514px, *Errata* 251px and *From the
+books* 231px, all permanently open — three chapters of prose wrapped around the one card a
+player arrives at this screen to read. All three now group-fold with a count, like the eight
+rule sections already beside them, and the glossary runs each term into its own definition
+rather than stacking term above body. **4.7 → 3.4vh**, with nothing removed.
+
+**F-50 · The node screen showed every written entry.** Each written entry carries its own
+Invoke (PUM p.9's chosen half), so a full eight-list sheet was 89 controls across 5.3 screens —
+the second-tallest screen in the app. It now shows four written entries plus one empty per
+list, and *Show all N slots* reports how many written ones remain behind it. **5.3 → 4.7vh, 89
+→ 77 controls.** No permission is lost: the rolled half (*Roll this list*) still reaches every
+slot including hidden ones, the die size and fill count are still on the header, and one tap
+brings the rest back. This revises the Phase 9 decision to show everything written — that was
+measured on a five-slot Standard sheet, and does not survive a ten-slot sheet with eight lists.
+
+**F-51 · Settings' primary was inline at 390px.** Export is the one action on that screen with
+a consequence — the card says so itself ("a game you cannot take with you is a rental") — so it
+is pinned with Import as its secondary, and the inline copy drops to a plain button so the
+screen carries one accent rather than two.

@@ -296,7 +296,7 @@ WALKTHROUGH.push(
     title: "Plot nodes in play",
     blocks: [
       { tap: "Play → Plot nodes" },
-      { p: "Each list shows what you have written plus one empty slot, with 'Show all N slots' when you want the rest. The header carries the die the app will roll and how full the list is." },
+      { p: "Each list shows its first four written entries plus one empty slot, with 'Show all N slots' when you want the rest — it says how many written entries are still hidden. Nothing is out of reach either way: the die rolls across every slot, and 'Roll this list' can land on an entry you cannot currently see. The header carries the die the app will roll and how full the list is." },
       { bullets: [
         "Tap a slot to write, rewrite or clear it. Every text field here can roll three context-matched GUM words for inspiration.",
         "Invoke — on a written entry, brings it in deliberately as a beat, no die rolled. PUM p.9 allows this and says it counts as a beat for advancing the track.",
@@ -607,7 +607,7 @@ const REFERENCE = [
       ] },
       { p: "Plot nodes" },
       { bullets: [
-        "Per list: the 1d10/1d20 pill, the fill count, Roll this list — 1dN, a “What goes in here” fold, each slot as a button, Invoke on written entries, Show all N slots.",
+        "Per list: the 1d10/1d20 pill, the fill count, Roll this list — 1dN, a “What goes in here” fold, the first four written slots plus one empty as buttons, Invoke on written entries, Show all N slots.",
         "Player-named lists add Rename and Remove.",
         "Add a plot node list — names one of the two blank lists from the extension sheet.",
         "Invoke this node → Invoke as a beat / Cancel.",
@@ -685,13 +685,14 @@ const REFERENCE = [
       { bullets: [
         "Search, then collapsible groups of rule entries, each page-cited; “guidance” marks the ones the app deliberately does not enforce.",
         "Glossary — twelve terms.",
-        "From the books — the three play states, the playing flowchart, the advice chapter, advanced mechanics.",
-        "Errata — where the books disagree with themselves.",
-        "Where the app does not roll — the eight fields with no inspiration block, and why.",
+        "The glossary, open by default — twelve terms, a line each.",
+        "From the books (folded) — the three play states, the playing flowchart, the advice chapter, advanced mechanics.",
+        "Errata (folded) — where the books disagree with themselves.",
+        "Where the app does not roll (folded) — the eight fields with no inspiration block, and why.",
       ] },
       { p: "Tutorial — this document. Settings — see Part 1." },
       { bullets: [
-        "Your data: Export JSON · Import JSON · Export readable · Check my data · Undo.",
+        "Your data: Export JSON (also pinned, with Import beside it) · Import JSON · Export readable · Check my data · Undo.",
         "Export and import dialogs: Copy · Download · Close · Import · Cancel.",
         "Optional rules: Disruption die · Volatile situation · Game Unfolding Machine · Enrich descriptive and story oracles · Show the \u201cWhat this does\u201d notes expanded.",
         "Appearance: Theme · Text size.",
