@@ -177,6 +177,10 @@ function closeSceneFlow(open) {
     actions: [
       { label: "Open the next scene", primary: true, onClick: () => render() },
       { label: "Back to the plot sheet", onClick: () => go("play", "track") },
+      // The closure summary says two journal entries were written, and until now
+      // it was the one step of the loop with no route to them: the first-run
+      // probe had to go via the plot sheet to reach the record it had just made.
+      { label: "Write it down", onClick: () => go("journal", "entries") },
       {
         label: "Undo",
         onClick: () => {

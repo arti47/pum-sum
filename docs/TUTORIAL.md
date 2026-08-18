@@ -659,7 +659,7 @@ Cast
 ### Scene
 
 - Scene arc — Rule of Bias (Neutral / Favourable / Trouble) · Roll a scene opener · Open it myself · Roll an intervention check · Roll a scene closure. While a scene runs the pinned action becomes Intervention check with Close beside it.
-- Scene closed dialog — Open the next scene · Back to the plot sheet · Undo.
+- Scene closed dialog — Open the next scene · Back to the plot sheet · Write it down · Undo.
 - While the scene runs: Call a plot beat · Ask an oracle · Who is here?
 - Exploration · Battle · Discovery — three SUM tables each, the first pinned as the primary, each with the whole table readable in a fold.
 - Characters — the twelve character tables grouped by depth, and Go to the cast →.
@@ -730,7 +730,7 @@ Each of these opens over the screen, traps focus, closes on Escape, and returns 
 - Note this beat / Note this answer (“How did you read it?”) / Note — the three note dialogs.
 - Add a protagonist (the wizard's inline form uses “Add protagonist”, disabled until there is a name) · Protagonist · Remove this protagonist? (its notes field is labelled “A line about them (optional)”) · Add a character / Add a location · Rename · Add to plot nodes, which offers “Back to the cast” when the sheet prints no such list.
 - Open a scene — “How does it open?”
-- Scene closed — Open the next scene / Back to the plot sheet / Undo.
+- Scene closed — Open the next scene / Back to the plot sheet / Write it down / Undo.
 - Keep this (the Forge) — Name them / Name the place, or “Open Settings” when GUM is off.
 - Write in the journal · Mark a session break (“A line about where you stopped (optional)”) · Delete this entry? · Clear the journal?
 - This game · Plot sheet — the two edit dialogs on Home.
