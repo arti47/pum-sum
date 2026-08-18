@@ -75,6 +75,23 @@ export function rollOracle({ oracleId, question = "", enrich = null } = {}) {
   return out;
 }
 
+// Roll only the enrichment word for an oracle answer that has none. PUM p.4
+// makes the d100 part of the rule, so with auto-enrich switched off the player
+// still needs a way to reach it for the one answer in front of them.
+export function enrichOracle(result) {
+  const table = enrichmentFor(result.family);
+  if (!table || result.enrichment) return result;
+  const roll = d100();
+  return {
+    ...result,
+    enrichment: {
+      name: table.name, sub: table.question,
+      roll, word: pairedLookup(table, roll),
+    },
+    dice: [...result.dice, D("d100", roll, 100)],
+  };
+}
+
 // ---------------------------------------------------------------------------
 // SUM tables — the Rule of Bias is MECHANICAL here: keep low or keep high.
 // ---------------------------------------------------------------------------

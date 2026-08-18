@@ -23,7 +23,9 @@ Descriptive oracles (Someone/Place/Object/Hazard/Mood/Notice) are enriched with 
 **Description** word; story oracles (Discovery/Problem/Intent/Activity/Reason/Explain) with a
 **Focus** word.
 → `roller.rollOracle` picks the enrichment table from the oracle's family. Quantifiers are
-never enriched.
+never enriched. The d100 is the book's default and the app's; Settings can switch it off, and
+an answer that arrived without one carries **Enrich it** → `roller.enrichOracle`, which rolls
+the enrichment die alone and leaves the 1d10 answer standing.
 
 ## Quantifiers — 1d10
 How many / how good / how hard, answered relative to a baseline the player sets first.

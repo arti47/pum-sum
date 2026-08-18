@@ -643,3 +643,60 @@ before the new ones were trusted.
 **Stopping here.** Three friendliness rounds have run: the structural pass, orientation and
 width, and now colour. What remains is preference rather than defect, and the honest thing is
 to say so rather than keep generating lists.
+
+---
+
+## Source re-read — the three books, read again against the shipped data
+
+The books were supplied a second time and read cover to cover, then checked mechanically
+rather than by eye: every table row in `data-*.js` was matched against the text of the page it
+cites, and every row's *position* in its table against the printed numbering.
+
+**What held.** All 1,580 GUM rows appear verbatim on the page they cite **and at the printed
+number** — the coordinate reconstruction's numbering survived a second, independent check.
+Every PUM oracle row, quantifier, granular answer, Description and Focus word, ABCD row,
+modified proposal and per-sheet prompt column matched its page exactly. All 24 SUM tables tile
+their die with no gap or overlap, and — the thing that would have inverted the Rule of Bias
+across the whole supplement — **not one table is transposed**: for all 24, the app's low half
+is the half the book prints as the favourable one. The granular d100 bands were re-checked
+number by number against p.24 and are exact. G1 (the duplicate at 17 and 22, GUM p.21) is real
+and is still kept as printed.
+
+Fifty-six SUM rows differ from the printed string by a word — "Remind **us** what exactly
+**brought** the characters here" for the book's "Remind what exactly bought", em dashes for
+commas, a dropped filler word. All fifty-six were read against the page: every one is a
+transcription of the same row, several of them fixing a typo in the book. Nothing changed.
+
+**F-35 · The Exploration sheet was given plot node slots it does not print.** PUM p.19 prints
+no plot node lists — checked by counting the `Add new, choose, or reroll` placeholders on every
+sheet page: Standard 20, Story-focus 30, Scenes 20, Dungeon 20, Story-parts 20, and **zero** on
+Journey, Exploration, Improvised, Sandbox and Customized. Journey, Sandbox and Customized were
+already modelled as what they are — sheets that pair with a Plot Nodes sheet, which is ten
+slots and carries the extension lists. Exploration was modelled as a five-slot, base-lists-only
+sheet, which is neither of the two things the book prints: it invented a list length, and it
+denied the sheet the two lists its own printed prompt column reaches for at 5 and 6, so a
+*Meet or recall a notable character* prompt on an Exploration game could never reach a list.
+Now 10 slots and `expandedNodes: true`, exactly like Journey, whose printed page is identical
+in this respect.
+
+**F-36 · "Enrich it" — a rule with an engine and no control.** PUM p.4 states the descriptive
+and story oracles as *1d10, then 1d100 on the enrichment table*. Settings can switch the d100
+off wholesale (it defaults on, as the book has it), and `roller.rollOracle` has always taken an
+`enrich` flag — but no surface ever set it, so with the toggle off there was no way to reach
+the book's own second half for the answer in front of you. The result card now offers **Enrich
+it** whenever a descriptive or story answer has no d100 word yet; it rolls only the enrichment
+die and folds it into the same journal entry rather than re-rolling the answer.
+
+**F-37 · Three screens spelled out which sheets carry the extension lists.** `src/cast.js`,
+`src/sheet.js` and the tutorial each named "Journey, Story-focus, Sandbox and Customized" by
+hand — content restated in `src/` (§10.2), and a list that F-35 would have made wrong in two
+places. Now read from the sheet table through `derived.expandedSheetSentence()`. The same line
+in `sheet.js` cited the extension sheet as PUM p.26; p.26 is the *base* node sheet and p.27 is
+the extension. Corrected.
+
+**Recorded, not changed.** SUM's contents page (p.2) and its section headings disagree three
+times — *Investigation* / **Discovery** (p.7), *Challenge circumstance* / **Challenge
+conditions** (p.5), *Revealing discovery* / **Revealing finding** (p.7), *Lingering stories* /
+**Lingering backstories** (p.11). The app already follows the page headings in all four cases,
+which is the same ruling as A2: the surface you play from wins. GUM p.12 numbers itself "12 of
+28" in a 26-page book. Neither affects a roll, so neither is surfaced as an erratum.

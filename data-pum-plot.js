@@ -186,12 +186,17 @@ export const NODE_CATEGORIES = [
 
 // --- Plot sheets (pp.14-23) ------------------------------------------------
 // track: sections in play order; `boxes` is the measured count of cross-off boxes.
+// printedLists: how many plot node lists the sheet's own page prints, counted from
+// the page. Zero means the sheet is meant to be printed alongside a Plot Nodes
+// sheet (p.25-27), which is ten slots — so zero implies nodeSlots 10, unless the
+// sheet wants no nodes at all. The harness holds the model to these counts.
 export const PLOT_SHEETS = [
   {
     id: "standard", name: "Standard", page: 14,
     tagline: "Play a quick game with an all-in-one plot sheet.",
     detail: "A short track for quick stories, with a concise plot node list. The plot beats shape the events and their bias.",
     prompts: PROMPTS_STANDARD, nodeSlots: 5, expandedNodes: false,
+    printedLists: 4,
     track: [
       { name: "Exposition", boxes: 3 },
       { name: "Confrontation", boxes: 5 },
@@ -203,6 +208,7 @@ export const PLOT_SHEETS = [
     tagline: "For longer play-throughs.",
     detail: "A longer track structured around a five-act story arc. The plot beats are balanced.",
     prompts: PROMPTS_STANDARD, nodeSlots: 10, expandedNodes: true,
+    printedLists: 0,
     track: [
       { name: "Exposition", boxes: 3 },
       { name: "Rising", boxes: 7 },
@@ -216,6 +222,7 @@ export const PLOT_SHEETS = [
     tagline: "Make your plot nodes very active — they invoke at every random prompt.",
     detail: "Uses plot nodes exclusively instead of random events. Ideal for structured games with well-defined elements and a pre-planned direction.",
     prompts: PROMPTS_STORY_FOCUS, nodeSlots: 5, expandedNodes: true,
+    printedLists: 6,
     track: [
       { name: "Exposition", boxes: 3 },
       { name: "Rising", boxes: 7 },
@@ -229,6 +236,7 @@ export const PLOT_SHEETS = [
     tagline: "Play a plot beat at every scene.",
     detail: "Links each plot beat to a scene. Play cinematically by invoking a beat each time you make a narrative jump.",
     prompts: PROMPTS_STANDARD, nodeSlots: 5, expandedNodes: false,
+    printedLists: 4,
     track: [
       { name: "Intro", boxes: 1 },
       { name: "Scene 1", boxes: 1 }, { name: "Scene 2", boxes: 1 },
@@ -243,6 +251,7 @@ export const PLOT_SHEETS = [
     tagline: "A plot beat at every room you open.",
     detail: "Built for dungeon and facility engagements. Leans towards action and problems.",
     prompts: PROMPTS_STANDARD, nodeSlots: 5, expandedNodes: false,
+    printedLists: 4,
     track: [
       { name: "Entrance", boxes: 1 },
       { name: "Room 1", boxes: 1 }, { name: "Room 2", boxes: 1 },
@@ -253,9 +262,13 @@ export const PLOT_SHEETS = [
   },
   {
     id: "exploration", name: "Exploration", page: 19,
-    tagline: "Each area plays a few prompts.",
+    tagline: "Each area plays a few prompts. Print along a Plot Nodes sheet.",
     detail: "For seeds that involve discovering or traversing an unknown location, playing triple beats per area.",
-    prompts: PROMPTS_STANDARD, nodeSlots: 5, expandedNodes: false,
+    // p.19 prints no node lists of its own — like Journey and Sandbox it pairs
+    // with a Plot Nodes sheet, which is ten slots and carries the extension
+    // lists its own prompt column reaches for at 5 and 6.
+    prompts: PROMPTS_STANDARD, nodeSlots: 10, expandedNodes: true,
+    printedLists: 0,
     track: [
       { name: "Arrival", boxes: 1 },
       { name: "1st Area", boxes: 3 },
@@ -269,6 +282,7 @@ export const PLOT_SHEETS = [
     tagline: "Sparse beats across larger chunks of storytelling.",
     detail: "Space out and stay in control of your narrative with single beats that upbeat each part.",
     prompts: PROMPTS_STANDARD, nodeSlots: 5, expandedNodes: false,
+    printedLists: 4,
     track: [
       { name: "Intro", boxes: 1 },
       { name: "Part 1", boxes: 1 }, { name: "Part 2", boxes: 1 }, { name: "Part 3", boxes: 1 },
@@ -280,6 +294,7 @@ export const PLOT_SHEETS = [
     tagline: "No plot nodes, no plot track. For playing to find out.",
     detail: "Designed for on-the-fly play with minimal prep. Relies entirely on random events.",
     prompts: PROMPTS_IMPROVISED, nodeSlots: 0, expandedNodes: false,
+    printedLists: 0,
     track: [],
   },
   {
@@ -287,6 +302,7 @@ export const PLOT_SHEETS = [
     tagline: "Roam the world without a track — still compatible with plot nodes.",
     detail: "Play open-endedly whenever you wish to do different things and engage the story freely.",
     prompts: PROMPTS_STANDARD, nodeSlots: 10, expandedNodes: true,
+    printedLists: 0,
     track: [],
   },
   {
@@ -294,6 +310,7 @@ export const PLOT_SHEETS = [
     tagline: "Build the track — and the prompt column — yourself.",
     detail: "Fill the track as you play to find out, or pre-design it to match an expected structure. Useful for pre-written adventures.",
     prompts: PROMPTS_STANDARD, nodeSlots: 10, expandedNodes: true,
+    printedLists: 0,
     customizable: true,
     track: [],
   },

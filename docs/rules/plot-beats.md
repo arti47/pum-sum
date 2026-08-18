@@ -38,6 +38,15 @@ Random Prompt column at it on a Customized sheet.
 Sheets 26 and 27 also carry a **Game notes** area → `scope.notes`, on the plot sheet under
 "This scope".
 
+## Which sheets have node lists at all (pp.14-27)
+Five sheets print their own lists on the page you play from: Standard, Scenes, Dungeon and
+Story-parts print four lists of five slots each; Story-focus prints six of five. The other
+five print none — Improvised because it wants none, and Journey, Exploration, Sandbox and
+Customized because they are meant to be printed alongside a **Plot Nodes sheet** (p.25 all
+six lists, p.26 the base four, p.27 the extension pair plus two blank ones), which is ten
+slots. → `PLOT_SHEETS[].printedLists` records the measured count per page and the harness
+holds `nodeSlots` / `expandedNodes` to it.
+
 ## Which die a node list uses
 Roll 1d10 in lists with less than half the entries filled; otherwise 1d20 — and exactly half
 is already "otherwise", so a ten-slot list switches at its fifth entry. A five-slot list

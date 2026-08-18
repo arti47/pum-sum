@@ -52,7 +52,7 @@ export const RULES_LIBRARY = [
       },
       {
         id: "enrichment", title: "Enrichment — 1d10 plus 1d100", page: "PUM pp.12-13",
-        body: "Descriptive oracles (who, where, what for, hazard, mood, notice) are enriched with a Description word; story oracles (find, risk, wants, doing, why, how) with a Focus word. Roll both and read them together — the pair is the answer, not the first line alone.",
+        body: "Descriptive oracles (who, where, what for, hazard, mood, notice) are enriched with a Description word; story oracles (find, risk, wants, doing, why, how) with a Focus word. Roll both and read them together — the pair is the answer, not the first line alone. Settings can switch the second die off; an answer that came without one carries Enrich it, which rolls the word for that answer alone.",
       },
       {
         id: "granular", title: "Granular Yes or No — 1d100 at a likelihood", page: "PUM p.24",

@@ -3,9 +3,9 @@
 import { el, add, announce } from "./core.js";
 import { explain, actionBar, resultCard, toast, promptModal } from "./ui.js";
 import * as store from "./store.js";
-import { rollYesNo, rollGranular, rollOracle, journalRoll, diceText, rollProposal, rollPrompt }
+import { rollYesNo, rollGranular, rollOracle, enrichOracle, journalRoll, diceText, rollProposal, rollPrompt }
   from "./roller.js";
-import { yesNoRegisters, granularBands } from "./rules.js";
+import { yesNoRegisters, granularBands, enrichmentFor } from "./rules.js";
 import { sectionNav, render, go } from "./router.js";
 import { openRule } from "./screens.js";
 import { DESCRIPTIVE, STORY, QUANTIFIERS } from "../data-pum-oracles.js";
@@ -271,7 +271,28 @@ function fireBeatFromOracle(kind, why) {
 }
 
 function rerollActions(result) {
-  return [
+  const actions = [];
+  // PUM p.4 rolls the d100 enrichment word with every descriptive or story
+  // answer. Auto-enrich can be switched off in Settings, and before this there
+  // was no way back to the rule for a single answer: the engine took an
+  // `enrich` flag no surface ever set.
+  if (result.kind === "oracle" && !result.enrichment && enrichmentFor(result.family)) {
+    actions.push({
+      label: "Enrich it",
+      onClick: () => {
+        const enriched = enrichOracle(result);
+        if (!enriched.enrichment) return;
+        store.updateJournal(last.entryId, {
+          detail: `${question}${question ? " — " : ""}${enriched.enrichment.name} ${enriched.enrichment.roll}: ${enriched.enrichment.word}`,
+          dice: enriched.dice.map((d) => ({ label: d.label, value: d.value, kept: d.kept })),
+        });
+        last = { result: enriched, entryId: last.entryId };
+        announce(`${enriched.enrichment.name}: ${enriched.enrichment.word}`);
+        render();
+      },
+    });
+  }
+  return actions.concat([
     {
       label: "Re-roll",
       onClick: () => {
@@ -303,7 +324,7 @@ function rerollActions(result) {
       label: "Dismiss",
       onClick: () => { last = null; render(); },
     },
-  ];
+  ]);
 }
 
 function commitLinked(result, previousId, title) {

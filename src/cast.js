@@ -10,7 +10,7 @@ import { render, go } from "./router.js";
 import { currentBias } from "./scene.js";
 import { CHARACTER_TABLE_IDS } from "../data-sum.js";
 import { NODE_CATEGORIES } from "../data-pum-plot.js";
-import { categoryName, nodeSlots } from "./derived.js";
+import { categoryName, nodeSlots, expandedSheetSentence } from "./derived.js";
 
 export function renderCast(host) {
   const game = store.activeGame();
@@ -264,7 +264,7 @@ function addToNodes(c) {
       title: "Add to plot nodes",
       body: el("div", null,
         el("p", { text: `${sheet ? sheet.name : "This plot sheet"} prints no ${cat.name.toLowerCase()} list, so there is no slot to write ${c.name} into.` }),
-        el("p", { class: "muted", text: "They stay in the cast either way — a prompt that reaches for a character will offer to recall them. The Journey, Story-focus, Sandbox and Customized sheets pair with the extension sheet that carries these lists." })
+        el("p", { class: "muted", text: `They stay in the cast either way — a prompt that reaches for a character will offer to recall them. The ${expandedSheetSentence()} sheets pair with the extension sheet that carries these lists.` })
       ),
       actions: [
         { label: "Back to the cast", primary: true, onClick: () => go("play", "cast") },

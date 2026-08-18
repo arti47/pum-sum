@@ -10,6 +10,7 @@ import * as store from "./store.js";
 import {
   sectionsOf, crossed, trackLength, hasTrack, isResolved, isEnded, currentSection,
   nodeList, nodeDie, nodeFill, nodeSlots, slotRange, categoryName, customListName,
+  expandedSheetSentence,
 } from "./derived.js";
 import { plotSheet, nodeCategory, sectionOfBox, proposalNote, abcd } from "./rules.js";
 import { rollProposal, rollPrompt, invokeNode, journalRoll, diceText } from "./roller.js";
@@ -733,7 +734,7 @@ function unprintedListBlock(scope, wrap, n, cat, beat) {
   const known = game ? game.cast.filter((c) => c.kind === kind) : [];
   const sheet = plotSheet(scope.sheetId);
   add(wrap, el("div", { text: `${sheet ? sheet.name : "This sheet"} does not print this list — the prompt stands on its own. Bring one in, or recall one you have already met.` }));
-  add(wrap, el("div", { class: "cite", text: "The extension sheet (PUM p.26) adds these lists; the Journey, Story-focus, Sandbox and Customized sheets use it." }));
+  add(wrap, el("div", { class: "cite", text: `The extension sheet (PUM p.27) adds these lists; the ${expandedSheetSentence()} sheets use it.` }));
 
   const row = el("div", { class: "btn-row" });
   const keep = (name, notes = "") => {

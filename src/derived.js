@@ -3,7 +3,7 @@
 
 import { STATE_VERSION, uid } from "./core.js";
 import { plotSheet, trackSections, trackTotal, sectionOfBox } from "./rules.js";
-import { NODE_CATEGORIES } from "../data-pum-plot.js";
+import { NODE_CATEGORIES, PLOT_SHEETS } from "../data-pum-plot.js";
 
 export const NODE_IDS = NODE_CATEGORIES.map((c) => c.id);
 
@@ -81,6 +81,16 @@ export function nodeUnavailableReason(scope, categoryId) {
   if (cat.expanded && !sheet.expandedNodes) return "not-on-this-sheet";
   if (cat.custom && !customListName(scope, categoryId)) return "unnamed-list";
   return null;
+}
+
+// Which sheets pair with the plot-node extension sheet, as a sentence. Read from
+// the sheet table rather than restated in a surface (§10.2) — three screens
+// listed these by hand and one of them would have gone stale the moment a
+// sheet's own entry changed.
+export function expandedSheetSentence() {
+  const names = PLOT_SHEETS.filter((s) => s.expandedNodes).map((s) => s.name);
+  if (!names.length) return "";
+  return names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
 }
 
 // The two blank lists on the extension sheet carry whatever name you write on them.

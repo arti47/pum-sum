@@ -129,7 +129,7 @@ Step 5 · Nodes. Plot nodes are your game's own content — the things a random 
 
 > **Why.** A blank list is not broken. When a prompt lands on an empty slot the app offers you three things — add something new, choose an entry that fits, or reroll — and whatever you invent becomes a permanent entry in that list. The lists are meant to grow in play. This is why prep does not demand sixty boxes of content before you have played a minute.
 
-On a sheet that pairs with the plot-node extension sheet (Journey, Story-focus, Sandbox, Customized), a further card offers to name a list of your own: factions, rumours, omens, debts owed. Name it and it comes into being with the same ten slots and the same die rule.
+On a sheet that pairs with the plot-node extension sheet (Journey, Story-focus, Exploration, Sandbox, Customized), a further card offers to name a list of your own: factions, rumours, omens, debts owed. Name it and it comes into being with the same ten slots and the same die rule.
 
 *PUM p.3 · p.27 · p.28*
 
@@ -200,6 +200,8 @@ Quantifiers — how many, how good, how hard. Set a baseline in your head before
 Granular Yes or No — the d100 variant. Declare a likelihood first — no way, hardly, unlikely, neutral, likely, surely, certain — and the roll is read against that column. Use it when the odds genuinely are not even and you want the dice to know that.
 
 Every result card carries Re-roll, Note it and Dismiss. Re-rolling is not cheating; the book says so explicitly. Both rolls stay in the journal, linked, so the record remains honest.
+
+A descriptive or story answer that arrived without its d100 word also carries Enrich it, which rolls the Description or Focus word for that answer alone and adds it to the same journal entry. You only see it if you switched the enrichment off in Settings — the book rolls it every time, so on it stays by default.
 
 *PUM p.8*
 
@@ -669,7 +671,7 @@ Cast
 - Yes or No — three registers, an “I have a bias” checkbox, Ask.
 - Granular — three registers, seven likelihood bands, Ask.
 - Descriptive · Story · Quantifiers — one button per oracle.
-- Result card: Re-roll · Note it · Dismiss; on a bias roll, two answer chips to choose between.
+- Result card: Re-roll · Note it · Dismiss; Enrich it when a descriptive or story answer has no d100 word yet; on a bias roll, two answer chips to choose between.
 - Does this call for a beat? — It said yes — random prompt · It said no — modified proposal.
 - Disruption die strip, when the setting is on: reports the d10 and offers Roll the random prompt / Roll the modified proposal.
 
