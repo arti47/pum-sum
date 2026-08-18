@@ -960,6 +960,10 @@ function nodeCard(scope, cat, slots) {
           label: `Slot ${lo}-${hi}`,
           value: text,
           inspire: cat.id,
+          // A dialog titled "Pending questions" with an empty box tells a
+          // newcomer nothing. The book defines every category and gives
+          // examples; both live in the data, so both are shown here.
+          hint: `${cat.definition} e.g. ${cat.examples}`,
           onSubmit: (v) => { store.setNode(cat.id, i, v); render(); },
         }),
       }, text || "Add new, choose, or reroll"),

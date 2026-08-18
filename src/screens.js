@@ -197,6 +197,7 @@ function editGame(game) {
   modal({
     title: "This game",
     body: el("div", null,
+      el("p", { class: "muted", text: "The world you are playing in, and what you are drawing on. None of it is locked — a game's tone can change once you have played a scene in it." }),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Title" }), title),
       inspireBlock("game-title", title),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Universe or RPG" }), universe),
@@ -232,6 +233,7 @@ function editScope(s) {
   modal({
     title: "Plot sheet",
     body: el("div", null,
+      el("p", { class: "muted", text: "One thread of the story: the goal this sheet is about, how it began, and what you are trying to find out. A game can hold several, one after another." }),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Scope name" }), name),
       inspireBlock("scope-name", name),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Mission" }), mission),
@@ -399,7 +401,10 @@ function glossaryCard(q) {
   if (!terms.length) return null;
   const card = el("div", { class: "card" });
   const body = el("div");
-  const fold = el("details", { class: "acc group", open: (!!q) || undefined },
+  // The one card in the library whose whole job is to answer "what does that
+  // word mean". Folded shut it answered nothing, so it opens by default; the
+  // rule groups below it stay folded, which is what keeps the screen short.
+  const fold = el("details", { class: "acc group", open: true },
     el("summary", null, "Glossary", el("span", { class: "pill", text: String(terms.length) })),
     body
   );

@@ -7,6 +7,7 @@ import * as store from "./store.js";
 import { rollSum, journalRoll, diceText } from "./roller.js";
 import { sumTable, plotSheet } from "./rules.js";
 import { render, go } from "./router.js";
+import { openRule } from "./screens.js";
 import { currentBias } from "./scene.js";
 import { CHARACTER_TABLE_IDS } from "../data-sum.js";
 import { NODE_CATEGORIES } from "../data-pum-plot.js";
@@ -18,7 +19,8 @@ export function renderCast(host) {
   add(host, explain([
     "Your protagonists, plus everyone and everywhere the story has actually met.",
     "Roll SUM's character tables from a person's entry and the result is stored with them, so next time you know how they talk and what they want.",
-  ]));
+    "Keeping someone here does not put them in the story's reach: a random prompt can only land on a plot node, so use \u201cAdd to plot nodes\u201d for anyone the plot should be able to bring back on its own.",
+  ], "nodes", openRule));
 
   // Protagonists
   const pcs = el("div", { class: "card" });
@@ -46,6 +48,7 @@ export function renderCast(host) {
     onclick: () => promptModal({
       // no-inspire: GUM has no name generator; the concept belongs in the notes.
       title: "Add a protagonist", label: "Name",
+      hint: "A character you play. They are your eyes and ears in this world, and you control their thoughts, voice and actions — the machine never rolls for them (PUM p.3).",
       notes: {
         label: "A line about them (optional)",
         placeholder: "What marks them out?",
@@ -79,6 +82,9 @@ export function renderCast(host) {
           // no-inspire: a name is the player's; the rolled concept sits beside it.
           title: kind === "character" ? "Add a character" : "Add a location",
           label: "Name",
+          hint: kind === "character"
+            ? "Someone the story has met or mentioned. Keeping them here means a prompt can bring them back later, and SUM can tell you how they behave."
+            : "Somewhere the story has reached or referred to. Keeping it here means a prompt can lead back to it later.",
           notes: {
             label: kind === "character" ? "What GUM says about them" : "What GUM says about it",
             placeholder: kind === "character" ? "Archetype, edge, flaw…" : "Feature, purpose, worth…",
@@ -121,6 +127,7 @@ function editProtagonist(p) {
   modal({
     title: "Protagonist",
     body: el("div", null,
+      el("p", { class: "muted", text: "One of the characters you play. Notes are for you — what they want, how they sound, what they are carrying." }),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Name" }), name),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Notes" }), notes),
       inspireBlock("protagonist-notes", notes)
@@ -153,6 +160,9 @@ function editProtagonist(p) {
 
 function openCast(c) {
   const body = el("div");
+  add(body, el("p", { class: "muted", text: c.kind === "character"
+    ? "Everything this game knows about them. Ask SUM below and the answer is stored here, so next time you know how they talk and what they want."
+    : "Everything this game knows about this place. Notes stay with it, so a prompt that leads back here has something to lead back to." }));
   const notes = el("textarea", { placeholder: "What do you know about them?" });
   notes.value = c.notes || "";
   add(body, el("label", { class: "field" }, el("span", { class: "lbl", text: "Notes" }), notes));

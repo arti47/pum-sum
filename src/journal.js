@@ -5,6 +5,7 @@ import { el, add, fmtTime, fmtDay } from "./core.js";
 import { explain, promptModal, confirmModal, toast, emptyState, actionBar } from "./ui.js";
 import * as store from "./store.js";
 import { sectionNav, render, go } from "./router.js";
+import { openRule } from "./screens.js";
 import { registerClearer } from "./viewstate.js";
 
 const PAGE = 40;
@@ -37,7 +38,8 @@ function renderEntries(host, game) {
   add(host, explain([
     "Every roll the app makes lands here with its dice, so you can re-derive any result later.",
     "Write your own entries too — this is where the story you are telling actually lives.",
-  ]));
+    "The filters are named after the kinds of roll: an oracle answers a question, a beat is a plot beat — a modified proposal you twisted, or a random prompt you rolled blind.",
+  ], "beat-kinds", openRule));
 
   const row = el("div", { class: "section-nav" });
   for (const [id, label] of FILTERS) {
@@ -105,6 +107,7 @@ function renderEntries(host, game) {
       title: "Write in the journal",
       label: "What happened?",
       multiline: true,
+      hint: "Your own words, in among the rolls: what your characters did, what you decided, where the scene went. Nothing here changes the game — it is the record you read back.",
       onSubmit: (v) => { if (v) { store.addJournal({ kind: "note", title: "", detail: v }); render(); } },
     }),
   });
@@ -133,6 +136,7 @@ function entryEl(e) {
     onclick: () => promptModal({
       // no-inspire: a note interprets a roll already made.
       title: "Note", label: "Your note", value: e.note, multiline: true,
+      hint: "What this roll turned out to mean in your story. The dice stay as they fell; this sits beside them.",
       onSubmit: (v) => { store.updateJournal(e.id, { note: v }); render(); },
     }),
   }, e.note ? "Edit note" : "Add note"));

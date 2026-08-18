@@ -754,3 +754,50 @@ Standard is already selected.
 
 **Verified after.** The first-run probe still walks cold open → prepared game → open scene →
 oracle → beat → confirm → close → journal in 18 taps with every step offered in place.
+
+---
+
+## Phase 11b — the novice audit, applied to every function
+
+Phase 11 fixed the first-run path. This pass asks the same question of **every** surface:
+`tests/audit-novice.mjs` walks all 20 routes and opens all 71 dialogs, checking four things
+that can be checked mechanically.
+
+1. every route carries its *what this does* note, and it is open on a fresh install;
+2. every route leads with a sentence, not a control (the section nav is chrome, not content);
+3. every book term a screen displays is either written out in prose on that screen or the
+   screen offers a route to the rule that defines it;
+4. **every dialog says what it does before it asks** — one sentence of eight words or more, or
+   a labelled field with a hint.
+
+First run: **40 findings**. After: **0**.
+
+**F-42 · Thirteen dialogs asked for typing and explained nothing.** The worst were the four
+plot-node lists: a dialog titled *Pending questions* with an empty box and a Save button, to a
+player who has never read PUM p.28. Each now carries the book's own definition and examples,
+read from `NODE_CATEGORIES` rather than restated (§10.2). Also fixed: *Add a protagonist*
+(p.3's "your eyes and ears… you control their thoughts, voice and actions"), *Add a character*
+and *Add a location* (why keeping them matters — a prompt can bring them back), the protagonist
+and cast entry dialogs, both journal-writing dialogs (a note sits beside the dice; it does not
+change them), and Home's *This game* and *Plot sheet* editors.
+
+**F-43 · Four screens used the books' vocabulary with no route to a definition.** Cast said
+"plot node" while explaining nothing about them — it now links to the rule and says the thing
+that actually matters: being in the cast does not put someone in the story's reach, only a plot
+node does. Journal named its filters after roll kinds and now says what an oracle and a beat
+are, linking to the rule.
+
+**F-44 · The glossary was folded shut.** The rules library is where "what does that word mean"
+is answered, and its glossary card — the only card on the screen that answers it — was
+collapsed. It opens by default now; the rule groups below stay folded, which is what keeps the
+screen navigable. The screen goes 2.9 → 4.7vh, which is accepted here: this is the reference
+screen, and a glossary you must expand before it defines anything is the §0 defect in miniature.
+
+**F-45 · The guide's parts were four closed rows of jargon.** Each part's blurb moved outside
+its fold, so the screen says what each part covers without opening anything, and the first
+quick-start step opens by default until the walkthrough is marked read. The screen's note also
+names the vocabulary and points at the glossary.
+
+**What the audit cannot check.** Whether the sentences are any good. It checks that a sentence
+is there, in the right place, at the moment the app asks something of the player — which was
+the failure mode in every one of the 40 findings.

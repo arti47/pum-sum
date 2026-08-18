@@ -70,13 +70,19 @@ export function renderTutorial(host) {
   add(host, explain([
     "The quick start below gets a first session played tonight. Everything under it is the complete guide: every function, four worked scenarios, and a screen-by-screen reference.",
     "It is a screen, not a wizard — come back to any part mid-session.",
+    "The books' vocabulary — plot beat, plot node, plot track, plot scope, bias — is defined a line each in the glossary at More \u2192 Rules, which opens on that glossary.",
   ]));
 
   // --- the fast path ------------------------------------------------------
   const quick = el("div", { class: "card" });
   add(quick, el("h2", { text: "Your first session in ten minutes" }));
-  for (const s of QUICK_START) {
-    const d = el("details", { class: "acc" }, el("summary", null, s.title));
+  // The first step opens by default until the walkthrough has been marked as
+  // read: eleven closed rows told a stranger nothing about what was inside them.
+  QUICK_START.forEach((s, i) => {
+    const d = el("details", {
+      class: "acc",
+      open: (i === 0 && !Settings.seenTutorial()) || undefined,
+    }, el("summary", null, s.title));
     const body = el("div", { class: "acc-body" });
     add(body, el("p", null, el("strong", { text: "Why: " }), s.why));
     add(body, el("p", null, el("strong", { text: "Do: " }), s.act));
@@ -88,7 +94,7 @@ export function renderTutorial(host) {
     }
     add(d, body);
     add(quick, d);
-  }
+  });
   if (!Settings.seenTutorial()) {
     add(quick, el("button", {
       class: "btn wide",
@@ -101,11 +107,14 @@ export function renderTutorial(host) {
   for (const part of PARTS) {
     const card = el("div", { class: "card" });
     const body = el("div");
+    // The blurb sits OUTSIDE the fold: four collapsed rows of book vocabulary
+    // told a stranger nothing about what was inside them, and the sentence that
+    // does was itself folded away.
+    add(card, el("p", { class: "muted", text: part.blurb }));
     add(card, el("details", { class: "acc group" },
       el("summary", null, part.title, el("span", { class: "pill", text: String(part.sections.length) })),
       body
     ));
-    add(body, el("p", { class: "muted", text: part.blurb }));
     for (const sec of part.sections) {
       const d = el("details", { class: "acc" }, el("summary", null, sec.title));
       const sb = el("div", { class: "acc-body" });
