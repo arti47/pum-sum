@@ -118,6 +118,24 @@ export const ADVANCED = [
   },
 ];
 
+// --- For someone who has never played a solo RPG ---------------------------
+// The app's own words, not the books'. PUM assumes you already know what solo
+// play is; the first-run measurement said a stranger meets five book terms
+// before anything tells them they are supposed to be talking.
+export const NEW_TO_SOLO = {
+  title: "Never played solo before?",
+  points: [
+    "You are the author and the actors. You describe what your characters do, out loud or on paper — the app never does that part.",
+    "When you do not know what happens next, you ask this app instead of a gamemaster. It answers with a prompt, not a verdict, and you decide what the answer means.",
+    "It does not resolve actions. Whether the lock opens or the sword lands is your own RPG's job, or yours.",
+  ],
+  loop: "Say what your characters do → ask when you are unsure → take the answer and keep telling the story.",
+};
+
+// The one-line coach on the plot sheet, shown until the first beat is confirmed.
+export const FIRST_BEAT_COACH =
+  "New here? Roll a beat, say out loud what it means in your story, and only then confirm it — or decide it did not matter and leave the track alone.";
+
 // --- What each machine is for ---------------------------------------------
 export const MACHINES = [
   {

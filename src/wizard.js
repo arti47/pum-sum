@@ -211,7 +211,15 @@ function stepProtagonists(host) {
 
 function stepSheet(host) {
   add(host, el("p", { class: "muted", text: "The sheet sets your pacing: how long the track is, how it is sectioned, and how often you invoke beats. More boxes means more randomness before this thread resolves." }));
-  for (const sheet of PLOT_SHEETS) {
+  // Ten sheets is a pacing decision a first-timer has no basis to make, and the
+  // measured first run met 444 words here. Standard is the book's own answer —
+  // "if this is your first time, the standard Plot Sheet is a good start"
+  // (p.3) — so it leads alone until the player asks for the rest.
+  const showAll = !!visible.sheets;
+  const list = showAll
+    ? PLOT_SHEETS
+    : PLOT_SHEETS.filter((s) => s.id === "standard" || s.id === draft.sheetId);
+  for (const sheet of list) {
     const chosen = draft.sheetId === sheet.id;
     const card = el("div", { class: "card", style: chosen ? "border-color:var(--accent)" : null });
     add(card, el("div", { class: "card-head" },
@@ -233,7 +241,16 @@ function stepSheet(host) {
       "aria-pressed": chosen ? "true" : "false",
       onclick: () => { draft.sheetId = sheet.id; render(); },
     }, chosen ? "Chosen" : "Choose this sheet"));
+    if (sheet.id === "standard" && !showAll) {
+      add(card, el("p", { class: "cite", text: "PUM p.3: if this is your first time, the Standard sheet is a good start." }));
+    }
     add(host, card);
+  }
+  if (!showAll) {
+    add(host, el("button", {
+      class: "btn wide",
+      onclick: () => { visible.sheets = true; render(); },
+    }, "Show all ten plot sheets"));
   }
 }
 

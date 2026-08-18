@@ -121,7 +121,7 @@ Step 2 · Scope. A plot scope is one defined mission, task or goal — the threa
 
 Step 3 · Protagonists. Your PCs are your eyes and ears. You are in full control of their thoughts, voice and actions — PUM never rolls for them, ever. At least one is required. The name is yours; the notes field beside it is where a rolled GUM archetype lands, because a concept does not belong in a name box.
 
-Step 4 · Sheet. Ten plot sheets, each a pacing decision. The card shows the track drawn to scale, the box count, how many node slots it gives you, and whether it reaches the extension lists.
+Step 4 · Sheet. Ten plot sheets, each a pacing decision. The card shows the track drawn to scale, the box count, how many node slots it gives you, and whether it reaches the extension lists. Only Standard is shown at first, because choosing between ten pacing structures is not a decision you can make before your first game — PUM p.3 says as much. Show all ten plot sheets opens the rest, and once you have chosen one it stays on screen beside Standard.
 
 > **Watch out.** More boxes is not 'better'. It is longer. Eleven boxes is a night or two; twenty is a campaign arc. Pick the one whose length matches the story you actually want to tell.
 
@@ -198,6 +198,8 @@ Story oracles — Discovery, Problem, Intent, Activity, Reason, Explain. Same sh
 Quantifiers — how many, how good, how hard. Set a baseline in your head before rolling, because the table answers relative to it. Four faces in ten are 'as expected': most of the time the world is unremarkable, and that is deliberate.
 
 Granular Yes or No — the d100 variant. Declare a likelihood first — no way, hardly, unlikely, neutral, likely, surely, certain — and the roll is read against that column. Use it when the odds genuinely are not even and you want the dice to know that.
+
+Until you confirm the first beat of a game, the plot sheet carries one line above the beat card: roll a beat, say out loud what it means, and only then confirm it. It goes for good once a box is crossed — there is nothing to dismiss.
 
 Every result card carries Re-roll, Note it and Dismiss. Re-rolling is not cheating; the book says so explicitly. Both rolls stay in the journal, linked, so the record remains honest.
 
@@ -391,7 +393,8 @@ Optional rules.
 - Disruption die — off by default, because PUM presents it as a variant. A d10 rides along with every oracle answer except quantifiers, Description and Focus: on a 1 a random prompt interrupts, on a 2 a proposal alters the scene. Read your answer first, then resolve the disruption.
 - Volatile situation — widens the proposal range from 2 to 2–5. A 1 remains the only face for a prompt.
 - GUM — on by default. Turn it off and the Forge section and every inspiration block disappear.
-- Enrich descriptive and story oracles — on, because the books make it the default.
+- Enrich descriptive and story oracles — on, because the books make it the default. With it off, a descriptive or story answer carries Enrich it instead.
+- Show the “What this does” notes expanded — on for a new player. Every screen carries a short note saying what it is for; they start open, and collapse everywhere for good the first time you close one. This brings them back.
 
 Appearance: theme follows the system unless you override it, and a text-size slider runs 85% to 140%. Pinch-zoom is locked so a stray gesture cannot disturb a roll; the slider is what pays that back.
 
@@ -690,7 +693,7 @@ Home
 - Plot sheets in this game: Switch to this · Edit (scope name, mission, starting point) · Delete · New plot sheet.
 - Your games: Open · Archive / Restore · Prepare another game.
 - The machines — what PUM, SUM and GUM each do.
-- With no game: Prepare a game (pinned) · Read the first-session walkthrough.
+- With no game: Never played solo before? — three lines saying you narrate, the app answers, and your own RPG resolves · Prepare a game (pinned) · Read the first-session walkthrough.
 
 Forge (hidden when GUM is off)
 
@@ -711,7 +714,7 @@ Tutorial — this document. Settings — see Part 1.
 
 - Your data: Export JSON · Import JSON · Export readable · Check my data · Undo.
 - Export and import dialogs: Copy · Download · Close · Import · Cancel.
-- Optional rules: Disruption die · Volatile situation · Game Unfolding Machine · Enrich descriptive and story oracles.
+- Optional rules: Disruption die · Volatile situation · Game Unfolding Machine · Enrich descriptive and story oracles · Show the “What this does” notes expanded.
 - Appearance: Theme · Text size.
 - About the books, including what they do not contain.
 - Danger zone: Delete the current game · Erase everything.

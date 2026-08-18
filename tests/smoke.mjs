@@ -253,7 +253,7 @@ for (const theme of ["light", "dark"]) {
   await ctx.close();
 }
 
-// --- 4. explain() present and collapsed; tap targets; input font size -----
+// --- 4. explain() present and open-until-closed; tap targets; input font size
 {
   const { ctx, page } = await newPage(FIXTURES.mid);
   for (const [tab, section] of ROUTES) {
@@ -276,7 +276,9 @@ for (const theme of ["light", "dark"]) {
       };
     });
     ok(`${tab}/${section} has an explain() note`, m.hasExplain);
-    if (m.hasExplain) ok(`${tab}/${section} explain() starts collapsed`, !m.explainOpen);
+    // The notes start expanded for a new player and collapse everywhere, for
+    // good, the first time one is closed. The fixture has never closed one.
+    if (m.hasExplain) ok(`${tab}/${section} explain() starts open for a new player`, m.explainOpen);
     if (m.smallest !== null) {
       ok(`${tab}/${section} checkbox rows are at least 40px`, m.smallest >= 40,
         `smallest is ${Math.round(m.smallest)}px`);
@@ -285,6 +287,38 @@ for (const theme of ["light", "dark"]) {
       ok(`${tab}/${section} inputs are at least 16px`, m.minFont >= 16, `${m.minFont}px`);
     }
   }
+  await ctx.close();
+}
+
+// --- 4b. closing one "what this does" note closes them everywhere ---------
+// The gesture is the setting: a reader who has taken the point should not have
+// to take it again on every screen, and re-opening one brings them all back.
+{
+  const { ctx, page } = await newPage(FIXTURES.mid);
+  await goto(page, "play", "track");
+  const closeOne = () => page.evaluate(() => {
+    const d = document.querySelector("#screen details.explain");
+    d.open = false;
+    d.dispatchEvent(new Event("toggle"));
+  });
+  await closeOne();
+  await page.waitForTimeout(120);
+  await goto(page, "oracles", "yesno");
+  const afterClose = await page.evaluate(() =>
+    document.querySelector("#screen details.explain").hasAttribute("open"));
+  ok("closing one note collapses the next screen's too", !afterClose);
+  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem("umState")).settings.explainOpen);
+  ok("and the choice is stored, not just visual", stored === false);
+  await page.evaluate(() => {
+    const d = document.querySelector("#screen details.explain");
+    d.open = true;
+    d.dispatchEvent(new Event("toggle"));
+  });
+  await page.waitForTimeout(120);
+  await goto(page, "scene", "arc");
+  const afterOpen = await page.evaluate(() =>
+    document.querySelector("#screen details.explain").hasAttribute("open"));
+  ok("re-opening one brings them all back", afterOpen);
   await ctx.close();
 }
 

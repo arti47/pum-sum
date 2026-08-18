@@ -100,7 +100,8 @@ await step("step 2 → next", "Next");
 await type("Name", "Wren");
 await step("add a protagonist", "Add protagonist");
 await step("step 3 → next", "Next");
-await step("pick a plot sheet", "Choose this sheet");
+// Standard is pre-chosen and leads alone; the other nine are one tap away.
+await step("see the other nine sheets", "Show all ten plot sheets");
 await step("step 4 → next", "Next");
 await step("write a plot node", "Add");
 await type("", "The burned archive");

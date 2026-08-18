@@ -17,7 +17,7 @@ import { rollProposal, rollPrompt, invokeNode, journalRoll, diceText } from "./r
 import { sectionNav, go, render } from "./router.js";
 import { openRule } from "./screens.js";
 import { NODE_CATEGORIES, PROMPT_NOTES, TRACK_SECTION_NOTES } from "../data-pum-plot.js";
-import { BEAT_TRIGGERS } from "../data-guidance.js";
+import { BEAT_TRIGGERS, FIRST_BEAT_COACH } from "../data-guidance.js";
 import { renderCast } from "./cast.js";
 import { registerClearer } from "./viewstate.js";
 
@@ -111,6 +111,15 @@ function renderTrack(host, scope) {
         }),
       }, "Write the starting point")
     ));
+  }
+
+  // Until the first beat of this game has been confirmed, one line says what
+  // the loop actually is — the first-run measurement found nothing on any
+  // screen telling a newcomer that they are the one who has to talk. It
+  // disappears for good the moment they confirm a beat; nothing to dismiss.
+  const game = store.activeGame();
+  if (game && !game.journal.some((e) => e.kind === "track")) {
+    add(host, el("p", { class: "coach", text: FIRST_BEAT_COACH }));
   }
 
   // Controls in the order the book performs them (§6.3.3): you call a beat, you

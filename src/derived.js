@@ -269,6 +269,8 @@ export function normalize(raw = {}) {
         ? raw.settings.autoEnrich : true,
       gum: raw.settings && typeof raw.settings.gum === "boolean"
         ? raw.settings.gum : true,
+      explainOpen: raw.settings && typeof raw.settings.explainOpen === "boolean"
+        ? raw.settings.explainOpen : true,
       seenTutorial: !!(raw.settings && raw.settings.seenTutorial),
     },
     activeGameId: raw.activeGameId || null,

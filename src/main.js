@@ -1,9 +1,9 @@
 // Boot.
 
 import { $ } from "./core.js";
-import { toast, registerUndo } from "./ui.js";
+import { toast, registerUndo, registerExplainState } from "./ui.js";
 import * as store from "./store.js";
-import { applyTheme, cycleTheme } from "./settings.js";
+import { applyTheme, cycleTheme, Settings } from "./settings.js";
 import { registerScreen, go, renderTabs, render } from "./router.js";
 import { renderPlay } from "./sheet.js";
 import { renderOracles } from "./oracles.js";
@@ -19,6 +19,13 @@ applyTheme();
 registerUndo({
   can: () => store.canUndo(),
   undo: () => { store.undo(); toast("Undone."); render(); },
+});
+
+// The "what this does" notes read their open state from Settings without ui.js
+// importing the store (§6.1).
+registerExplainState({
+  isOpen: () => Settings.explainOpen(),
+  set: (v) => Settings.setExplainOpen(v),
 });
 
 registerScreen("play", renderPlay);

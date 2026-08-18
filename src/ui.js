@@ -174,7 +174,13 @@ export function promptModal({ title, label, value = "", multiline = false, place
 }
 
 // --- the per-screen "what this does" note (§6.6 layer 1) --------------------
-// Two to four sentences, in the app's own voice, collapsed by default.
+// Two to four sentences, in the app's own voice. Open until the player closes
+// one. ui.js is the primitive layer and must not read the store, so the boot
+// registers the reader and the setter, exactly as it does for undo and inspire.
+let explainState = null;
+
+export function registerExplainState(fns) { explainState = fns; }
+
 export function explain(text, ruleId = null, onRuleLink = null) {
   const body = el("div", { class: "body" });
   const paras = Array.isArray(text) ? text : [text];
@@ -185,10 +191,20 @@ export function explain(text, ruleId = null, onRuleLink = null) {
       onclick: () => onRuleLink(ruleId),
     }, "Read the rule →"));
   }
-  return el("details", { class: "explain" },
+  const open = explainState ? explainState.isOpen() : false;
+  const d = el("details", { class: "explain" },
     el("summary", null, "What this does"),
     body
   );
+  if (open) d.open = true;
+  // Closing one closes them everywhere, and for good: a reader who has taken
+  // the point should not have to take it again on every screen. Re-opening one
+  // brings them all back, so the gesture is symmetrical.
+  d.addEventListener("toggle", () => {
+    if (!explainState) return;
+    if (d.open !== explainState.isOpen()) explainState.set(d.open);
+  });
+  return d;
 }
 
 // --- the pinned action bar (§6.2) -------------------------------------------

@@ -27,6 +27,13 @@ export const Settings = {
   gum: () => getState().settings.gum !== false,
   setGum: (v) => setSetting("gum", !!v),
 
+  // The per-screen "what this does" notes start EXPANDED and stay that way until
+  // the player collapses one — then they stay collapsed everywhere. A stranger
+  // reads the framing without having to know a fold is there; anyone who does
+  // not want it silences it once, with the gesture they were already making.
+  explainOpen: () => getState().settings.explainOpen !== false,
+  setExplainOpen: (v) => setSetting("explainOpen", !!v),
+
   seenTutorial: () => !!getState().settings.seenTutorial,
   setSeenTutorial: (v) => setSetting("seenTutorial", !!v),
 

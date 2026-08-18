@@ -14,7 +14,7 @@ import { startWizard, inWizard, renderWizard, addScopeDialog } from "./wizard.js
 import { renderTutorial } from "./tutorial.js";
 import { renderForge } from "./forge.js";
 import { RULES_LIBRARY, GLOSSARY } from "../data-rules-library.js";
-import { PLAY_STATES, FLOWCHART, ADVICE, ADVANCED, MACHINES } from "../data-guidance.js";
+import { PLAY_STATES, FLOWCHART, ADVICE, ADVANCED, MACHINES, NEW_TO_SOLO } from "../data-guidance.js";
 import { PUM_ERRATA, NODE_CATEGORIES } from "../data-pum-plot.js";
 import { GUM_ERRATA, INSPIRE_ABSENT } from "../data-gum.js";
 
@@ -60,6 +60,11 @@ function renderHome(host) {
       "Two machines in one app. PUM manages your plot: what happens next, and how close this thread is to resolving. SUM fills in the scene PUM opened, and the people in it.",
       "Neither book resolves tasks — bring your own RPG for that, or narrate the outcome yourself.",
     ]));
+    // Above the fold, and not behind a fold: measured on the first run, a
+    // stranger met five book terms before anything said they were the one who
+    // had to talk. This is the app's shortest possible answer to "what is a
+    // solo RPG", and it is only ever shown before the first game exists.
+    add(host, newToSoloCard());
     add(host, emptyState(
       "No game yet",
       "PUM starts with a little preparation: a universe, a plot scope, your protagonists, and a plot sheet.",
@@ -284,6 +289,19 @@ function gamesCard(current) {
     ));
   }
   add(card, el("button", { class: "btn wide primary", onclick: () => startWizard() }, "Prepare another game"));
+  return card;
+}
+
+function newToSoloCard() {
+  const card = el("div", { class: "card" });
+  add(card, el("div", { class: "card-head" },
+    el("h2", { text: NEW_TO_SOLO.title }),
+    el("span", { class: "cite", text: "the app's own words" })
+  ));
+  const ul = el("ul", { class: "plain" });
+  for (const p of NEW_TO_SOLO.points) add(ul, el("li", { text: p }));
+  add(card, ul);
+  add(card, el("p", { class: "loop", text: NEW_TO_SOLO.loop }));
   return card;
 }
 
@@ -550,6 +568,11 @@ function renderSettings(host) {
     "Game Unfolding Machine (GUM v2.2)",
     "The third book's 43 prep tables — plot seeds, factions, locations, objects, a nemesis, creatures, characters, and the grand oracle. Adds a Forge tab. On by default because you supplied the book; turn it off to hide it entirely.",
     Settings.gum(), (v) => { Settings.setGum(v); render(); }
+  ));
+  add(rules, toggle(
+    "Show the \u201cWhat this does\u201d notes expanded",
+    "Every screen carries a short note explaining what it is for. They start open and close for good the first time you collapse one — this brings them back.",
+    Settings.explainOpen(), (v) => { Settings.setExplainOpen(v); render(); }
   ));
   add(rules, toggle(
     "Enrich descriptive and story oracles",

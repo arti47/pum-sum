@@ -700,3 +700,57 @@ conditions** (p.5), *Revealing discovery* / **Revealing finding** (p.7), *Linger
 **Lingering backstories** (p.11). The app already follows the page headings in all four cases,
 which is the same ruling as A2: the surface you play from wins. GUM p.12 numbers itself "12 of
 28" in a 26-page book. Neither affects a roll, so neither is surfaced as an erratum.
+
+---
+
+## Phase 11 — the never-played-solo pass
+
+The friendliness rounds measured **reachability**: can the player find the next thing. This one
+measured **comprehension**: at each step of the first run, the DOM was captured with the
+contents of every closed `<details>` stripped out, because an unopened fold is not read.
+
+| step | words a stranger sees | hidden in folds | book terms on screen |
+|---|---|---|---|
+| cold open | 54 | 15 (22%) | plot scope, PUM, SUM, GUM |
+| prep 1–3 | 45–125 | 12–20% | universe, protagonist, mission |
+| prep 4 · sheet picker | **444** | 121 (21%) | plot beat, random prompt, plot node, plot track, bias |
+| the plot sheet | 149 | 54 (27%) | + modified proposal, oracle |
+| an oracle answer | 114 | 29 (20%) | bias, PUM p.28 |
+| a beat on the table | 166 | 63 (28%) | d10, confirm |
+
+**What the numbers said.** The app teaches well *at the point of use* — the beat card names
+the node category, explains what an empty slot means, and says in plain words "play it out in
+the fiction, then confirm it above — or decide it did not matter". But the framing that makes
+any of it make sense is folded shut on all twelve screens, and the single sentence a newcomer
+most needs — *this app never tells you whether you succeeded; bring your own RPG or narrate
+it* — was inside the cold-open fold. Nothing on any screen said the player is the one who has
+to talk.
+
+**F-38 · The teaching was collapsed by default.** `explain()` now starts **open** and collapses
+everywhere, permanently, the first time the player closes one — re-opening one brings them all
+back. The gesture is the setting: a reader who has taken the point never takes it twice, and
+nobody has to discover that a fold exists. `ui.js` stays free of Settings through a third
+registration seam, `registerExplainState`, alongside `registerInspire` and `registerUndo`. A
+Settings toggle restores them, and the smoke harness's old assertion — *explain() starts
+collapsed*, now false by design — is replaced by the round trip: close one, the next screen is
+collapsed too, the choice is in `localStorage`, re-open one and they all return.
+
+**F-39 · Nothing said what a solo RPG is.** `NEW_TO_SOLO` (`data-guidance.js`, the app's own
+words, not the books') sits above the fold on the cold-open Home and only there: you are the
+author and the actors; you ask the app instead of a gamemaster; it does not resolve actions.
+Plus the loop in one line.
+
+**F-40 · Nothing said the loop out loud.** `FIRST_BEAT_COACH` runs above the beat card until
+the first beat of a game is confirmed — "roll a beat, say out loud what it means, and only then
+confirm it — or decide it did not matter". It disappears for good when a box is crossed, so
+there is nothing to dismiss and no state to store.
+
+**F-41 · The sheet picker was the wall.** Ten pacing structures, 444 words, at step 4 of 5,
+before the player has rolled anything. PUM p.3 answers this itself — *"if this is your first
+time, the standard Plot Sheet is a good start"* — so Standard leads alone, carrying that
+citation, with the other nine behind *Show all ten plot sheets* (and the chosen sheet always
+stays on screen). The step goes from 17 controls to 9, and the first run loses a tap because
+Standard is already selected.
+
+**Verified after.** The first-run probe still walks cold open → prepared game → open scene →
+oracle → beat → confirm → close → journal in 18 taps with every step offered in place.

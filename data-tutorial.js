@@ -142,7 +142,7 @@ const WALKTHROUGH = [
 
       { p: "Step 3 · Protagonists. Your PCs are your eyes and ears. You are in full control of their thoughts, voice and actions — PUM never rolls for them, ever. At least one is required. The name is yours; the notes field beside it is where a rolled GUM archetype lands, because a concept does not belong in a name box." },
 
-      { p: "Step 4 · Sheet. Ten plot sheets, each a pacing decision. The card shows the track drawn to scale, the box count, how many node slots it gives you, and whether it reaches the extension lists." },
+      { p: "Step 4 · Sheet. Ten plot sheets, each a pacing decision. The card shows the track drawn to scale, the box count, how many node slots it gives you, and whether it reaches the extension lists. Only Standard is shown at first, because choosing between ten pacing structures is not a decision you can make before your first game — PUM p.3 says as much. Show all ten plot sheets opens the rest, and once you have chosen one it stays on screen beside Standard." },
       { table: { name: "The ten plot sheets", page: "PUM pp.14–23", head: ["Sheet", "Track", "Nodes"], rows: [
         ["Standard", "11 boxes · 3/5/3", "4 lists × 5"],
         ["Journey", "20 · 3/7/4/3/3", "6 lists × 10"],
@@ -221,6 +221,7 @@ const WALKTHROUGH = [
       { p: "Quantifiers — how many, how good, how hard. Set a baseline in your head before rolling, because the table answers relative to it. Four faces in ten are 'as expected': most of the time the world is unremarkable, and that is deliberate." },
       { p: "Granular Yes or No — the d100 variant. Declare a likelihood first — no way, hardly, unlikely, neutral, likely, surely, certain — and the roll is read against that column. Use it when the odds genuinely are not even and you want the dice to know that." },
 
+      { p: "Until you confirm the first beat of a game, the plot sheet carries one line above the beat card: roll a beat, say out loud what it means, and only then confirm it. It goes for good once a box is crossed — there is nothing to dismiss." },
       { p: "Every result card carries Re-roll, Note it and Dismiss. Re-rolling is not cheating; the book says so explicitly. Both rolls stay in the journal, linked, so the record remains honest." },
       { p: "A descriptive or story answer that arrived without its d100 word also carries Enrich it, which rolls the Description or Focus word for that answer alone and adds it to the same journal entry. You only see it if you switched the enrichment off in Settings — the book rolls it every time, so on it stays by default." },
       { ref: "PUM p.8" },
@@ -406,7 +407,8 @@ WALKTHROUGH.push(
         "Disruption die — off by default, because PUM presents it as a variant. A d10 rides along with every oracle answer except quantifiers, Description and Focus: on a 1 a random prompt interrupts, on a 2 a proposal alters the scene. Read your answer first, then resolve the disruption.",
         "Volatile situation — widens the proposal range from 2 to 2–5. A 1 remains the only face for a prompt.",
         "GUM — on by default. Turn it off and the Forge section and every inspiration block disappear.",
-        "Enrich descriptive and story oracles — on, because the books make it the default.",
+        "Enrich descriptive and story oracles — on, because the books make it the default. With it off, a descriptive or story answer carries Enrich it instead.",
+        "Show the \u201cWhat this does\u201d notes expanded — on for a new player. Every screen carries a short note saying what it is for; they start open, and collapse everywhere for good the first time you close one. This brings them back.",
       ] },
       { p: "Appearance: theme follows the system unless you override it, and a text-size slider runs 85% to 140%. Pinch-zoom is locked so a stray gesture cannot disturb a roll; the slider is what pays that back." },
       { p: "The library. One game holds many plot sheets — one per scope — and finished ones stay as a record. Home lets you switch scope, edit or delete one, add a new one, switch or archive whole games, and prepare another." },
@@ -670,7 +672,7 @@ const REFERENCE = [
         "Plot sheets in this game: Switch to this · Edit (scope name, mission, starting point) · Delete · New plot sheet.",
         "Your games: Open · Archive / Restore · Prepare another game.",
         "The machines — what PUM, SUM and GUM each do.",
-        "With no game: Prepare a game (pinned) · Read the first-session walkthrough.",
+        "With no game: Never played solo before? — three lines saying you narrate, the app answers, and your own RPG resolves · Prepare a game (pinned) · Read the first-session walkthrough.",
       ] },
       { p: "Forge (hidden when GUM is off)" },
       { bullets: [
@@ -691,7 +693,7 @@ const REFERENCE = [
       { bullets: [
         "Your data: Export JSON · Import JSON · Export readable · Check my data · Undo.",
         "Export and import dialogs: Copy · Download · Close · Import · Cancel.",
-        "Optional rules: Disruption die · Volatile situation · Game Unfolding Machine · Enrich descriptive and story oracles.",
+        "Optional rules: Disruption die · Volatile situation · Game Unfolding Machine · Enrich descriptive and story oracles · Show the \u201cWhat this does\u201d notes expanded.",
         "Appearance: Theme · Text size.",
         "About the books, including what they do not contain.",
         "Danger zone: Delete the current game · Erase everything.",
