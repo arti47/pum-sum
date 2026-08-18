@@ -88,6 +88,16 @@ function mutate(label, fn) {
   emit();
 }
 
+// A preference is not a move in the game. It is its own inverse — the same
+// control sets it back — and the undo stack is capped, so letting toggles onto
+// it evicts real play history. Closing a "what this does" note is a preference
+// write, and one player collapsing folds across five screens would otherwise
+// have pushed out five undoable actions.
+function prefer(fn) {
+  fn(state);
+  emit();
+}
+
 // --- games ------------------------------------------------------------------
 export function games() { return getState().games; }
 
@@ -463,15 +473,15 @@ export function setLastBeat(beat) {
 
 // --- settings & theme -------------------------------------------------------
 export function setSetting(key, value) {
-  mutate("Change a setting", (s) => { s.settings[key] = value; });
+  prefer((s) => { s.settings[key] = value; });
 }
 
 export function setTheme(theme) {
-  mutate("Change theme", (s) => { s.theme = theme; });
+  prefer((s) => { s.theme = theme; });
 }
 
 export function setTextScale(scale) {
-  mutate("Change text size", (s) => { s.textScale = scale; });
+  prefer((s) => { s.textScale = scale; });
 }
 
 // --- export / import (a supported feature, not a debug hatch — §5.1) --------

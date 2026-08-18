@@ -335,7 +335,7 @@ The Scene tab also carries SUM's situation tables, three to a screen: Exploratio
 
 `Journal`
 
-Every roll the app makes lands here with its dice, so any result can be re-derived later. Thirteen filters cover every kind of entry the app writes. Entries page forty at a time and cap at five hundred.
+Every roll the app makes lands here with its dice, so any result can be re-derived later. Thirteen filters cover every kind of entry the app writes. Entries page twenty at a time and cap at five hundred.
 
 - Write an entry — your own narration. This is where the story you are telling actually lives.
 - Session break — a bookmark for where you stopped. Neither book defines a session procedure, so nothing is reset or rolled; the app does not invent one.

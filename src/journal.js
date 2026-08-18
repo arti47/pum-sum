@@ -8,7 +8,10 @@ import { sectionNav, render, go } from "./router.js";
 import { openRule } from "./screens.js";
 import { registerClearer } from "./viewstate.js";
 
-const PAGE = 40;
+// 40 entries was 97 controls and the tallest screen in the app under the stress
+// fixture. A log is read from the top; the page is smaller and says how much
+// more there is.
+const PAGE = 20;
 let shown = PAGE;
 let filter = "all";
 

@@ -801,3 +801,24 @@ names the vocabulary and points at the glossary.
 **What the audit cannot check.** Whether the sentences are any good. It checks that a sentence
 is there, in the right place, at the moment the app asks something of the player — which was
 the failure mode in every one of the 40 findings.
+
+### Phase 11c — the residuals
+
+Three things the novice pass left standing, each measured.
+
+**F-46 · A preference was a move in the game.** `setSetting`, `setTheme` and `setTextScale`
+each took an undo snapshot. The stack is capped at twenty, so a player collapsing the *what
+this does* notes across five screens — which is one setting write per screen — silently pushed
+five real, undoable actions off the end of it. Preferences now go through `store.prefer()`,
+which emits without snapshotting. They are their own inverse: the control that set one sets it
+back, and Settings holds all of them. The guard was watched failing before the fix was trusted.
+
+**F-47 · One rolling screen still had an inline primary.** `scene/people` left its first action
+521px down the page once the notes opened, while Arc, Exploration, Battle and Discovery all pin
+theirs. It pins *Roll Meet reaction* — first contact is the book's own first depth and the one
+a scene that has just met someone starts from.
+
+**F-48 · The journal was the tallest screen in the app.** Forty entries a page came to 97
+controls and 6.6vh under the stress fixture. Twenty pages it to 57 and 3.8vh; the *Show N more
+of M* control already told the reader how much was left, so nothing is hidden that was not
+already one tap away.

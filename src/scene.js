@@ -380,6 +380,24 @@ function renderPeopleTables(host) {
   add(host, el("button", {
     class: "btn wide", onclick: () => go("play", "cast"),
   }, "Go to the cast →"));
+
+  // The four depths are in the book's own order and the first is where a scene
+  // that has just met someone begins. Every other rolling screen pins its
+  // primary; this one left it inline, 521px down once the notes opened.
+  const firstMeet = sumTable("meet-reaction");
+  if (firstMeet) {
+    actionBar({
+      label: `Roll ${firstMeet.name}`,
+      context: `d${firstMeet.die} · first contact${bias !== "none" ? " · bias " + bias : ""}`,
+      onClick: () => {
+        const r = rollSum({ tableId: "meet-reaction", bias });
+        last = { result: r, tableId: "meet-reaction" };
+        journalRoll(r, { kind: "sum", title: `${firstMeet.name} — ${r.answer}`, detail: diceText(r.dice) });
+        announce(r.answer);
+        render();
+      },
+    });
+  }
 }
 
 export function currentBias() { return bias; }

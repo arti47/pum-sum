@@ -648,6 +648,7 @@ globalThis.localStorage = {
   removeItem(k) { delete this._v[k]; },
 };
 const store = await import("../src/store.js");
+const { Settings } = await import("../src/settings.js");
 const roller = await import("../src/roller.js");
 const core = await import("../src/core.js");
 
@@ -868,6 +869,19 @@ const core = await import("../src/core.js");
   eq("one undo puts the box back", derived.crossed(store.currentScope()), before);
   eq("and takes the journal entry with it", store.activeGame().journal.length, entries);
   eq("the label is the action's, not the last mutation's", store.undoLabel(), "Create game");
+
+  // A preference is not a move in the game: it is its own inverse, and the undo
+  // stack is capped, so toggles must not evict play history. Closing a "what
+  // this does" note writes a setting on every screen it happens on.
+  const label = store.undoLabel();
+  Settings.setExplainOpen(false);
+  Settings.setTheme("dark");
+  Settings.setTextScale(1.2);
+  eq("a preference does not become an undo step", store.undoLabel(), label);
+  eq("and it still took effect", Settings.explainOpen(), false);
+  Settings.setExplainOpen(true);
+  Settings.setTheme("system");
+  Settings.setTextScale(1);
   store.deleteGame(g.id);
 }
 
