@@ -135,7 +135,7 @@ const WALKTHROUGH = [
       { p: "Step 2 · Scope. A plot scope is one defined mission, task or goal — the thread this plot sheet is about, not the whole campaign. 'Find out who burned the caravan' is a scope. 'Become king' is a campaign." },
       { bullets: [
         "Plot scope name — required.",
-        "Mission and initial goals — a pitch for the situation you start in.",
+        "Mission — a pitch for the situation you start in, and the PCs' initial goals.",
         "Starting point — where this opens and what is introduced there. Optional now; the Home screen keeps asking until it is written.",
       ] },
       { note: "The mission field's inspiration block is GUM's plot seed exactly — a hook, a motivation, a mission, a lead, a caveat and the opposition. Open it and tap 'All 6 tables' and you have rolled the book's own six-table combination without leaving the field." },
@@ -668,7 +668,7 @@ const REFERENCE = [
       { p: "Home" },
       { bullets: [
         "Before you play — the outstanding prep steps, each a link.",
-        "The current game card: Go to the plot sheet · Open a scene / Continue the scene · Edit → Title, Universe or RPG, World tone and theme, Inspiration.",
+        "The current game card: Go to the plot sheet · Open a scene / Continue the scene · Edit → Name this game, Universe or RPG, World, tone and theme, Inspiration.",
         "Plot sheets in this game: Switch to this · Edit (scope name, mission, starting point) · Delete · New plot sheet.",
         "Your games: Open · Archive / Restore · Prepare another game.",
         "The machines — what PUM, SUM and GUM each do.",

@@ -150,11 +150,14 @@ function stepScope(host) {
   const card = el("div", { class: "card" });
   add(card, el("p", { class: "muted", text: "A plot scope is one defined mission, task or goal. What kind of story do you want to unfold — defeating a powerful enemy, uncovering a mystery, solving an inner problem?" }));
   add(card, field("Plot scope name", "scopeName", { placeholder: "Find out who burned the caravan", inspire: "scope-name" }));
-  add(card, field("Mission and initial goals", "mission", {
+  // One label for one stored field: the scope's mission is called "Mission"
+  // here, in the Add-a-scope dialog and on Home. What it is *for* — the initial
+  // goals — is guidance, and guidance goes in the hint (§6.6).
+  add(card, field("Mission", "mission", {
     multiline: true,
     inspire: "scope-mission",
     placeholder: "A pitch for the situation you start in, and what the PCs are trying to do.",
-    hint: "Draft a pitch for the starting situation: a civil war, a natural disaster, a background problem that seeds an interesting start.",
+    hint: "Draft a pitch for the starting situation — a civil war, a natural disaster, a background problem — and the PCs' initial goals.",
   }));
   add(card, field("Starting point", "startingPoint", {
     multiline: true,

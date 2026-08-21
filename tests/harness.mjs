@@ -366,6 +366,38 @@ ok("every node-invoking prompt has a play note",
       bad.slice(0, 6).join(" · "));
   }
 
+  // --- one stored field, one label ------------------------------------------
+  // The scope's mission was "Mission and initial goals" in the prep wizard and
+  // "Mission" in both dialogs that edit the same stored value, so the guide
+  // could quote either and be wrong on the other screen. A field the player
+  // meets twice must be called the same thing both times.
+  {
+    // Only the stored text fields a player meets on more than one screen. A
+    // dialog's local variable name is not a stored key, so the set is explicit.
+    const KEYS = new Set(["title", "universe", "tone", "inspiration", "mission",
+      "scopeName", "startingPoint", "notes"]);
+    const byKey = new Map();
+    const note = (key, label, file) => {
+      if (!KEYS.has(key)) return;
+      if (!byKey.has(key)) byKey.set(key, new Map());
+      const seen = byKey.get(key);
+      if (!seen.has(label)) seen.set(label, file);
+    };
+    for (const f of ["src/wizard.js", "src/screens.js", "src/sheet.js", "src/cast.js"]) {
+      const src = readFileSync(join(root, f), "utf8");
+      // inline wizard fields: field("Label", "key", …)
+      for (const m of src.matchAll(/field\("([^"]+)",\s*"(\w+)"/g)) note(m[2], m[1], f);
+      // dialog fields: el("span", { class: "lbl", text: "Label" }), variable)
+      for (const m of src.matchAll(/class:\s*"lbl",\s*text:\s*"([^"]+)"\s*\}\),\s*(\w+)\)/g)) {
+        note(m[2], m[1], f);
+      }
+    }
+    const clashes = [...byKey].filter(([, labels]) => labels.size > 1)
+      .map(([key, labels]) => `${key}: ${[...labels].map(([l, f]) => `"${l}" (${f})`).join(" vs ")}`);
+    ok("there are stored fields to check", byKey.size >= 5, `${byKey.size} fields`);
+    ok("a stored field carries one label everywhere", clashes.length === 0, clashes.join(" · "));
+  }
+
   // and the three renderings cannot drift. execFileSync throws on a non-zero
   // exit, so catch it — a stale file is a failure to report, not a crash that
   // takes the rest of the harness with it.

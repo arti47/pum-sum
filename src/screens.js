@@ -198,7 +198,7 @@ function editGame(game) {
     title: "This game",
     body: el("div", null,
       el("p", { class: "muted", text: "The world you are playing in, and what you are drawing on. None of it is locked — a game's tone can change once you have played a scene in it." }),
-      el("label", { class: "field" }, el("span", { class: "lbl", text: "Title" }), title),
+      el("label", { class: "field" }, el("span", { class: "lbl", text: "Name this game" }), title),
       inspireBlock("game-title", title),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "Universe or RPG" }), universe),
       el("label", { class: "field" }, el("span", { class: "lbl", text: "World, tone and theme" }), tone),
