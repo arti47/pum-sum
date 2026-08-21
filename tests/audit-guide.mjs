@@ -179,6 +179,13 @@ const rest = [...claims].filter(([t]) => !TABS.has(t) && !says(t));
 const unreached = rest.filter(([t]) => inSource(t));
 const drift = rest.filter(([t]) => !inSource(t));
 
+// A sibling document (a scenario walkthrough kept outside the repo) can be
+// checked against the same harvest.
+if (process.env.DUMP_SCREEN_STRINGS) {
+  const { writeFileSync } = await import("node:fs");
+  writeFileSync(process.env.DUMP_SCREEN_STRINGS, JSON.stringify([...onScreen], null, 0));
+}
+
 const pad = (s, n) => String(s).padEnd(n);
 console.log(`\nGuide audit — the guide's wording against what the app actually renders\n`);
 console.log(`${onScreen.size} distinct strings harvested from ${ROUTES.length} routes and ${dialogs} dialogs`);
