@@ -14,6 +14,7 @@
     "deadcode": "node tests/deadcode.mjs",
     "audit:deep": "node tests/audit-deep.mjs",
     "audit:novice": "node tests/audit-novice.mjs",
+    "audit:guide": "node tests/audit-guide.mjs",
     "tutorial": "node tests/tools/gen-tutorial.mjs",
     "pdf": "node tests/tools/gen-pdf.mjs"
   },

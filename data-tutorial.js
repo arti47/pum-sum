@@ -595,7 +595,7 @@ const REFERENCE = [
       { bullets: [
         "Random prompt (pinned) / Proposal — the two beat controls. The card above repeats them as Modified proposal and Random prompt.",
         "On a beat card: Confirm — cross a box · Not this time (or Played it, on a trackless sheet) · Re-roll · Add a note · Re-roll the beat when a repeat is flagged.",
-        "On a node result: Add new · Choose · Reroll · Leave it to destiny · Name it and roll (an unnamed list) · Bring one in and Recall (a list this sheet does not print).",
+        "On a node result: Add new · Choose · Reroll · Leave it to destiny · Name it and roll, on an unnamed list · Bring one in · Recall (N), on a list this sheet does not print — the count is how many are in the cast.",
         "Track: any box opens Box N — Mark a timed beat / Edit the timed beat / Clear the mark / Close.",
         "Advance without a beat · Step back · End this scope · Reopen this scope.",
         "Customize (Customized sheet only) → Add a section · + box · Remove · Edit the prompt column → Save the column / Reset to the standard column · Done.",
@@ -607,7 +607,7 @@ const REFERENCE = [
       ] },
       { p: "Plot nodes" },
       { bullets: [
-        "Per list: the 1d10/1d20 pill, the fill count, Roll this list — 1dN, a “What goes in here” fold, the first four written slots plus one empty as buttons, Invoke on written entries, Show all N slots.",
+        "Per list: the 1d10 or 1d20 pill, the fill count, Roll this list — 1d10 or 1d20, a “What goes in here” fold, the first four written slots plus one empty as buttons, Invoke on written entries, Show all N slots.",
         "Player-named lists add Rename and Remove.",
         "Add a plot node list — names one of the two blank lists from the extension sheet.",
         "Invoke this node → Invoke as a beat / Cancel.",
@@ -626,7 +626,7 @@ const REFERENCE = [
     title: "Scene",
     blocks: [
       { bullets: [
-        "Scene arc — Rule of Bias (Neutral / Favourable / Trouble) · Roll a scene opener · Open it myself · Roll an intervention check · Roll a scene closure. While a scene runs the pinned action becomes Intervention check with Close beside it.",
+        "Scene arc — the Rule of Bias as three buttons: Neutral — roll once / Favourable — keep lowest / Trouble — keep highest · Roll a scene opener · Open it myself · Roll an intervention check · Roll a scene closure. While a scene runs the pinned action becomes Intervention check with Close beside it.",
         "Scene closed dialog — Open the next scene · Back to the plot sheet · Write it down · Undo.",
         "While the scene runs: Call a plot beat · Ask an oracle · Who is here?",
         "Exploration · Battle · Discovery — three SUM tables each, the first pinned as the primary, each with the whole table readable in a fold.",
@@ -646,7 +646,7 @@ const REFERENCE = [
         "Descriptive · Story · Quantifiers — one button per oracle.",
         "Result card: Re-roll · Note it · Dismiss; Enrich it when a descriptive or story answer has no d100 word yet; on a bias roll, two answer chips to choose between.",
         "Does this call for a beat? — It said yes — random prompt · It said no — modified proposal.",
-        "Disruption die strip, when the setting is on: reports the d10 and offers Roll the random prompt / Roll the modified proposal.",
+        "Disruption die — the card under an answer when the setting is on: reports the d10 and offers Roll the random prompt / Roll the modified proposal.",
       ] },
     ],
   },
@@ -655,7 +655,7 @@ const REFERENCE = [
     title: "Journal",
     blocks: [
       { bullets: [
-        "Entries — thirteen filters, Write an entry (pinned), Session break, Show N more.",
+        "Entries — thirteen filters, Write an entry (pinned), Session break, Show N more of M.",
         "Per entry, behind Edit: Add note / Edit note · Delete.",
         "Dice — distribution per die size, and Clear the journal.",
       ] },
@@ -678,8 +678,8 @@ const REFERENCE = [
       { bullets: [
         "Plot seed · World · Characters · Grand oracle.",
         "Roll a whole plot seed (pinned) · World truths · Roll all three · per-table dN buttons · Roll all of <group>.",
-        "Result card: Re-roll · Keep it → · Dismiss · Re-roll this one on a set.",
-        "Keep this → Write into <list> · Add to the cast as a character · Add to the cast as a location · Just keep it in the journal. With no game open, Prepare a game instead.",
+        "Result card: Re-roll · Keep it → · Dismiss · Re-roll this one — on a set, it re-rolls just that table.",
+        "Keep this → Write into <list> · Add to the cast as a character · Add to the cast as a location · Just keep it in the journal. With no game open, Prepare a game → instead.",
       ] },
       { p: "Rules" },
       { bullets: [
@@ -694,8 +694,8 @@ const REFERENCE = [
       { bullets: [
         "Your data: Export JSON (also pinned, with Import beside it) · Import JSON · Export readable · Check my data · Undo.",
         "Export and import dialogs: Copy · Download · Close · Import · Cancel.",
-        "Optional rules: Disruption die · Volatile situation · Game Unfolding Machine · Enrich descriptive and story oracles · Show the \u201cWhat this does\u201d notes expanded.",
-        "Appearance: Theme · Text size.",
+        "Optional rules: Disruption die · Volatile situation · Game Unfolding Machine (GUM v2.2) · Enrich descriptive and story oracles · Show the \u201cWhat this does\u201d notes expanded.",
+        "Appearance: Theme · Text size — N%, which the label carries as you drag it.",
         "About the books, including what they do not contain.",
         "Danger zone: Delete the current game · Erase everything.",
       ] },
@@ -735,14 +735,14 @@ const REFERENCE = [
       { bullets: [
         "prep — “Game prepared”, “Starting point set”, “New plot sheet”, “New plot node list”.",
         "beat — the beat's own text, plus “Beat played, track unchanged” when you decline to cross, and “Plot node invoked deliberately” / “Plot node list invoked deliberately”.",
-        "node — “Plot node invented”, “Plot node chosen”, “Plot node from GUM”, “Recalled from the cast”, “Character brought in”.",
-        "track — “Advanced without a beat”, “Beat confirmed”, “Plot scope ended”, “Plot scope reopened”.",
+        "node — “Plot node invented”, “Plot node chosen”, “Recalled from the cast”, “Character brought in” / “Location brought in”.",
+        "track — “Advanced without a beat”, “Beat confirmed — <the beat>”, “Plot scope ended”, “Plot scope reopened”.",
         "timed — “Timed plot beat”, written when a marked box fires.",
         "scene — “Scene opened”, “Intervention check”, “Scene closed”.",
         "yesno · granular · oracle — one per oracle roll, titled with the register and the answer.",
         "sum — SUM table rolls, titled with the table and its result.",
         "gum — Forge rolls and any inspiration word you kept.",
-        "note — your own entries, and anything kept from the Forge.",
+        "note â your own entries, and anything kept from the Forge, titled “Kept from GUM — <table>”.",
         "session — “— session break —”.",
       ] },
       { note: "A re-roll writes a second entry linked to the first rather than replacing it, so the record shows what you rolled and what you decided to use instead. That is the point of keeping both." },
