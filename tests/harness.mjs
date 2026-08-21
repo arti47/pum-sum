@@ -314,6 +314,58 @@ ok("every node-invoking prompt has a play note",
   ok("the tutorial names every control in the app", missing.length === 0,
     `${missing.length} unmentioned: ${missing.slice(0, 12).join(" · ")}`);
 
+  // --- and the reverse: the guide must not invent wording -------------------
+  // The check above proves every control is *named* in the guide. It cannot see
+  // the opposite drift — the guide sending a reader somewhere the app does not
+  // have, or spelling a control differently after a rename. Every `tap:` block
+  // is a route a reader follows literally, so each of its segments must be a
+  // real tab, a real section, or a real control label. Template labels are
+  // matched with their holes as wildcards.
+  {
+    const lit = new Set(); const pats = [];
+    const remember = (t) => {
+      if (!t || t.length < 3) return;
+      if (t.includes("${")) {
+        const solid = t.replace(/\$\{[^}]*\}/g, "").replace(/\s+/g, "");
+        if (solid.length < 6) return;          // ".{1,28}" alone would match anything
+        pats.push(new RegExp("^" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+          .replace(/\\\$\\\{[^}]*\\\}/g, ".{1,28}") + "$"));
+      } else lit.add(t);
+    };
+    for (const f of readdirSync(join(root, "src")).filter((n) => n.endsWith(".js"))) {
+      const src = readFileSync(join(root, "src", f), "utf8");
+      for (const m of src.matchAll(/["`]([^"`\n]{3,70})["`]/g)) remember(m[1]);
+    }
+    const TABS = ["Play", "Scene", "Oracles", "Journal", "More"];
+    const SECTIONS = [
+      "Plot track", "Plot nodes", "Cast", "Forge", "Plot seed", "World", "Characters",
+      "Grand oracle", "Yes or No", "Descriptive", "Story", "Granular", "Quantifiers",
+      "Scene arc", "Exploration", "Battle", "Discovery", "Entries", "Dice",
+      "Home", "Rules", "Tutorial", "Settings",
+    ];
+    const nav = new Set([...TABS, ...SECTIONS]);
+    const says = (t) => nav.has(t) || lit.has(t) || pats.some((p) => p.test(t));
+    const taps = tut.PARTS.flatMap((p) => p.sections.flatMap((s) => s.blocks))
+      .filter((b) => b.tap).map((b) => b.tap);
+    const bad = [];
+    for (const path of taps) {
+      const segs = path.split("→").map((x) => x.trim());
+      if (!TABS.includes(segs[0])) { bad.push(`${path} (tab "${segs[0]}")`); continue; }
+      // The last segment may be an instruction rather than a control; the ones
+      // before it are always navigation the reader has to find.
+      for (const seg of segs.slice(1, -1)) {
+        if (!says(seg)) bad.push(`${path} ("${seg}")`);
+      }
+      const last = segs[segs.length - 1];
+      if (segs.length > 1 && !says(last) && last.split(" ").length <= 5) {
+        bad.push(`${path} ("${last}")`);
+      }
+    }
+    ok("the guide has tap routes to check", taps.length >= 10, `${taps.length} routes`);
+    ok("every tap route names a real tab, section or control", bad.length === 0,
+      bad.slice(0, 6).join(" · "));
+  }
+
   // and the three renderings cannot drift. execFileSync throws on a non-zero
   // exit, so catch it — a stale file is a failure to report, not a crash that
   // takes the rest of the harness with it.
